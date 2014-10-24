@@ -1,0 +1,33 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" >
+<!--
+2014-10-21: Created.
+-->
+<svg xmlns="http://www.w3.org/2000/svg">
+<metadata>
+Created by FontForge 20110222 at Tue Oct 21 09:49:59 2014
+ By Ubuntu
+Created by Ubuntu with FontForge 2.0 (http://fontforge.sf.net)
+</metadata>
+<defs>
+<font id="iconvault" horiz-adv-x="512" >
+  <font-face 
+    font-family="iconvault"
+    font-weight="500"
+    font-stretch="normal"
+    units-per-em="512"
+    panose-1="2 0 6 9 0 0 0 0 0 0"
+    ascent="448"
+    descent="-64"
+    bbox="59.1426 12.7715 452.571 371.229"
+    underline-thickness="25.6"
+    underline-position="-51.2"
+    unicode-range="U+F100-F101"
+  />
+    <missing-glyph />
+    <glyph glyph-name="uniF100" unicode="&#xf100;" 
+d="M399.8 20.1719l-315.628 315.628l28.0283 28.0283l315.628 -315.628zM104.8 12.7715l-28.0283 28.0283l330.429 330.429l28.0283 -28.0283z" />
+    <glyph glyph-name="uniF101" unicode="&#xf101;" 
+d="M59.1426 304.286v40h393.429v-40h-393.429zM59.1426 172v39.7139h393.429v-39.7139h-393.429zM59.1426 39.7139v39.7148h393.429v-39.7148h-393.429z" />
+  </font>
+</defs></svg>

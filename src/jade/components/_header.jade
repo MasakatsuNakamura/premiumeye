@@ -1,0 +1,29 @@
+if(env === "pc")
+	.header.clearfix
+		if(page !== "index")
+			h1.fon-goog.fon-u-thin #{page.toUpperCase()}
+		nav.top-menu.fon-goog.fon-thin
+			ul
+				+topMenuList("index")
+				+topMenuList("json")
+				+topMenuList("include")
+				+topMenuList("extends")
+				+topMenuList("mixin")
+else
+	.header
+		if(page !== "index")
+			h1.fon-goog.fon-u-thin #{page.toUpperCase()}
+		.btn-top-nav
+			a.icon-menu(href="#")
+		nav.top-nav
+			ul.fon-goog.fon-thin
+				li
+					a(href="./index.html") TOP
+				li
+					a(href="./json.html") JSON
+				li
+					a(href="./include.html") INCLUDE
+				li
+					a(href="./extends.html") EXTENDS
+				li
+					a(href="./mixin.html") MIXIN

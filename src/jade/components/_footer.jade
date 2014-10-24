@@ -1,0 +1,22 @@
+.footer.clearfix
+	if(env=="pc")
+		.bg
+	ul.sns
+		li.tw
+			<a href="https://twitter.com/share" class="twitter-share-button" data-url="#{url}" data-text="#{description}" data-hashtags="jade" data-count="none">Tweet</a>
+			<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+		li.fb
+			<iframe src="//www.facebook.com/plugins/like.php?href=#{encodeURIComponent(url)}&amp;width&amp;layout=button&amp;action=like&amp;show_faces=false&amp;share=false&amp;height=35&amp;scrolling="no" frameborder="0" style="border:none; overflow:hidden; height:35px;" allowTransparency="true"></iframe>
+		li.gp
+			<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+			.g-plusone(data-href="#{url}", data-size="medium", data-annotation="none")
+		if(env=="sp")
+			li.line
+				- var lineUrl = encodeURIComponent(description + " " + url)
+				<a href="http://line.me/R/msg/text/?#{lineUrl}"><img src="img/sns/linebutton_82x20.png" width="82" height="20" alt="LINEで送る" /></a>
+
+script(src="js/plugins.js")
+script(src="js/app.js")
+
+</body>
+</html>

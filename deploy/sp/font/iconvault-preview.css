@@ -1,0 +1,30 @@
+/*
+ * Created with iconvau.lt
+ */
+
+@font-face {
+  font-family: "iconvault";
+  src: url("iconvault_59b7d37ee863ba3e09c586366cca292a.eot");
+  src: url("iconvault_59b7d37ee863ba3e09c586366cca292a.eot?#iefix") format("embedded-opentype"),
+       url("iconvault_59b7d37ee863ba3e09c586366cca292a.woff") format("woff"),
+       url("iconvault_59b7d37ee863ba3e09c586366cca292a.ttf") format("truetype"),
+       url("iconvault_59b7d37ee863ba3e09c586366cca292a.svg#iconvault") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+.icon-menu-close:before,
+.icon-menu:before {
+  font-family: "iconvault";
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  display: inline-block;
+  text-decoration: inherit;
+}
+
+.icon-menu-close:before { content: "\f100"; }
+.icon-menu:before { content: "\f101"; }

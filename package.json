@@ -1,0 +1,12 @@
+{
+  "name": "explanation-jade",
+  "description": "explanation jade",
+  "version": "1.0.0",
+  "author": "nowri.ka",
+  "readmeFilename": "README.md",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-jade": "^0.13.0",
+    "grunt-contrib-watch": "^0.6.1"
+  }
+}
