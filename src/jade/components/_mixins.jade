@@ -1,7 +1,0 @@
-mixin topMenuList(pageName)
-	- var label = (pageName=="index")? "TOP":pageName.toUpperCase();
-	if((page !== "index") || (pageName !== "index"))
-		li
-			if(page !== pageName)
-				a(href="./#{pageName}.html") #{label}
-

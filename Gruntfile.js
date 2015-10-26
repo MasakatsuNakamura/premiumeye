@@ -14,12 +14,9 @@ module.exports = function(grunt) {
 				pretty:true // コードを整形出力するか
 			},
 			deploy_pc:{
-				options:{
-					data:jadeDataFunc("pc")
-				},
 				files:[{
 					expand:true,
-					cwd:'src/jade/pc',
+					cwd:'src/jade',
 					src:[
 						'*.jade'
 					],
@@ -27,20 +24,6 @@ module.exports = function(grunt) {
 					ext:'.html'
 				}]
 			},
-			deploy_sp:{
-				options:{
-					data:jadeDataFunc("sp")
-				},
-				files:[{
-					expand:true,
-					cwd:'src/jade/sp',
-					src:[
-						'*.jade'
-					],
-					dest:'deploy/sp',
-					ext:'.html'
-				}]
-			}
 		}
 	});
 	function jadeDataFunc(env) {

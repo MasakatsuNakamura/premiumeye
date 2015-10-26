@@ -1,58 +1,88 @@
-<!DOCTYPE html><html class="pc index">
-<head>
-  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-  <meta name="description" content="Jade(grunt-contrib-jade)を使用した静的HTMLコーディング実践のサンプルサイトです。">
-  <meta name="keywords" content="Jade,HTML,コーディング,Grunt,grunt-contrib-jade">
-  <meta property="og:title" content="Jadeを使用した静的HTMLコーディング実践">
-  <meta property="og:type" content="website">
-  <meta property="og:description" content="Jade(grunt-contrib-jade)を使用した静的HTMLコーディング実践のサンプルサイトです。">
-  <meta property="og:url" content="http://nowri.github.io/explain_jade/">
-  <meta property="og:image" content="http://nowri.github.io/explain_jade/img/share/share.png">
-  <meta property="og:site_name" content="Jadeを使用した静的HTMLコーディング実践">
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>Jadeサンプル | index</title>
-  <link href="css/index.css" rel="stylesheet">
-  <link href="http://fonts.googleapis.com/css?family=Roboto:100,300,700italic" rel="stylesheet" type="text/css">
-</head><body>
-<div class="header clearfix">
-  <nav class="top-menu fon-goog fon-thin">
-    <ul>
-      <li><a href="./json.html">JSON</a>
-      </li>
-      <li><a href="./include.html">INCLUDE</a>
-      </li>
-      <li><a href="./extends.html">EXTENDS</a>
-      </li>
-      <li><a href="./mixin.html">MIXIN</a>
-      </li>
-    </ul>
-  </nav>
-</div>
-<div class="main">
-  <div class="visual">
-    <h1 class="fon-goog fon-bold fon-italic">EXPLANATION OF JADE</h1>
-    <p class="copy">Jadeを使用した静的HTMLコーディング実践</p>
-  </div>
-  <div class="desc">
-    <p>Jade は JST (JavaScript Templates) の一つであり、<br>HTML を書くための軽量マークアップ言語 である Haml に影響を受けた<br>JavaScript テンプレートエンジンでもあります。</p>
-    <p>日本語でJadeのリファレンス的な記事はみかけますが、<br>一般的な静的HTMLサイト制作でJadeの機能を実際どのように使うかという所に踏み込んだものはなかったと思うので、<br>本サンプルを通して解説します。</p>
-    <p>本サンプルの解説記事は<a href="http://qiita.com/nowri/items/242bc8a5d94e85d33a1e" target="_blank">こちら</a>です。</p>
-  </div>
-</div>
-<div class="footer clearfix">
-  <div class="bg"></div>
-  <ul class="sns">
-    <li class="tw">
-      <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://nowri.github.io/explain_jade/" data-text="Jade(grunt-contrib-jade)を使用した静的HTMLコーディング実践のサンプルサイトです。" data-hashtags="jade" data-count="none">Tweet</a>
-      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-    </li>
-    <li class="fb"><iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fnowri.github.io%2Fexplain_jade%2F&amp;width&amp;layout=button&amp;action=like&amp;show_faces=false&amp;share=false&amp;height=35&amp;scrolling="no" frameborder="0" style="border:none; overflow:hidden; height:35px;" allowTransparency="true"></iframe></li>
-    <li class="gp"><script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
-      <div data-href="http://nowri.github.io/explain_jade/" data-size="medium" data-annotation="none" class="g-plusone"></div>
-    </li>
-  </ul>
-</div>
-<script src="js/plugins.js"></script>
-<script src="js/app.js"></script></body>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>裏サニックスアイ</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+  </head>
 </html>
+<body style="margin-top:70px">
+  <div style="width:auto" class="container">
+    <div id="div-modal" class="modal fade">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1>検索しています...</h1>
+        </div>
+        <div class="modal-body">
+          <div class="progress progress-striped active">
+            <div style="width: 100%;" class="bar"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div id="bs-example-navbar-collapse-1" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="?p=0">PVセンサー一覧</a></li>
+          <li><a href="?p=1">低発電量</a></li>
+          <li><a href="?p=2">異常発電量</a></li>
+        </ul>
+      </div>
+    </nav>
+    <form class="form-inline">
+      <div class="form-group">
+        <label class="sr-only">query</label>
+        <input id="myquery" type="text" placeholder="検索文字列 発電所名など" class="form-control">
+      </div>
+      <button id="mybutton" data-target="#div-modal" class="btn btn-default">検索</button>
+    </form>
+    <table style="width:100%" class="table table-striped">
+      <thead>
+        <tr>
+          <th>シリアル番号</th>
+          <th>発電所名</th>
+          <th>顧客名</th>
+          <th>プラン</th>
+          <th>営業所</th>
+          <th>パワコン台数</th>
+          <th>ステータス</th>
+          <th>メーカー</th>
+          <th>機種名</th>
+        </tr>
+      </thead>
+      <tbody id="mytable"></tbody>
+    </table>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        $("#mybutton").on("click", function () {
+          $("pleaseWaitDialog").show();
+          $.ajax({
+            type: "GET",
+            url: "https://olggsrrf75.execute-api.ap-northeast-1.amazonaws.com/prod/get_pvsensor_info",
+            data: "query=" + encodeURIComponent($("#myquery").val()),
+            success: function(json) {
+              var pvsensors = json['info'];
+              var resp = "";
+              var header = ["シリアル番号","発電所名","顧客名","プラン","営業所","パワコン台数","ステータス","メーカー","機種名"];
+              for (var key in pvsensors) {
+                var pvsensor = pvsensors[key];
+                resp += "<tr>";
+                for (var i = 0; i < header.length; i++) {
+                  resp += "<td>" + pvsensor[header[i]] + "</td>";
+                }
+                resp += "</tr>";
+              }
+              $("#mytable").html(resp);
+            }
+          });
+          $("pleaseWaitDialog").hide();
+          return false;
+        });
+      });
+    </script>
+  </div>
+</body>
