@@ -1,9 +1,0 @@
-{
-  "title":"Jadeサンプル | ",
-  "description":"Jade(grunt-contrib-jade)を使用した静的HTMLコーディング実践のサンプルサイトです。",
-  "keywords":"Jade,HTML,コーディング,Grunt,grunt-contrib-jade",
-  "url":"http://nowri.github.io/explain_jade/",
-  "image":"http://nowri.github.io/explain_jade/img/share/share.png",
-  "sitename":"Jadeを使用した静的HTMLコーディング実践",
-  "qiita":"http://qiita.com/nowri/items/242bc8a5d94e85d33a1e"
-}

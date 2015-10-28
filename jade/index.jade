@@ -1,0 +1,19 @@
+include ./components/_header
+div
+  form.form-inline
+    div.form-group
+      label.sr-only search
+      input#search.form-control(type="text", placeholder="検索文字列 発電所名など")
+    button#mybutton.btn.btn-default 検索
+    span#numbers
+    select#page
+  table.table.table-striped(style="width:100%")
+    thead
+      tr
+        th 番号
+        each name in header
+          th=name
+    tbody#mytable
+  script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js")
+  script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js")
+  script(src="./index.js")

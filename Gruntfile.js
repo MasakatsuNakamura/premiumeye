@@ -5,40 +5,53 @@ module.exports = function(grunt) {
 	grunt.initConfig({
 		watch : {
 			deploy:{
-				files:['src/**'],
+				files:['**'],
 				tasks:['deploy']
 			}
 		},
-		jade:{
-			options:{
-				pretty:true // コードを整形出力するか
-			},
-			deploy_pc:{
+		coffee: {
+			deploy:{
 				files:[{
 					expand:true,
-					cwd:'src/jade',
+					cwd:'coffee',
+					src:[
+						'*.coffee'
+					],
+					dest:'deploy',
+					ext:'.js'
+				}]
+			}
+		},
+		jade: {
+			options:{
+				data:jadeDataFunc(),
+				pretty:true // コードを整形出力するか
+			},
+			deploy:{
+				files:[{
+					expand:true,
+					cwd:'jade',
 					src:[
 						'*.jade'
 					],
 					dest:'deploy',
 					ext:'.html'
-				}]
-			},
+				}],
+			}
 		}
 	});
-	function jadeDataFunc(env) {
+	function jadeDataFunc() {
 		return function(dest, srcAr) {
 			var _ = grunt.util._,
 				regDest = /\/([A-Za-z_0-9-]+?)\.html/,
 				destName = dest.match(regDest)[1],
 				data;
 			try {
-				data = grunt.file.readJSON("src/json/_common.json");
+				data = grunt.file.readJSON("json/_common.json");
 			} catch(e) {
 				data = {};
 			}
 			return _.extend({
-				env:env,
 				page:destName
 			}, data);
 		};
@@ -46,9 +59,10 @@ module.exports = function(grunt) {
 
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-contrib-jade');
-	grunt.registerTask('deploy', ['jade']);
+	grunt.loadNpmTasks('grunt-contrib-coffee');
+	grunt.registerTask('deploy', ['jade', 'coffee']);
 
 	grunt.loadTasks('tasks');
 
-	grunt.registerTask('default', ['deploy']);
+	grunt.registerTask('default', ['deploy', 'coffee']);
 };

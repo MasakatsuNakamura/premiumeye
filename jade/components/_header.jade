@@ -1,0 +1,17 @@
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    title #{title}#{menu[page]}
+    link(href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css", rel="stylesheet")
+  body(style="margin-top:70px")
+    div.container(style="width:auto")
+      nav.navbar.navbar-inverse.navbar-fixed-top
+        div#bs-example-navbar-collapse-1.collapse.navbar-collapse
+          ul.nav.navbar-nav
+            each name, url in menu
+              li(class="#{(page === url) ? 'active' : ''}")
+                a(href="#{url}.html")=name
+

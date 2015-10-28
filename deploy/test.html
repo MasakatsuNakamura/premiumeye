@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>裏サニックスアイ</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+  </head>
+  <body>
+    <div>
+      <input id="search" type="text">
+      <input id="search-btn" type="button" value="検索">
+    </div>
+    <div>
+      <table>
+        <thead>
+          <th>シリアル番号</th>
+          <th>発電所名</th>
+          <th>顧客名</th>
+          <th>プラン</th>
+          <th>営業所</th>
+          <th>パワコン台数</th>
+          <th>ステータス</th>
+          <th>メーカー</th>
+          <th>機種名</th>
+          <th>プログラムバージョン</th>
+          <th>センサー向き</th>
+          <th>パワコン情報</th>
+        </thead>
+        <tbody id="list"></tbody>
+      </table>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        $("#search-btn").on("click", function () {
+          $("#list").html("ローディング");
+          $.ajax({
+            type: "GET",
+            url: "https://olggsrrf75.execute-api.ap-northeast-1.amazonaws.com/prod/get_pvsensor_info",
+            data: "query=" + $("#search").val(),
+            success: function(json) {
+              var pvsensors = json.info;
+              var header = ["シリアル番号","発電所名","顧客名","プラン","営業所","パワコン台数","ステータス","メーカー","機種名","プログラムバージョン","センサー向き","パワコン情報"];
+              var resp = "";
+              for (var i = 0; i < pvsensors.length; i++) {
+                var pvsensor = pvsensors[i];
+                resp += "<tr>";
+                for (var j = 0; j < header.length; j++) {
+                  var desc = pvsensor[header[j]];
+                  resp += "<td>" + desc + "</td>";
+                }
+                resp += "</tr>";
+              }
+              resp += "</tbody></table>";
+      
+              $("#list").html(resp);
+            }
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
