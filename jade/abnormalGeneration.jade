@@ -1,131 +1,103 @@
-include ./components/_header
-div
-  form.form-inline
-    div.form-group
-      label.sr-only search
-      input#search.form-control(type="text", placeholder="検索文字列 発電所名など")
-    button#mybutton.btn.btn-default 検索
-    span#numbers
-    select#page
-  table.table.table-striped(style="width:100%")
-    thead
-      tr
-        th 番号
-        each name in header
-          th=name
-    tbody#mytable
-  script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js")
-  script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js")
-  script.
-    function getUrlVars() {
-      var vars = [], hash;
-      var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-      for(var i = 0; i < hashes.length; i++)
-      {
-        hash = hashes[i].split('=');
-        vars.push(hash[0]);
-        vars[hash[0]] = hash[1];
+extends ./components/_header
+block content
+  p(style="font-size:18px")
+    a#yesterday 前日
+    &nbsp;
+    span#mydate(style="font-size:22px")
+    &nbsp;
+    a#tommorow 翌日
+  div#accordion.panel-group(style="width:100%")
+    script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js")
+    script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js")
+    script.
+      function getUrlVars() {
+        'use strict';
+        var vars = [], hash;
+        var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+        for(var i = 0; i < hashes.length; i++)
+        {
+          hash = hashes[i].split('=');
+          vars.push(hash[0]);
+          vars[hash[0]] = hash[1];
+        }
+        return vars;
       }
-      return vars;
-    };
-    $(document).ready(function() {
-      var args = getUrlVars();
-      if ('search' in args) {
-        $('#search').val(decodeURI(args['search']));
-      }
-      if ('sortby' in args) {
-        $('#sortby').val(decodeURI(args['sortby']));
-      } else {
-        $('#sortby').val('シリアル番号');
-      }
-      var header = !{JSON.stringify(header)};
-      var size = 20;
-      var col = [];
-      var num = 0;
-      var pages = 0;
-      var i = 0;
-      search_fn();
 
-      function search_fn() {
-        $.getJSON("https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/pv_sensors.json", function (json) {
-          var data = [];
-          var find = [];
-          var search = $("#search").val();
-          var searches = search.split(/ or /);
-          if (searches.length === 0) {
-            searches[0] = search;
-          }
-          for (var mysearch in searches) {
-            searches[mysearch] = '^(?=.*' + searches[mysearch].split(/\s+/).join(')(?=.*') + ')';
-          }
-          var re = new RegExp(searches.join('|'), "i");
-          console.log(searches.join('|'));
-          num = 0;
-          for (var id in json) {
-            var line = [];
-            for (var item in header) {
-              var val = json[id][header[item]];
-              json[id][header[item]] = val ? val : '';
-              line.push((json[id][header[item]] + '').replace("\n", " "));
-            }
-            if (!json[id]['テスト'] && (search === '' || line.join(',').match(re))) {
-    //        json[id]['プログラムバージョン'] = json[id]['プログラムバージョン'].replace(/\./g, '').replace(/:/, '.');
-              data.push(json[id]);
-              num++;
-            }
-          }
+      $(document).ready(function() {
+        'use strict';
+        var args = getUrlVars();
+        var date;
+        if (args.length == 3) {
+          date = new Date(args.year, args.month - 1, args.day);
+        } else {
+          date = new Date();
+          date.setDate(date.getDate() - 1);
+        }
+        var yesterday = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+        yesterday.setDate(yesterday.getDate() - 1);
+        $('#yesterday').attr("href", "?year=" + yesterday.getFullYear() + "&month=" + (yesterday.getMonth() + 1) + "&day=" + yesterday.getDate());
+        $('#yesterday').text("前日");
 
-          if ($('#sortby').val() !== '') {
-            data.sort(function(val1, val2) {
-              val1 = val1[$('#sortby').val()];
-              val2 = val2[$('#sortby').val()];
-              if (val1 < val2) {
-                return -1;
-              } else if (val1 > val2) {
-                return 1;
-              } else {
-                return 0;
-              }
+        var tommorow = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+        tommorow.setDate(tommorow.getDate() + 1);
+        $('#tommorow').attr("href", "?year=" + tommorow.getFullYear() + "&month=" + (tommorow.getMonth() + 1) + "&day=" + tommorow.getDate());
+        $('#tommorow').text("翌日");
+
+        var strDate = date.getFullYear() + "/" + (date.getMonth() + 1) + "/" + date.getDate();
+        $('#mydate').text(strDate);
+        $.getJSON("https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/abnormalGeneration/" + strDate + ".json", function (json) {
+          $.getJSON("https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/pv_sensors.json", function (pvsensors) {
+            var header = [ 'パワコン番号', '積算電力', '前回積算電力', '差分', '日時', '前回日時', '変化係数' ];
+            var res = '<ul class="syncer-acdn-parent" id="list">\n';
+            var num = 0;
+            var keys = [];
+            for (var id in json) {
+              keys.push(id);
+            }
+            keys.sort(function (a, b) {
+              if (a < b) return -1;
+              if (a > b) return 1;
+              return 0;
             });
-          }
-
-          pages = parseInt(num / size) + 1;
-          var page = '';
-          for (var i = 0; i < pages; i++) {
-            page += '<option value="' + i + '"">' + (i + 1) + ' / ' + pages + '</option>';
-          }
-          $("#page").html(page);
-          draw();
-
-          $("#page").change(function(){
-            draw();
-          });
-
-          function draw() {
-            var p = parseInt($('#page').val());
-            var tbl = "</tr>";
-            for (i = p * size; i < p * size + size; i++) {
-              if (i >= num) break;
-              var line = data[i];
-              tbl += "<tr><td>" + (i + 1) + "</td>";
-              for (var j = 0; j < header.length; j++) {
-                var cell = header[j];
-                var value = line[cell];
-                if (cell === "発電所名") {
-                  var value = '<a href="https://maps.google.co.jp/maps?ll=' + line['緯度'] + ',' + line['経度'] + '&z=11&q=' + line['緯度'] + ',' + line['経度'] + '+(' + encodeURI(line['発電所名'] + '発電所') + ')&hl=ja&iwloc=A" target="_blank">' + line['発電所名'] + '発電所</a>';
-                } else if (cell === "シリアル番号") {
-                  var value = '<a href="' + line['URL'] + '" target="_blank">' + line['シリアル番号'] + '</a>';
-                }
-                tbl += "<td>" + value.toString().replace(/\n/g, '<br />') + "</td>";
+            keys.forEach(function (id) {
+              var list = json[id].Series;
+              res += '<div class="panel panel-default">';
+              res += '<div class="panel-heading">';
+              res += '<h4 class="panel-title">';
+              res += '<a data-toggle="collapse" data-parent="#accordion" href="#collapse' + num + '">';
+              res += id + '(' + list.length + '件) ' + json[id].発電所名 + '発電所(' + json[id].営業所 + ') ' + json[id].メーカー + ':' + json[id].機種名 + '(ファームバージョン:' + json[id].プログラムバージョン + ')</a></p>\n';
+              res += '</a>';
+              res += '</h4>';
+              res += '</div>';
+              res += '<div id="collapse' + num + '" class="panel-collapse collapse">';
+              res += '<div class="panel-body">';
+              res += '<table class="table"><thead><th>&nbsp;</th>';
+              for (var column = 0; column < header.length; column++) {
+                res += '<th style="padding:8px 15px;">' + header[column] + '</th>';
               }
-              tbl += "</tr>";
-            }
-            $("#mytable").html(tbl);
-            var date = new Date();
-            $("#numbers").text(num + " 箇所 (" + date.getFullYear() + "年" + (date.getMonth() + 1) + "月" + date.getDate() + "日 時点)");
+              res += '</tr></thead><tbody>';
+              for (var row in list) {
+                res += '<tr>';
+                var line = list[row];
+                res += "<td><a style='padding:0;' href='" + pvsensors[id].URL.replace(/\/pv_sensor/, "/rawdata") + "' target='_blank'>開く</a></td>";
+                for (column = 0; column < header.length; column++) {
+                  res += '<td>' + line[header[column]] + '</td>';
+                }
+                res += '</tr>';
+              }
+              res += '</tbody></table></div></div></div>';
+              num++;
+            });
+            $('#accordion').html(res);
+            console.log(res);
 
-          }
+            $(function(){
+              $(".syncer-acdn" ).click( function(){
+                var target = $(this).data( "target" );
+                $("#" + target ).slideToggle();
+                return false;
+              });
+            });
+          });
         });
-      }
-      return false;
-    });
+      });

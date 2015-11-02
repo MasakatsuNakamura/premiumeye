@@ -9,9 +9,13 @@ html
   body(style="margin-top:70px")
     div.container(style="width:auto")
       nav.navbar.navbar-inverse.navbar-fixed-top
+        div.container-fluid
+        div.navbar-header
+          a.navbar-brand(href="#") サニックスアイズ
         div#bs-example-navbar-collapse-1.collapse.navbar-collapse
           ul.nav.navbar-nav
             each name, url in menu
               li(class="#{(page === url) ? 'active' : ''}")
                 a(href="#{url}.html")=name
-
+      div(style="width:98%;margin:0 15px 0 0")
+        block content
