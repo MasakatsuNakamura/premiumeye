@@ -22,19 +22,20 @@
         </div>
       </nav>
       <div style="margin:0 10px 0 10px">
-        <p><b>検索条件：</b>
-          <input id="search" size="80">
-          <input id="sortby" type="hidden"><span>&nbsp;</span>
-          <input id="search-btn" type="button" value="絞込み"><span>&nbsp;</span>
-          <input id="all-btn" type="button" value="すべて"><span>&nbsp;</span>
-          <input id="sanix" type="button" value="古サニックス"><span>&nbsp;</span>
-          <input id="tabuchi" type="button" value="要VerUP"><span>&nbsp;</span>
-          <input id="pana" type="button" value="パナ6台以上"><span>&nbsp;</span>
-          <input id="wide" type="button" value="ワイド逆向き">
-        </p>
-        <p><b>検索結果：</b><span id="numbers"></span><span>&nbsp;</span><b>ページ：</b>
+        <div style="margin-bottom:12px" class="form-inline">
+          <input id="sortby" type="hidden">
+          <label for="search">検索条件：</label>
+          <input id="search" size="80" class="form-control">
+          <button id="search-btn" class="btn btn-default">絞込み</button>
+          <button id="all-btn" class="btn btn-default">すべて</button>
+          <button id="sanix" class="btn btn-default">古サニックス</button>
+          <button id="tabuchi" class="btn btn-default">要VerUP</button>
+          <button id="pana" class="btn btn-default">パナ6台以上</button>
+          <button id="wide" class="btn btn-default">ワイド逆向き</button>
+        </div>
+        <div><b>検索結果：</b><span id="numbers"></span><span>&nbsp;</span><b>ページ：</b>
           <select id="page"></select>
-        </p>
+        </div>
         <div>
           <table class="table">
             <thead>

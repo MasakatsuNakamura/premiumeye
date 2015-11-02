@@ -23,7 +23,7 @@
       </nav>
       <div style="margin:0 10px 0 10px">
         <div>
-          <p style="font-size:18px"><a id="yesterday">前日</a><span>&nbsp;</span><span id="mydate" style="font-size:22px"></span><span>&nbsp;</span><a id="tommorow">翌日</a><span>&nbsp;</span><span style="font-size:12px;color:#F00;">※ 赤部分は、「電力量低下」エラーが重複して出ているもの</span><span>&nbsp;</span><span style="font-size:12px;color:#8E8;">※ 緑部分は、「電力量低下」エラーが単体で出ているもの</span></p>
+          <div class="form-inline"><a id="yesterday" class="btn btn-default">前日</a><span id="mydate" style="font-size:22px"></span><a id="tommorow" class="btn btn-default">翌日</a><span style="font-size:12px;color:#F00;">&nbsp;※ 赤部分は、「電力量低下」エラーが重複して出ているもの</span><span style="font-size:12px;color:#8E8;">&nbsp;※ 緑部分は、「電力量低下」エラーが単体で出ているもの</span></div>
           <div>
             <table class="table">
               <thead>
@@ -81,8 +81,7 @@
               $('#tommorow').text("翌日");
             
               var strDate = date.getFullYear() + "/" + (date.getMonth() + 1) + "/" + date.getDate();
-              $('#mydate').text(strDate);
-              $('h1').text($('h1').text() + ' ' + strDate);
+              $('#mydate').html('&nbsp;' + strDate + '&nbsp;');
               $.getJSON("https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/detectLowGeneration/" +
                strDate + ".json", function (json) {
                 $.getJSON("https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/pv_sensors.json", function (pvsensors) {

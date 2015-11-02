@@ -1,22 +1,16 @@
 extends ./components/_header
 block content
-  p
-    b 検索条件：
-    input#search(size="80")
+  .form-inline(style="margin-bottom:12px")
     input#sortby(type="hidden")
-    span &nbsp;
-    input#search-btn(type="button", value="絞込み")
-    span &nbsp;
-    input#all-btn(type="button", value="すべて")
-    span &nbsp;
-    input#sanix(type="button", value="古サニックス")
-    span &nbsp;
-    input#tabuchi(type="button", value="要VerUP")
-    span &nbsp;
-    input#pana(type="button", value="パナ6台以上")
-    span &nbsp;
-    input#wide(type="button", value="ワイド逆向き")
-  p
+    label(for="search") 検索条件：
+    input#search.form-control(size="80")
+    button#search-btn.btn.btn-default 絞込み
+    button#all-btn.btn.btn-default すべて
+    button#sanix.btn.btn-default 古サニックス
+    button#tabuchi.btn.btn-default 要VerUP
+    button#pana.btn.btn-default パナ6台以上
+    button#wide.btn.btn-default ワイド逆向き
+  div
     b 検索結果：
     span#numbers
     span &nbsp;
