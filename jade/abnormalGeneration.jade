@@ -2,11 +2,11 @@ extends ./components/_header
 block content
   p(style="font-size:18px")
     a#yesterday 前日
-    &nbsp;
+    span &nbsp;
     span#mydate(style="font-size:22px")
-    &nbsp;
+    span &nbsp;
     a#tommorow 翌日
-  div#accordion.panel-group(style="width:100%")
+  div#accordion.panel-group
     script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js")
     script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js")
     script.
@@ -48,7 +48,7 @@ block content
         $.getJSON("https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/abnormalGeneration/" + strDate + ".json", function (json) {
           $.getJSON("https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/pv_sensors.json", function (pvsensors) {
             var header = [ 'パワコン番号', '積算電力', '前回積算電力', '差分', '日時', '前回日時', '変化係数' ];
-            var res = '<ul class="syncer-acdn-parent" id="list">\n';
+            var res = '';
             var num = 0;
             var keys = [];
             for (var id in json) {
@@ -90,14 +90,6 @@ block content
             });
             $('#accordion').html(res);
             console.log(res);
-
-            $(function(){
-              $(".syncer-acdn" ).click( function(){
-                var target = $(this).data( "target" );
-                $("#" + target ).slideToggle();
-                return false;
-              });
-            });
           });
         });
       });

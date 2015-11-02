@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>サニックスアイズ | 異常発電量一覧表</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="shortcut icon" href="favicon.ico" type="image/vnd.microsoft.icon">
   </head>
   <body style="margin-top:70px">
     <div style="width:auto" class="container">
@@ -20,9 +21,9 @@
           </ul>
         </div>
       </nav>
-      <div style="width:98%;margin:0 15px 0 0">
-        <p style="font-size:18px"><a id="yesterday">前日</a>&nbsp;<span id="mydate" style="font-size:22px"></span>&nbsp;<a id="tommorow">翌日</a></p>
-        <div id="accordion" style="width:100%" class="panel-group">
+      <div style="margin:0 10px 0 10px">
+        <p style="font-size:18px"><a id="yesterday">前日</a><span>&nbsp;</span><span id="mydate" style="font-size:22px"></span><span>&nbsp;</span><a id="tommorow">翌日</a></p>
+        <div id="accordion" class="panel-group">
           <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
           <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
           <script>
@@ -64,7 +65,7 @@
               $.getJSON("https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/abnormalGeneration/" + strDate + ".json", function (json) {
                 $.getJSON("https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/pv_sensors.json", function (pvsensors) {
                   var header = [ 'パワコン番号', '積算電力', '前回積算電力', '差分', '日時', '前回日時', '変化係数' ];
-                  var res = '<ul class="syncer-acdn-parent" id="list">\n';
+                  var res = '';
                   var num = 0;
                   var keys = [];
                   for (var id in json) {
@@ -106,14 +107,6 @@
                   });
                   $('#accordion').html(res);
                   console.log(res);
-            
-                  $(function(){
-                    $(".syncer-acdn" ).click( function(){
-                      var target = $(this).data( "target" );
-                      $("#" + target ).slideToggle();
-                      return false;
-                    });
-                  });
                 });
               });
             });

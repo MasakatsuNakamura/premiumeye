@@ -3,13 +3,13 @@ block content
   div
     p(style="font-size:18px")
       a#yesterday 前日
-      &nbsp;
+      span &nbsp;
       span#mydate(style="font-size:22px")
-      &nbsp;
+      span &nbsp;
       a#tommorow 翌日
-      &nbsp;
+      span &nbsp;
       span(style="font-size:12px;color:#F00;") ※ 赤部分は、「電力量低下」エラーが重複して出ているもの
-      &nbsp;
+      span &nbsp;
       span(style="font-size:12px;color:#8E8;") ※ 緑部分は、「電力量低下」エラーが単体で出ているもの
     div
       - var header = ['シリアル番号', '発電所名', '営業所', 'メーカー', '機種', 'プラン', '発電力量', '定格出力', '偏差値', '周辺順位', '周辺発電所数' ]
