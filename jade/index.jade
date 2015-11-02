@@ -10,11 +10,10 @@ block content
     button#tabuchi.btn.btn-default 要VerUP
     button#pana.btn.btn-default パナ6台以上
     button#wide.btn.btn-default ワイド逆向き
-  div
-    b 検索結果：
-    span#numbers
-    span &nbsp;
-    b ページ：
+  .form-inline(style="margin-bottom:12px")
+    label(for="numbers") 検索結果：
+    span#numbers &nbsp;
+    label(for="page") ページ：
     select#page
   div
     table.table
@@ -42,6 +41,35 @@ block content
 
       $(document).ready(function() {
         'use strict';
+        //イベントハンドラ
+        $("#page").change(function(){
+          draw();
+        });
+        $("#search-btn").attr("tabindex", "0");
+        $("#search-btn").click(function(){
+          location.href = '?search=' + $('#search').val();
+        });
+        $("#all-btn").click(function(){
+          location.href = '?search=';
+        });
+        $("#sanix").click(function(){
+          location.href = '?search=' + "SA099T01 V[0-6][0-9A-F]";
+        });
+        $("#tabuchi").click(function(){
+          location.href = '?search=' + "田淵電機 1\\.0[0-8] or 安川電機 1\\.0[0-5] or SA099T01 1\\.0[0-8] or P73H103RJ 1\\.(0[0-9]|1[01])";
+        });
+        $("#pana").click(function(){
+          location.href = '?search=' + "SP(SS|SM|US) ,([6-9]|1[0-9]), パワコン 初期化待ち|アクティベート待ち";
+        });
+        $("#wide").click(function(){
+          location.href = '?search=' + "電力量センサー ,逆,";
+        });
+        $("input").keydown(function(e) {
+          if (e.keyCode === 13) {
+            location.href = '?search=' + $('#search').val();
+          }
+        });
+        // 引数解析
         var args = getUrlVars();
         if ('search' in args) {
           $('#search').val(decodeURI(args.search));
@@ -107,36 +135,7 @@ block content
             $("#page").html(page);
             draw();
 
-      //イベントハンドラ
-            $("#page").change(function(){
-              draw();
-            });
-            $("#search-btn").attr("tabindex", "0");
-            $("#search-btn").click(function(){
-              location.href = '?search=' + $('#search').val();
-            });
-            $("#all-btn").click(function(){
-              location.href = '?search=';
-            });
-            $("#sanix").click(function(){
-              location.href = '?search=' + "SA099T01 V[0-6][0-9A-F]";
-            });
-            $("#tabuchi").click(function(){
-              location.href = '?search=' + "田淵電機 1\\.0[0-8] or 安川電機 1\\.0[0-5] or SA099T01 1\\.0[0-8] or P73H103RJ 1\\.(0[0-9]|1[01])";
-            });
-            $("#pana").click(function(){
-              location.href = '?search=' + "SP(SS|SM|US) ,([6-9]|1[0-9]), パワコン 初期化待ち|アクティベート待ち";
-            });
-            $("#wide").click(function(){
-              location.href = '?search=' + "電力量センサー ,逆,";
-            });
-            $("input").keydown(function(e) {
-              if (e.keyCode === 13) {
-                location.href = '?search=' + $('#search').val();
-              }
-            });
-
-            function draw() {
+           function draw() {
               var p = parseInt($('#page').val());
               var tbl = "";
               var values = {};
