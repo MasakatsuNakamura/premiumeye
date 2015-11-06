@@ -20,6 +20,7 @@ block content
       thead
         tr
           th No
+          - var header = [ "シリアル番号", "発電所名", "顧客名", "プラン", "営業所", "パワコン台数", "ステータス", "メーカー", "機種名", "プログラムバージョン", "センサー向き", "パワコン情報" ]
           each name in header
             th=name
       tbody#list

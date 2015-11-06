@@ -4,3 +4,4 @@ node_modules/
 tasks/
 src/scss/
 design/
+s3auth.json

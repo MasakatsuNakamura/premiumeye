@@ -1,0 +1,32 @@
+extends ./components/_header
+block content
+  .containar
+    .form-inline(style="margin-bottom:12px")
+      input#sortby(type="hidden")
+      label(for="search") 検索条件：
+      input#search.form-control(size="80")
+      button#search-btn.btn.btn-default 絞込み
+    table.table
+      thead
+        tr
+          - var HEADER = {"no":"社員番号", "name":"氏名", "kana":"シメイ", "shozoku":"所属", "bumon":"部門", "shokushu":"職種", "shokui":"職位", "indate":"入社日", "kintai":"勤怠管理所属", "email":"メールアドレス"};
+          each name, key in HEADER
+            th=name
+      tbody#mytable
+    script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js")
+    script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js")
+    script.
+      $(document).ready(function(){
+        $.getJSON("https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/5XMRr22UxMU5dlivLoPnpJAvRpJ8wF53/namelist.json", function (data) {
+          var HEADER = !{JSON.stringify(HEADER)};
+          for (var id in data)　{
+            var person = data[id];
+            var row = "<tr>";
+            for (var key in HEADER) {
+              row += "<td>" + person[key] + "</td>";
+            }
+            row += "</tr>";
+            $("#mytable").append(row);
+          }
+        });
+      });

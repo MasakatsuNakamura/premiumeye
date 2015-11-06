@@ -4,6 +4,5 @@
   "keywords": "",
   "url": "",
   "sitename": "",
-  "menu": { "index": "PVセンサー一覧", "lowGeneration": "低発電量一覧表", "abnormalGeneration": "異常発電量一覧表", "noticeMail": "通知メール一覧" },
-  "header": [ "シリアル番号", "発電所名", "顧客名", "プラン", "営業所", "パワコン台数", "ステータス", "メーカー", "機種名", "プログラムバージョン", "センサー向き", "パワコン情報" ]
+  "menu": { "index": "PVセンサー一覧", "lowGeneration": "低発電量一覧表", "lowGeneration2": "未復旧故障一覧", "abnormalGeneration": "異常発電量一覧表", "noticeMail": "通知メール一覧", "nameList": "社員名簿", "administrators": "管理者一覧" }
 }
