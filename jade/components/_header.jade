@@ -18,5 +18,8 @@ html
             each name, url in menu
               li(class="#{(page === url) ? 'active' : ''}")
                 a(href="#{url}.html")=name
+          ul.nav.navbar-nav.navbar-right
+            li.active
+              a(href="https://sanix-eye.jp/7db01ea67f5f30305d9958cce3bc9b48/", target="_blank") サニックスアイ管理ページへ
       div(style="margin:0 10px 0 10px")
         block content

@@ -18,14 +18,17 @@
             <li><a href="index.html">PVセンサー一覧</a></li>
             <li class="active"><a href="lowGeneration.html">低発電量一覧表</a></li>
             <li><a href="abnormalGeneration.html">異常発電量一覧表</a></li>
+            <li><a href="noticeMail.html">通知メール一覧</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li class="active"><a href="https://sanix-eye.jp/7db01ea67f5f30305d9958cce3bc9b48/" target="_blank">サニックスアイ管理ページへ</a></li>
           </ul>
         </div>
       </nav>
       <div style="margin:0 10px 0 10px">
-        <div class="form-inline"><a id="yesterday" class="btn btn-default">前日</a>
-          <button class="btn btn-default"><span id="mydate"></span></button><a id="tommorow" class="btn btn-default">翌日</a>
-          <button class="btn btn-success">※ 赤部分は、「電力量低下」エラーが重複して出ているもの</button>
-          <button class="btn btn-danger">※ 緑部分は、「電力量低下」エラーが単体で出ているもの</button>
+        <div class="form-inline"><a id="yesterday" class="btn btn-default">前日</a><span id="mydate" style="font-size:22px"></span><a id="tommorow" class="btn btn-default">翌日</a>
+          <button class="btn btn-danger">※ 赤部分は、「電力量低下」エラーが重複して出ているもの</button>
+          <button class="btn btn-success">※ 緑部分は、「電力量低下」エラーが単体で出ているもの</button>
         </div>
         <div>
           <table class="table">
@@ -107,9 +110,9 @@
                     if (list['偏差値'] < 42 || list.電力量低下) {
                       var style = '';
                       if (list.電力量低下 && list.偏差値 < 42.5) {
-                        style = 'success';
-                      } else if (list.電力量低下) {
                         style = 'danger';
+                      } else if (list.電力量低下) {
+                        style = 'success';
                       }
                       res += '<tr class=' + style + '><td><a href=' + pvsensors[id].URL + ' target="_blank">' + id + '</a></td><td>' + pvsensors[id].発電所名 + '発電所</td><td>' + pvsensors[id].営業所+ '</td><td>' + pvsensors[id].メーカー + '</td><td>' + pvsensors[id].機種名 + '</td><td>' + pvsensors[id].プラン + '</td>';
                       for (var i = 0; i < header.length - 6; i++) {

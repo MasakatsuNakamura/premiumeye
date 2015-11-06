@@ -2,11 +2,10 @@ extends ./components/_header
 block content
   .form-inline
     a#yesterday.btn.btn-default 前日
-    button.btn.btn-default
-      span#mydate
+    span#mydate(style="font-size:22px")
     a#tommorow.btn.btn-default 翌日
-    button.btn.btn-success ※ 赤部分は、「電力量低下」エラーが重複して出ているもの
-    button.btn.btn-danger ※ 緑部分は、「電力量低下」エラーが単体で出ているもの
+    button.btn.btn-danger ※ 赤部分は、「電力量低下」エラーが重複して出ているもの
+    button.btn.btn-success ※ 緑部分は、「電力量低下」エラーが単体で出ているもの
   div
     - var header = ['シリアル番号', '発電所名', '営業所', 'メーカー', '機種', 'プラン', '発電力量', '定格出力', '偏差値', '周辺順位', '周辺発電所数' ]
     table.table
@@ -75,9 +74,9 @@ block content
               if (list['偏差値'] < 42 || list.電力量低下) {
                 var style = '';
                 if (list.電力量低下 && list.偏差値 < 42.5) {
-                  style = 'success';
-                } else if (list.電力量低下) {
                   style = 'danger';
+                } else if (list.電力量低下) {
+                  style = 'success';
                 }
                 res += '<tr class=' + style + '><td><a href=' + pvsensors[id].URL + ' target="_blank">' + id + '</a></td><td>' + pvsensors[id].発電所名 + '発電所</td><td>' + pvsensors[id].営業所+ '</td><td>' + pvsensors[id].メーカー + '</td><td>' + pvsensors[id].機種名 + '</td><td>' + pvsensors[id].プラン + '</td>';
                 for (var i = 0; i < header.length - 6; i++) {
