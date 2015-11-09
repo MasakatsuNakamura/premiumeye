@@ -6,14 +6,14 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
     s3auth: grunt.file.readJSON('s3auth.json'),
     s3: {
-     options: {
-      key: '<%= s3auth.key %>',
-      secret: '<%= s3auth.secret %>',
-      region: 'ap-northeast-1',
-      bucket: 'sanix-data-analysis',
+      options: {
+        key: '<%= s3auth.key %>',
+        secret: '<%= s3auth.secret %>',
+        region: 'ap-northeast-1',
+        bucket: 'sanix-data-analysis',
       },
-      sanixEyes: {
-        upload: [ { src: 'deploy/index.html', dest: 'test/index.html' } ]
+      dev: {
+        upload: [ { src: 'deploy/**', dest: 'dest' } ]
       }
     },
     watch : {
