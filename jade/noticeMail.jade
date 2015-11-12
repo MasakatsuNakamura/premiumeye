@@ -77,10 +77,10 @@ block content
             var myadmin = admin[hadmin[json[id]['recipient']]];
             if (!myadmin) continue;
             var line = '<tr>';
-            line += '<td>' + json[id]['date'] + '</td>';
-            line += '<td style="text-align:left">' + myadmin['所属'] + '</td>';
-            line += '<td style="text-align:left"><a href="mailto:' + json[id]['recipient'] + '" target="_blank">' + myadmin['name'] + '</td>';
-            line += '<td style="text-align:left"><a href="' + json[id]['url'] + '" target="_blank">' + json[id]['subject'] + '</a></td>';
+            line += '<td>' + json[id].date + '</td>';
+            line += '<td style="text-align:left">' + myadmin.所属 + '</td>';
+            line += '<td style="text-align:left"><a href="mailto:' + json[id].recipient + '" target="_blank">' + myadmin.name + '</td>';
+            line += '<td style="text-align:left"><a href="' + json[id].url + '" target="_blank">' + json[id].subject + '</a></td>';
             $('#list').append(line);
           }
         });

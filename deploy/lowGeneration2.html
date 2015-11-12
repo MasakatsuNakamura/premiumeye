@@ -31,21 +31,7 @@
       <div style="margin:0 10px 0 10px">
         <div class="containar">
           <table class="table">
-            <thead>
-              <tr>
-                <th>通知レベル</th>
-                <th>対応状況</th>
-                <th>顧客ID</th>
-                <th>姓</th>
-                <th>名</th>
-                <th>会社名</th>
-                <th>シリアル番号</th>
-                <th>発電所名</th>
-                <th>故障分類</th>
-                <th>機器番号</th>
-                <th>発生日時</th>
-              </tr>
-            </thead>
+            <thead id="myheader"></thead>
             <tbody id="mytable"></tbody>
           </table>
           <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
@@ -53,8 +39,9 @@
           <script>
             $(document).ready(function(){
               $.getJSON("https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/detectLowGeneration2/list.json", function (data) {
-                var HEADER = ["通知レベル","対応状況","顧客ID","姓","名","会社名","シリアル番号","発電所名","故障分類","機器番号","発生日時"];
-                for (var l = 0; l < data.length; l++)　{
+                var HEADER = data[0];
+                $("#myheader").html("<tr><th>" + HEADER.join("</th><th>") + "</th></td>");
+                for (var l = 1; l < data.length; l++)　{
                   var line = data[l];
                   var row = "<tr>";
                   for (var i = 0; i < HEADER.length; i++) {
