@@ -4,5 +4,5 @@
   "keywords": "",
   "url": "",
   "sitename": "",
-  "menu": { "index": "PVセンサー一覧", "lowGeneration": "低発電量一覧表", "lowGeneration2": "未復旧故障一覧", "abnormalGeneration": "異常発電量一覧表", "noticeMail": "通知メール一覧", "nameList": "社員名簿", "administrators": "管理者一覧" }
+  "menu": { "index": "PVセンサー一覧", "lowGeneration": "低発電量一覧表", "lowGeneration2": "未復旧故障一覧", "abnormalGeneration": "異常発電量一覧表", "noticeMail": "通知メール一覧", "nameList": "社員名簿", "administrators": "管理者一覧", "tabuchiInputvol": "田淵入力電圧異常" }
 }
