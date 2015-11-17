@@ -34,6 +34,7 @@ $ aws s3 cp deploy s3://sanix-data-analysis/ --recursive
 ## s3auth.jsonファイルの設定
 
 プロジェクトフォルダ(Gruntfile.jsのあるフォルダ)にs3auth.jsonというファイルを作成してください。
+
 ```
 {
 	"key": "<AWS ACCESS KEY ID>",
