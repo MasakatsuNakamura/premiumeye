@@ -10,10 +10,12 @@ module.exports = function(grunt) {
         key: '<%= s3auth.key %>',
         secret: '<%= s3auth.secret %>',
         region: 'ap-northeast-1',
-        bucket: 'sanix-data-analysis',
+        bucket: 'sanix-data-analysis'
       },
-      dev: {
-        upload: [ { src: 'deploy/**', dest: 'dest' } ]
+      build: {
+        upload: [
+          { src: 'deploy/**', dest: 'root' }
+        ]
       }
     },
     watch : {
@@ -74,6 +76,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-jade');
   grunt.loadNpmTasks('grunt-s3');
+  grunt.registerTask('upload', 's3');
   grunt.registerTask('deploy', ['jade', 's3']);
 
   grunt.loadTasks('tasks');

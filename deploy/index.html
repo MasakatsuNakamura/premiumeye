@@ -22,6 +22,7 @@
             <li><a href="noticeMail.html">通知メール一覧</a></li>
             <li><a href="nameList.html">社員名簿</a></li>
             <li><a href="administrators.html">管理者一覧</a></li>
+            <li><a href="tabuchiInputvol.html">田淵入力電圧異常</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li><a href="https://sanix-eye.jp/7db01ea67f5f30305d9958cce3bc9b48/" target="_blank">サニックスアイ管理ページへ</a></li>
@@ -85,33 +86,7 @@
             $(document).ready(function() {
               'use strict';
               //イベントハンドラ
-              $("#page").change(function(){
-                draw();
-              });
-              $("#search-btn").attr("tabindex", "0");
-              $("#search-btn").click(function(){
-                location.href = '?search=' + $('#search').val();
-              });
-              $("#all-btn").click(function(){
-                location.href = '?search=';
-              });
-              $("#sanix").click(function(){
-                location.href = '?search=' + "SA099T01 V[0-6][0-9A-F]";
-              });
-              $("#tabuchi").click(function(){
-                location.href = '?search=' + "田淵電機 1\\.0[0-8] or 安川電機 1\\.0[0-5] or SA099T01 1\\.0[0-8] or P73H103RJ 1\\.(0[0-9]|1[01])";
-              });
-              $("#pana").click(function(){
-                location.href = '?search=' + "SP(SS|SM|US) ,([6-9]|1[0-9]), パワコン 初期化待ち|アクティベート待ち";
-              });
-              $("#wide").click(function(){
-                location.href = '?search=' + "電力量センサー ,逆,";
-              });
-              $("input").keydown(function(e) {
-                if (e.keyCode === 13) {
-                  location.href = '?search=' + $('#search').val();
-                }
-              });
+            
               // 引数解析
               var args = getUrlVars();
               if ('search' in args) {
@@ -131,6 +106,64 @@
               function search_fn() {
                 'use strict';
                 $.getJSON("https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/pv_sensors.json", function (json) {
+                  function draw() {
+                    var p = parseInt($('#page').val());
+                    var tbl = "";
+                    var values = {};
+                    for (var i = 0; i < header.length; i++) {
+                      var cell = header[i];
+                      values[cell] = {};
+                    }
+                    for (i = p * size; i < p * size + size; i++) {
+                      if (i >= num) break;
+                      var line = data[i];
+                      tbl += "<tr><td>" + (i + 1) + "</td>";
+                      for (var j = 0; j < header.length; j++) {
+                        var cell = header[j];
+                        var value = line[cell];
+                        if (cell === "発電所名") {
+                          var value = '<a href="https://maps.google.co.jp/maps?ll=' + line['緯度'] + ',' + line['経度'] + '&z=11&q=' + line['緯度'] + ',' + line['経度'] + '+(' + encodeURI(line['発電所名'] + '発電所') + ')&hl=ja&iwloc=A" target="_blank">' + line['発電所名'] + '発電所</a>';
+                        } else if (cell === "シリアル番号") {
+                          var value = '<a href="' + line['URL'] + '" target="_blank">' + line['シリアル番号'] + '</a>';
+                        }
+                        tbl += "<td>" + value.toString().replace(/\n/g, '<br />') + "</td>";
+                        values[cell][line[cell]] = true;
+                      }
+                      tbl += "</tr>";
+                    }
+                    tbl += "</table>";
+                    $("#list").html(tbl);
+                    var date = new Date();
+                    $("#numbers").text(num + " 箇所 (" + date.getFullYear() + "年" + (date.getMonth() + 1) + "月" + date.getDate() + "日 時点)");
+                  }
+            
+                  $("#page").change(function(){
+                    draw();
+                  });
+                  $("#search-btn").attr("tabindex", "0");
+                  $("#search-btn").click(function(){
+                    location.href = '?search=' + $('#search').val();
+                  });
+                  $("#all-btn").click(function(){
+                    location.href = '?search=';
+                  });
+                  $("#sanix").click(function(){
+                    location.href = '?search=' + "SA099T01 V[0-6][0-9A-F]";
+                  });
+                  $("#tabuchi").click(function(){
+                    location.href = '?search=' + "田淵電機 1\\.0[0-8] or 安川電機 1\\.0[0-5] or SA099T01 1\\.0[0-8] or P73H103RJ 1\\.(0[0-9]|1[01])";
+                  });
+                  $("#pana").click(function(){
+                    location.href = '?search=' + "SP(SS|SM|US) ,([6-9]|1[0-9]), パワコン 初期化待ち|アクティベート待ち";
+                  });
+                  $("#wide").click(function(){
+                    location.href = '?search=' + "電力量センサー ,逆,";
+                  });
+                  $("input").keydown(function(e) {
+                    if (e.keyCode === 13) {
+                      location.href = '?search=' + $('#search').val();
+                    }
+                  });
                   var data = [];
                   var search = $("#search").val();
                   var searches = search.split(/ or /);
@@ -177,38 +210,6 @@
                   }
                   $("#page").html(page);
                   draw();
-            
-                 function draw() {
-                    var p = parseInt($('#page').val());
-                    var tbl = "";
-                    var values = {};
-                    for (var i = 0; i < header.length; i++) {
-                      var cell = header[i];
-                      values[cell] = {};
-                    }
-                    for (i = p * size; i < p * size + size; i++) {
-                      if (i >= num) break;
-                      var line = data[i];
-                      tbl += "<tr><td>" + (i + 1) + "</td>";
-                      for (var j = 0; j < header.length; j++) {
-                        var cell = header[j];
-                        var value = line[cell];
-                        if (cell === "発電所名") {
-                          var value = '<a href="https://maps.google.co.jp/maps?ll=' + line['緯度'] + ',' + line['経度'] + '&z=11&q=' + line['緯度'] + ',' + line['経度'] + '+(' + encodeURI(line['発電所名'] + '発電所') + ')&hl=ja&iwloc=A" target="_blank">' + line['発電所名'] + '発電所</a>';
-                        } else if (cell === "シリアル番号") {
-                          var value = '<a href="' + line['URL'] + '" target="_blank">' + line['シリアル番号'] + '</a>';
-                        }
-                        tbl += "<td>" + value.toString().replace(/\n/g, '<br />') + "</td>";
-                        values[cell][line[cell]] = true;
-                      }
-                      tbl += "</tr>";
-                    }
-                    tbl += "</table>";
-                    $("#list").html(tbl);
-                    var date = new Date();
-                    $("#numbers").text(num + " 箇所 (" + date.getFullYear() + "年" + (date.getMonth() + 1) + "月" + date.getDate() + "日 時点)");
-            
-                  }
                 });
               }
             });

@@ -5,3 +5,4 @@ tasks/
 src/scss/
 design/
 s3auth.json
+deploy/
