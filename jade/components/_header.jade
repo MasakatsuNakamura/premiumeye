@@ -7,19 +7,21 @@ html
     title #{title}#{menu[page]}
     link(href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css", rel="stylesheet")
     link(rel="shortcut icon", href="favicon.ico", type="image/vnd.microsoft.icon")
-  body(style="margin-top:70px")
-    div.container(style="width:auto")
-      nav.navbar.navbar-inverse.navbar-fixed-top
-        div.container-fluid
-        div.navbar-header
-          a.navbar-brand(href="index.html") サニックスアイズ
-        div#bs-example-navbar-collapse-1.collapse.navbar-collapse
+  body
+    nav.navbar.navbar-inverse
+      div.navbar-header
+      a(href="index.html", class="navbar-brand") サニックスアイズ
+      button.navbar-toggle.collapsed(type="button", data-toggle="collapse", data-target="#nav-content")
+          span.icon-bar
+          span.icon-bar
+          span.icon-bar
+
+      div#nav-content(class="collapse navbar-collapse")
           ul.nav.navbar-nav
             each name, url in menu
               li(class="#{(page === url) ? 'active' : ''}")
                 a(href="#{url}.html")=name
-          ul.nav.navbar-nav.navbar-right
             li
               a(href="https://sanix-eye.jp/7db01ea67f5f30305d9958cce3bc9b48/", target="_blank") サニックスアイ管理ページへ
-      div(style="margin:0 10px 0 10px")
-        block content
+    div(style="margin:0 10px 0 10px")
+      block content
