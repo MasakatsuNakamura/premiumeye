@@ -4,23 +4,34 @@ html
     meta(charset='utf-8')
     meta(http-equiv='X-UA-Compatible', content='IE=edge')
     meta(name='viewport', content='width=device-width, initial-scale=1')
-    title #{title}#{menu[page]}
+    title #{title}
     link(href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css", rel="stylesheet")
     link(rel="shortcut icon", href="favicon.ico", type="image/vnd.microsoft.icon")
   body
     nav.navbar.navbar-inverse
-      div.navbar-header
-      a(href="index.html", class="navbar-brand") サニックスアイズ
-      button.navbar-toggle.collapsed(type="button", data-toggle="collapse", data-target="#nav-content")
-          span.icon-bar
-          span.icon-bar
-          span.icon-bar
+      .container-fluid
+        .navbar-header
+        a(href="index.html", class="navbar-brand") サニックスアイズ
+        button.navbar-toggle.collapsed(type="button", data-toggle="collapse", data-target="#nav-content")
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
 
-      div#nav-content(class="collapse navbar-collapse")
+        #nav-content.collapse.navbar-collapse
           ul.nav.navbar-nav
             each name, url in menu
-              li(class="#{(page === url) ? 'active' : ''}")
-                a(href="#{url}.html")=name
+              if typeof(name) == 'string'
+                li(class="#{(page === url) ? 'active' : ''}")
+                  a(href="#{url}.html")=name
+              else
+                li.dropdown
+                  a.dwopdown-toggle(href="#", data-toggle="dropdown")=url
+                    span.caret
+                  ul.dropdown-menu
+                    each name2, url2 in name
+                      li
+                        a(href="#{url2}.html")=name2
+          ul.nav.navbar-nav.navbar-right
             li
               a(href="https://sanix-eye.jp/7db01ea67f5f30305d9958cce3bc9b48/", target="_blank") サニックスアイ管理ページへ
     div(style="margin:0 10px 0 10px")
