@@ -10,7 +10,8 @@ module.exports = function(grunt) {
         key: '<%= s3auth.key %>',
         secret: '<%= s3auth.secret %>',
         region: 'ap-northeast-1',
-        bucket: 'sanix-data-analysis'
+        bucket: 'sanix-data-analysis',
+        access: 'authenticated-read'
       },
       build: {
         upload: [
