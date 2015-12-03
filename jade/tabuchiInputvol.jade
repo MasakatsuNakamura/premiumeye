@@ -4,9 +4,16 @@ block content
     a#yesterday.btn.btn-default 前日
     span#mydate(style="font-size:22px")
     a#tommorow.btn.btn-default 翌日
-    button.btn.btn-danger ※ 赤部分は、「入力電圧異常」と判定したもの
+    div(class="alert alert-success")
+     h3 データがロックしている（固まっている）発電所
+     p 検出条件）12/13/14時の3サンプリングで入力電圧がまったく変化していない
+    div(class="alert alert-danger")
+     h3 入力電圧が低い（異常）可能性のある発電所
+     p 検出条件1）緑のデータロックが発生していないこと
+     p 検出条件2）入力電圧のバラつきが大きい発電所内(分散>1000)の偏差値50以下が12/13/14時の3サンプリング連続した場合
+     p ※入力電圧0はさすがにPVを接続していないと断定し、判定には加えていない。        
   div
-    - var header = ['シリアル番号', 'パワコン番号', '発電所', '営業所', '入力電圧1', '入力電圧2', '入力電圧3', '入力電圧4', '入力電圧5' ]
+    - var header = ['シリアル番号', 'パワコン番号', '発電所', '営業所', '時間', '入力電圧1', '入力電圧2', '入力電圧3', '入力電圧4', '入力電圧5', '分散']
     table.table
       thead
         tr
@@ -53,22 +60,38 @@ block content
       $.getJSON("https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/tabuchi-inputvol-detect/" + strDate + ".json", function (json) {
         $.getJSON("https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/pv_sensors.json", function (pvsensors) {
           var header = !{JSON.stringify(header)};
-          var res = '';
+          var res = '';              
           for (var id in json) {
-            console.log(id);
+            //console.log(id);
             for(var i=0; i<json[id].length; i++) {
-              res += '<tr><td><a href=' + pvsensors[id].URL + ' target="_blank">' + id + '</a></td><td>' 
-              + json[id][i].pcsid + '</td><td>' 
-              + pvsensors[id].発電所名 + '発電所</td><td>' 
-              + pvsensors[id].営業所 + '</td>';
-              for(var j=0; j<5; j++) {
-                var style = '';
-                if(json[id][i].result_out[j]) {
-                  style = 'danger';
+              var class_style = '';
+              var rowspan_num = '';
+              if(json[id][i].inv_vol_num === 1) {
+                class_style = ' class=success';
+              } else {
+                rowspan_num = ' rowspan=3';
+              }
+              var write = 1;
+              for(var k=0; k<json[id][i].inv_vol_num; k++) {
+                res += '<tr' + class_style + '>';
+                if(write === 1) {
+                  res += '<td' + rowspan_num + '><a href=' + pvsensors[id].URL + ' target="_blank">' + id + '</a></td>'; 
+                  res += '<td' + rowspan_num + '>' + json[id][i].pcsid + '</td>';
+                  res += '<td' + rowspan_num + '>' + pvsensors[id].発電所名 + '発電所</td>'; 
+                  res += '<td' + rowspan_num + '>' + pvsensors[id].営業所 + '</td>';
                 }
-                res += '<td class='+ style + '>' + json[id][i].input_vol[j] + '</td>';
-              }              
-              res += '</tr>\n';
+                write = 0;
+                res += '<td>' + String(12+k) + '時' + '</td>';
+                for(var j=0; j<5; j++) {
+                  var style2 = '';
+                  if(json[id][i].result_out[j] === 1) {
+                    style2 = 'danger';
+                  }
+                  res += '<td class='+ style2 + '>' + json[id][i].input[k].input_vol[j] + '</td>';
+                }
+                res += '<td>' + json[id][i].input[k].dispersion + '</td>';              
+                res += '</tr>/n';
+              }
             }
           }
           $('#list').html(res);
