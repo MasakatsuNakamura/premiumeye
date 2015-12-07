@@ -20,7 +20,7 @@ block content
       thead
         tr
           th No
-          - var header = [ "シリアル番号", "発電所名", "顧客名", "プラン", "営業所", "パワコン台数", "ステータス", "メーカー", "機種名", "プログラムバージョン", "センサー向き", "パワコン情報" ]
+          - var header = [ "serialid", "発電所名", "顧客名", "プラン", "営業所", "パワコン台数", "ステータス", "メーカー", "機種名", "プログラムバージョン", "センサー向き", "パワコン情報" ]
           each name in header
             th=name
       tbody#list
@@ -52,7 +52,7 @@ block content
         if ('sortby' in args) {
           $('#sortby').val(decodeURI(args.sortby));
         } else {
-          $('#sortby').val('シリアル番号');
+          $('#sortby').val('serialid');
         }
         var header = !{JSON.stringify(header)};
         var size = 20;
@@ -80,8 +80,8 @@ block content
                   var value = line[cell];
                   if (cell === "発電所名") {
                     var value = '<a href="https://maps.google.co.jp/maps?ll=' + line['緯度'] + ',' + line['経度'] + '&z=11&q=' + line['緯度'] + ',' + line['経度'] + '+(' + encodeURI(line['発電所名'] + '発電所') + ')&hl=ja&iwloc=A" target="_blank">' + line['発電所名'] + '発電所</a>';
-                  } else if (cell === "シリアル番号") {
-                    var value = '<a href="' + line['URL'] + '" target="_blank">' + line['シリアル番号'] + '</a>';
+                  } else if (cell === "serialid") {
+                    var value = '<a href="' + line['URL'] + '" target="_blank">' + line['serialid'] + '</a>';
                   }
                   tbl += "<td>" + value.toString().replace(/\n/g, '<br />') + "</td>";
                   values[cell][line[cell]] = true;
