@@ -11,7 +11,7 @@ block content
      h3 入力電圧が低い（異常）可能性のある発電所
      p 検出条件1）緑のデータロックが発生していないこと
      p 検出条件2）入力電圧のバラつきが大きい発電所内(分散>1000)の偏差値50以下が12/13/14時の3サンプリング連続した場合
-     p ※入力電圧0はさすがにPVを接続していないと断定し、判定には加えていない。        
+     p ※入力電圧0はさすがにPVを接続していないと断定し、判定には加えていない。
   div
     - var header = ['シリアル番号', 'パワコン番号', '発電所', '営業所', '時間', '入力電圧1', '入力電圧2', '入力電圧3', '入力電圧4', '入力電圧5', '分散']
     table.table
@@ -60,7 +60,7 @@ block content
       $.getJSON("https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/tabuchi-inputvol-detect/" + strDate + ".json", function (json) {
         $.getJSON("https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/pv_sensors.json", function (pvsensors) {
           var header = !{JSON.stringify(header)};
-          var res = '';              
+          var res = '';
           for (var id in json) {
             //console.log(id);
             for(var i=0; i<json[id].length; i++) {
@@ -75,9 +75,9 @@ block content
               for(var k=0; k<json[id][i].inv_vol_num; k++) {
                 res += '<tr' + class_style + '>';
                 if(write === 1) {
-                  res += '<td' + rowspan_num + '><a href=' + pvsensors[id].URL + ' target="_blank">' + id + '</a></td>'; 
+                  res += '<td' + rowspan_num + '><a href=' + pvsensors[id].URL + ' target="_blank">' + id + '</a></td>';
                   res += '<td' + rowspan_num + '>' + json[id][i].pcsid + '</td>';
-                  res += '<td' + rowspan_num + '>' + pvsensors[id].発電所名 + '発電所</td>'; 
+                  res += '<td' + rowspan_num + '>' + pvsensors[id].発電所名 + '発電所</td>';
                   res += '<td' + rowspan_num + '>' + pvsensors[id].営業所 + '</td>';
                 }
                 write = 0;
@@ -89,7 +89,7 @@ block content
                   }
                   res += '<td class='+ style2 + '>' + json[id][i].input[k].input_vol[j] + '</td>';
                 }
-                res += '<td>' + json[id][i].input[k].dispersion + '</td>';              
+                res += '<td>' + json[id][i].input[k].dispersion + '</td>';
                 res += '</tr>/n';
               }
             }

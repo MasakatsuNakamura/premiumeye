@@ -29,7 +29,7 @@ module.exports = function(grunt) {
       deploy:{
         files:[{
           expand:true,
-          cwd:'coffee',
+          cwd:'jade',
           src:[
           '*.coffee'
           ],
@@ -76,9 +76,10 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-jade');
+  grunt.loadNpmTasks('grunt-contrib-coffee');
   grunt.loadNpmTasks('grunt-s3');
   grunt.registerTask('upload', 's3');
-  grunt.registerTask('deploy', ['jade', 's3']);
+  grunt.registerTask('deploy', ['jade', 'coffee', 's3']);
 
   grunt.loadTasks('tasks');
 
