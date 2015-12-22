@@ -20,7 +20,7 @@ $(document).ready ->
     $.getJSON "https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/abnormalGeneration/" + strDate + ".json", (json) =>
         myjson = json
         $.getJSON "https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/pv_sensors.json", (pvsensors) =>
-            header = [ 'パワコン番号', '積算電力', '前回積算電力', '差分', '日時', '前回日時', '変化係数']
+            header = ['パワコン番号', '積算電力', '前回積算電力', '差分', '日時', '前回日時', '変化係数']
             res = ''
             num = 0
             keys = (key for key of myjson).sort (a, b) ->
