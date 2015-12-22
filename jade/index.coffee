@@ -6,7 +6,8 @@ $(document).ready(->
         $('#sortby').val(decodeURI(args.sortby))
     else
         $('#sortby').val('serialid')
-    header = ["serialid", "発電所名", "顧客名", "プラン", "営業所", "パワコン台数", "ステータス", "メーカー", "機種名", "プログラムバージョン", "センサー向き", "パワコン情報"]
+    header = ["serialid", "発電所名", "顧客名", "プラン", "営業所", "パワコン台数", "ステータス", "メーカー", "機種名",
+        "プログラムバージョン", "センサー向き", "パワコン情報"]
     for item in header
         $('#myheader').append("<th>" + item + "</th>")
     size = 20

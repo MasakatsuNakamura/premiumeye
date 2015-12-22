@@ -3,26 +3,9 @@ block content
   .containar
     table.table
       thead
-        tr
-          - var HEADER = ["社員番号", "姓", "名", "メールアドレス", "snaviメールアドレス", "ユーザータイプ", "職種", "所属", "最終ログイン日時", "登録日", "更新日", "携帯電話番号", "ミスマッチ" ];
-          each name, key in HEADER
-            th=name
+        tr#myheader
       tbody#mytable
     script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js")
     script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js")
-    script.
-      $(document).ready(function(){
-        $.getJSON("https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/administrators.json", function (data) {
-          var HEADER = !{JSON.stringify(HEADER)};
-          for (var id in data)　{
-            var person = data[id];
-            var row = "<tr>";
-            for (var i = 0; i < HEADER.length; i++) {
-            	var obj = person[HEADER[i]];
-              row += "<td>" + (obj ? obj : '&nbsp') + "</td>";
-            }
-            row += "</tr>";
-            $("#mytable").append(row);
-          }
-        });
-      });
+    script(src="geturlvars.js")
+    script(src="administrators.js")
