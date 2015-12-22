@@ -1,15 +1,15 @@
-$(document).ready(->
+$(document).ready ->
     args = getUrlVars()
-    $('#myheader').html(args.id)
+    $('#myheader').html args.id
 
-    AWS.config.update({
+    AWS.config.update {
         accessKeyId: 'AKIAIXDMG63TWB5ODRMQ',
         secretAccessKey: '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'
-    })
+    }
     AWS.config.region = 'ap-northeast-1'
     lambda = new AWS.Lambda()
 
-    lambda.invoke({
+    lambda.invoke {
         FunctionName: 'list-csv',
         Payload: JSON.stringify({"id": args.id})
     }, (err, data) ->
@@ -18,6 +18,4 @@ $(document).ready(->
         else
             json =JSON.parse(data.Payload)
             for key in (key for key of json).sort()
-                $('#mylist').append('<li><a href="' + json[key] + '">' + key + '</a></li>')
-    )
-)
+                $('#mylist').append '<li><a href="' + json[key] + '">' + key + '</a></li>'

@@ -6,28 +6,5 @@ block content
       tbody#mytable
     script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js")
     script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js")
-    script.
-      $(document).ready(function(){
-        $.getJSON("https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/detectLowGeneration2/list.json", function (data) {
-          var HEADER = data[0];
-          $("#myheader").html("<tr><th>" + HEADER.join("</th><th>") + "</th></td>");
-          for (var l = 1; l < data.length; l++)　{
-            var line = data[l];
-            var row = "<tr>";
-            for (var i = 0; i < HEADER.length; i++) {
-            	var obj = line[i];
-              row += "<td>" + (obj ? obj : '&nbsp') + "</td>";
-            }
-            row += "</tr>";
-            $("#mytable").append(row);
-            $("tr").each(function() {
-              var first = $(this).children("td:first-child").text();
-              if (first === '警告') {
-                $(this).addClass("danger");
-              } else if (first === '通知') {
-                $(this).addClass("success");
-              }
-            });
-          }
-        });
-      });
+    script(src="geturlvars.js")
+    script(src="lowGeneration2.js")

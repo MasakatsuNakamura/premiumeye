@@ -1,5 +1,5 @@
-$(document).ready(->
-    $.getJSON("https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/5XMRr22UxMU5dlivLoPnpJAvRpJ8wF53/namelist.json", (data)->
+$(document).ready ->
+    $.getJSON "https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/5XMRr22UxMU5dlivLoPnpJAvRpJ8wF53/namelist.json", (data) ->
         HEADER = {
             "no":"社員番号",
             "name":"氏名",
@@ -9,31 +9,25 @@ $(document).ready(->
             "bumon":"部門",
             "shokushu":"職種",
             "shokui":"職位",
-            "indate":"入社日",
+            "indate":"入社日"
         }
         for key, header of HEADER
-            $("#myheader").append("<th>" + header + "</th>")
+            $("#myheader").append "<th>" + header + "</th>"
         namelist = []
         for number, person of data
             namelist.push(person)
-        namelist.sort((val1, val2)->
-            val1 = val1['kintai'] + val1['shokushu']
-            val2 = val2['kintai'] + val2['shokushu']
-            if val1 < val2
-                return -1
-            else if val1 > val2
+        namelist.sort (a, b) ->
+            if (a.kintai + a.shokushu) > (b.kintai + b.shokushu)
                 return 1
-            else
-                return 0
-        )
-        console.log(namelist)
+            else if (a.kintai + a.shokushu) < (b.kintai + b.shokushu)
+                return -1
+            return 0
+
         for person in namelist
-            row = "<tr>";
+            row = "<tr>"
             for header of HEADER
                 obj = person[header]
                 obj = if obj? then obj else '&nbsp'
-                row += "<td>" +  obj + "</td>";
-            row += "</tr>";
-            $("#mytable").append(row);
-    )
-)
+                row += "<td>" +  obj + "</td>"
+            row += "</tr>"
+            $("#mytable").append(row)

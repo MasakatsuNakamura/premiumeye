@@ -5,84 +5,11 @@ block content
     span#mydate(style="font-size:22px")
     a#tommorow.btn.btn-default 翌日
   div
-    - var header = ['日時', '所属', '氏名', 'メッセージ' ]
     table.table
       thead
-        tr
-          each name in header
-            th=name
+        tr#myheader
       tbody#list
   script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js")
   script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js")
-  script.
-    function getUrlVars() {
-        var vars = [], hash;
-        var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-        for(var i = 0; i < hashes.length; i++)
-        {
-            hash = hashes[i].split('=');
-            vars.push(hash[0]);
-            vars[hash[0]] = hash[1];
-        }
-        return vars;
-    };
-
-    $(document).ready(function() {
-        var args = getUrlVars();
-        var date;
-        if (args.length == 3) {
-            date = new Date(args['year'], args['month'] - 1, args['day']);
-        } else {
-            date = new Date();
-        }
-      var year = date.getFullYear();
-      var month = date.getMonth() + 1;
-      month = "0" + month;
-      month = month.substr(month.length - 2, 2);
-      var mydate = date.getDate();
-      mydate = "0" + mydate;
-      mydate = mydate.substr(mydate.length - 2, 2);
-      var strDate = year + "/" + month + "/" + mydate;
-        $('#mydate').text(strDate);
-
-        var yesterday = new Date();
-        yesterday.setTime(date.getTime() - 86400000);
-        $('#yesterday').attr("href", "?year=" + yesterday.getFullYear() + "&month=" + (yesterday.getMonth() + 1) + "&day=" + yesterday.getDate());
-        $('#yesterday').text("前日");
-
-        var tommorow = new Date();
-        tommorow.setTime(date.getTime() + 86400000);
-        $('#tommorow').attr("href", "?year=" + tommorow.getFullYear() + "&month=" + (tommorow.getMonth() + 1) + "&day=" + tommorow.getDate());
-        $('#tommorow').text("翌日");
-
-      $.getJSON("https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/administrators.json", function (admin) {
-        var hadmin = [];
-        for (var i = 0; i < admin.length; i++) {
-          hadmin[admin[i]['メールアドレス']] = i;
-        }
-        $.getJSON("https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/noticeMail/" + strDate + ".json", function (json) {
-          json.sort(function(val1, val2) {
-            val1 = val1['date'];
-            val2 = val2['date'];
-            if (val1 < val2) {
-              return 1;
-            } else if (val1 > val2) {
-              return -1;
-            } else {
-              return 0;
-            }
-          });
-          for (var id in json) {
-            if (!json[id]['recipient']) continue;
-            var myadmin = admin[hadmin[json[id]['recipient']]];
-            if (!myadmin) continue;
-            var line = '<tr>';
-            line += '<td>' + json[id].date + '</td>';
-            line += '<td style="text-align:left">' + myadmin.所属 + '</td>';
-            line += '<td style="text-align:left"><a href="mailto:' + json[id].recipient + '" target="_blank">' + myadmin.name + '</td>';
-            line += '<td style="text-align:left"><a href="' + json[id].url + '" target="_blank">' + json[id].subject + '</a></td>';
-            $('#list').append(line);
-          }
-        });
-      });
-    });
+  script(src="geturlvars.js")
+  script(src="noticeMail.js")
