@@ -18,25 +18,31 @@ $(document).ready ->
     strDate = date.getFullYear() + "/" + (date.getMonth() + 1) + "/" + date.getDate()
     $('#mydate').html '&nbsp;' + strDate + '&nbsp;'
 
-    lowgen = ''
-    $.getJSON "https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/detectLowGeneration/" +
-        strDate + ".json", (lowgen) =>
-            @lowgen = lowgen
-        $.getJSON "https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/pv_sensors.json", (pvsensors) =>
+    $.getJSON "https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/" +
+            "fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/detectLowGeneration/" + strDate + ".json", (lowgen) =>
+
+        gendata = []
+        if !(lowgen?)
+            return false
+        for key, value of lowgen
+            value.id = key
+            gendata.push value
+
+        gendata.sort (a, b) ->
+            a.偏差値 - b.偏差値
+
+        $.getJSON "https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/" +
+                "fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/pv_sensors.json", (pvsensors) =>
+
             header = ['シリアル番号', '発電所名', '営業所', 'メーカー', '機種', 'プラン', '発電力量', '定格出力', '偏差値', '周辺順位', '周辺発電所数']
-            for item in header
-                $('#myheader').append "<th>" + item + "</th>"
 
-            gendata = []
-            for key, value of @lowgen
-                value.id = key
-                gendata.push value
+            if !(pvsensors?)
+                return false
 
-            gendata.sort (a, b) ->
-                a.偏差値 - b.偏差値
+            $('#myheader').append "<th>" + header.join('</th><th>') + "</th>"
 
-            res = ''
             for list in gendata
+                row = []
                 id = list.id
                 if !(pvsensors[id])?
                     continue
@@ -45,19 +51,19 @@ $(document).ready ->
                 list.発電力量 = Math.round(list.発電力量 * 100)/ 100;
                 list.定格出力 = Math.round(list.定格出力 * 10)/ 10;
                 if list.偏差値 < 42 || list.電力量低下
+                    row.push '<a href=' + pvsensor.URL + ' target="_blank">' + id + '</a>'
+                    row.push pvsensor.発電所名
+                    row.push pvsensor.営業所
+                    row.push pvsensor.メーカー
+                    row.push pvsensor.機種名
+                    row.push pvsensor.プラン
+                    for h in header[6..]
+                        row.push list[h]
                     style = '';
                     if (list.電力量低下)? && list.偏差値 < 42.5
                         style = 'danger'
                     else if (list.電力量低下)?
                         style = 'success'
-                    res += '<tr class=' + style + '>' +
-                        '<td><a href=' + pvsensor.URL + ' target="_blank">' + id + '</a></td>' +
-                        '<td>' + pvsensor.発電所名 + '発電所</td>' +
-                        '<td>' + pvsensor.営業所+ '</td>' +
-                        '<td>' + pvsensor.メーカー + '</td>' +
-                        '<td>' + pvsensor.機種名 + '</td>' +
-                        '<td>' + pvsensor.プラン + '</td>'
-                    for h in header[6..]
-                        res += '<td>' + list[h] + '</td>'
-                    res += '</tr>\n'
-            $('#list').html res
+                    $('#list').append '<tr class=' + style + '><td>' + row.join('</td><td>') + '</td></tr>'
+
+            return true
