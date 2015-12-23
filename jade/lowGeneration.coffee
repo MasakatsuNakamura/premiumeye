@@ -8,12 +8,10 @@ $(document).ready ->
     yesterday = new Date date.getFullYear(), date.getMonth(), date.getDate()
     yesterday.setDate yesterday.getDate() - 1
     $('#yesterday').attr "href", "?year=" + yesterday.getFullYear() + "&month=" + (yesterday.getMonth() + 1) + "&day=" + yesterday.getDate()
-    $('#yesterday').text "前日"
 
     tommorow = new Date date.getFullYear(), date.getMonth(), date.getDate()
     tommorow.setDate tommorow.getDate() + 1
     $('#tommorow').attr "href", "?year=" + tommorow.getFullYear() + "&month=" + (tommorow.getMonth() + 1) + "&day=" + tommorow.getDate()
-    $('#tommorow').text "翌日"
 
     strDate = date.getFullYear() + "/" + (date.getMonth() + 1) + "/" + date.getDate()
     $('#mydate').html '&nbsp;' + strDate + '&nbsp;'

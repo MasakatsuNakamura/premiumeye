@@ -17,12 +17,12 @@ $(document).ready ->
     strDate = year + "/" + month + "/" + mydate
     $('#mydate').text ' ' + strDate + ' '
 
-    yesterday = new Date
-    yesterday.setTime date.getTime() - 86400000
+    yesterday = new Date date.getFullYear(), date.getMonth(), date.getDate()
+    yesterday.setDate yesterday.getDate() - 1
     $('#yesterday').attr "href", "?year=" + yesterday.getFullYear() + "&month=" + (yesterday.getMonth() + 1) + "&day=" + yesterday.getDate()
 
-    tommorow = new Date
-    tommorow.setTime date.getTime() + 86400000
+    tommorow = new Date date.getFullYear(), date.getMonth(), date.getDate()
+    tommorow.setDate tommorow.getDate() + 1
     $('#tommorow').attr "href", "?year=" + tommorow.getFullYear() + "&month=" + (tommorow.getMonth() + 1) + "&day=" + tommorow.getDate()
 
     $.getJSON "https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/administrators.json", (admin) =>
