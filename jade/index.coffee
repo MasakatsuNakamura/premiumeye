@@ -1,6 +1,7 @@
 $(document).ready ->
     args = getUrlVars()
-    if 'search' in args
+    if args.search?
+        console.log(decodeURI(args.search))
         $('#search').val(decodeURI(args.search))
     if 'sortby' in args
         $('#sortby').val(decodeURI(args.sortby))
@@ -28,11 +29,14 @@ $(document).ready ->
         num = 0
         data = []
         for id, items of json
+            myitems = {}
             for key in header
-                items[key] = '&nbsp' if !(items[key])?
-            line = (value + '').replace("\n", " ") for key, value of items
+                myitems[key] = if items[key]? then items[key] else '&nbsp'
+            line = []
+            for key, value of myitems
+                line.push (value + '').replace("\n", " ")
             if !items.テスト && (search == '' || line.join(',').match(re))
-                data.push items
+                data.push myitems
                 num++
 
         if $('#sortby').val() != ''

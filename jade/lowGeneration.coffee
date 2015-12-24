@@ -19,9 +19,10 @@ $(document).ready ->
     $.getJSON "https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/" +
             "fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/detectLowGeneration/" + strDate + ".json", (lowgen) =>
 
-        gendata = []
         if !(lowgen?)
             return false
+
+        gendata = []
         for key, value of lowgen
             value.id = key
             gendata.push value
