@@ -1,8 +1,4 @@
 .*
 node_modules/
-!.gitignore
 tasks/
-src/scss/
-design/
-s3auth.json
-deploy/
+dest/

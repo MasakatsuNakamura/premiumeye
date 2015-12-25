@@ -15,7 +15,7 @@ gulp.task('clean', function(cb) {
 gulp.task('compile-coffee', function() {
     gulp.src('./src/**/*.coffee')
         .pipe(coffee({bare: true}))
-        .pipe(gulp.dest('./dest'))
+        .pipe(gulp.dest('./dest/js'))
 });
 
 gulp.task('compile-jade', function() {
@@ -38,10 +38,9 @@ gulp.task("upload", function() {
         }));
 });
 
-gulp.task('deploy', function(callback) {
+gulp.task('build', function(callback) {
     return runSequence(
         ['compile-coffee', 'compile-jade'],
-        ['upload'],
         callback
     );
 });
