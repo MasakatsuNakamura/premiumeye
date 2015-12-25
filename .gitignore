@@ -1,4 +1,5 @@
 .*
+.gitigunore
 node_modules/
 tasks/
 dest/

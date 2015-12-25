@@ -1,18 +1,18 @@
 extends ./components/_header
 block content
-  .form-inline
-    a#yesterday.btn.btn-default 前日
-    span#mydate(style="font-size:22px")
-    a#tommorow.btn.btn-default 翌日
-    button.btn.btn-danger ※ 赤部分は、「電力量低下」エラーが重複して出ているもの
-    button.btn.btn-success ※ 緑部分は、「電力量低下」エラーが単体で出ているもの
-  div
-    table.table
-      thead
-        tr#myheader
-      tbody#list
-  script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js")
-  script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js")
-  script(src="js/geturlvars.js")
-  script(src="js/lowGeneration.js")
+    .form-inline
+        a#yesterday.btn.btn-default 前日
+        span#mydate(style="font-size:22px")
+        a#tommorow.btn.btn-default 翌日
+        button.btn.btn-danger ※ 赤部分は、「電力量低下」エラーが重複して出ているもの
+        button.btn.btn-success ※ 緑部分は、「電力量低下」エラーが単体で出ているもの
+    div
+        table.table
+            thead
+                tr#myheader
+            tbody#list
+    script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js")
+    script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js")
+    script(src="js/geturlvars.js")
+    script(src="js/lowGeneration.js")
 

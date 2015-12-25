@@ -1,28 +1,28 @@
 extends ./components/_header
 block content
-  .form-inline(style="margin-bottom:12px")
-    input#sortby(type="hidden")
-    label(for="search") 検索条件：
-    input#search.form-control(size="80")
-    button#search-btn.btn.btn-default 絞込み
-    button#all-btn.btn.btn-default すべて
-    button#sanix.btn.btn-default 古サニックス
-    button#tabuchi.btn.btn-default 要VerUP
-    button#pana.btn.btn-default パナ6台以上
-    button#wide.btn.btn-default ワイド逆向き
-  .form-inline(style="margin-bottom:12px")
-    label(for="numbers") 検索結果：
-    span#numbers &nbsp;
-    label(for="page") ページ：
-    select#page
-  div
-    table.table
-      thead
-        tr#myheader
-          th No
-          th &nbsp;
-      tbody#list
-    script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js")
-    script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js")
-    script(src="js/geturlvars.js")
-    script(src="js/index.js")
+    .form-inline(style="margin-bottom:12px")
+        input#sortby(type="hidden")
+        label(for="search") 検索条件：
+        input#search.form-control(size="80")
+        button#search-btn.btn.btn-default 絞込み
+        button#all-btn.btn.btn-default すべて
+        button#sanix.btn.btn-default 古サニックス
+        button#tabuchi.btn.btn-default 要VerUP
+        button#pana.btn.btn-default パナ6台以上
+        button#wide.btn.btn-default ワイド逆向き
+    .form-inline(style="margin-bottom:12px")
+        label(for="numbers") 検索結果：
+        span#numbers &nbsp;
+        label(for="page") ページ：
+        select#page
+    div
+        table.table
+            thead
+                tr#myheader
+                    th No
+                    th &nbsp;
+            tbody#list
+        script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js")
+        script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js")
+        script(src="js/geturlvars.js")
+        script(src="js/index.js")
