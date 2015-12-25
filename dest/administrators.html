@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>サニックスアイズ</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="shortcut icon" href="favicon.ico" type="image/vnd.microsoft.icon">
+  </head>
+  <body>
+    <nav class="navbar navbar-inverse">
+      <div class="container-fluid">
+        <div class="navbar-header"></div><a href="index.html" class="navbar-brand">サニックスアイズ</a>
+        <button type="button" data-toggle="collapse" data-target="#nav-content" class="navbar-toggle collapsed"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+        <div id="nav-content" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="index.html">PVセンサー一覧</a></li>
+            <li><a href="lowGeneration2.html">未復旧故障一覧</a></li>
+            <li class="dropdown"><a href="#" data-toggle="dropdown" class="dwopdown-toggle">異常検出<span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="lowGeneration.html">低発電量一覧表</a></li>
+                <li><a href="abnormalGeneration.html">異常発電量一覧表</a></li>
+                <li><a href="tabuchiInputvol.html">田淵入力電圧異常</a></li>
+              </ul>
+            </li>
+            <li class="dropdown"><a href="#" data-toggle="dropdown" class="dwopdown-toggle">その他<span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="noticeMail.html">通知メール一覧</a></li>
+                <li><a href="nameList.html">社員名簿</a></li>
+                <li><a href="administrators.html">管理者一覧</a></li>
+              </ul>
+            </li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="https://sanix-eye.jp/7db01ea67f5f30305d9958cce3bc9b48/" target="_blank">サニックスアイ管理ページへ</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div style="margin:0 10px 0 10px">
+      <div class="containar">
+        <table class="table">
+          <thead>
+            <tr id="myheader"></tr>
+          </thead>
+          <tbody id="mytable"></tbody>
+        </table>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+        <script src="geturlvars.js"></script>
+        <script src="administrators.js"></script>
+      </div>
+    </div>
+  </body>
+</html>

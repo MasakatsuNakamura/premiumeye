@@ -1,10 +1,10 @@
 $(document).ready ->
     args = getUrlVars()
     if args.search?
-        console.log(decodeURI(args.search))
-        $('#search').val(decodeURI(args.search))
+        console.log(args)
+        $('#search').val(args.search)
     if 'sortby' in args
-        $('#sortby').val(decodeURI(args.sortby))
+        $('#sortby').val(args.sortby)
     else
         $('#sortby').val('serialid')
 
