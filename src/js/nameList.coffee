@@ -11,11 +11,9 @@ $(document).ready ->
             "shokui":"職位",
             "indate":"入社日"
         }
-        for key, header of HEADER
-            $("#myheader").append "<th>" + header + "</th>"
-        namelist = []
-        for number, person of data
-            namelist.push(person)
+        header = title for key, title of HEADER
+        $("#myheader").append "<th>" + header.join("</th><th>") + "</th>"
+        namelist = (person for number, person of data)
         namelist.sort (a, b) ->
             if (a.kintai + a.shokushu) > (b.kintai + b.shokushu)
                 return 1
@@ -30,4 +28,4 @@ $(document).ready ->
                 obj = if obj? then obj else '&nbsp'
                 row += "<td>" +  obj + "</td>"
             row += "</tr>"
-            $("#mytable").append(row)
+            $("#mytable").append row
