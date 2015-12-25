@@ -18,7 +18,25 @@ npm installとすることで、package.jsonに含まれる依存ファイルが
 ## htmlの生成
 
 ```
-$ gulp deploy
+$ gulp default
 ```
 
-でs3へのデプロイが完了します。
+でビルド・s3へのデプロイが完了します。
+
+ビルドだけ
+
+```
+$ gulp build
+```
+
+s3へのデプロイ(アップロード)だけ
+
+```
+$ gulp upload
+```
+
+## ページの追加方法
+
+json/_common.jsonを修正することでメニューが追加できます。
+対応するページはsrc/以下にjadeで記述してください。
+スクリプトは、jade内に直書きしてもいいですが、分離してCoffeeScriptで記述したほうが可読性が上がります。
