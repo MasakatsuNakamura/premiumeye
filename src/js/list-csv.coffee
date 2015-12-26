@@ -17,5 +17,14 @@ $(document).ready ->
             console.log(err, err.stack);
         else
             json =JSON.parse(data.Payload)
-            for key in (key for key of json).sort()
-                $('#mylist').append '<li><a href="' + json[key] + '">' + key + '</a></li>'
+            $('#myheader').html '<a href="' + json.info.URL + '" target="_blank">' + args.id +
+                '</a> (' + json.info.営業所 + ' / ' + json.info.発電所名 + '発電所)'
+            keys = (key for key of json.data).sort (a, b) ->
+                if a > b
+                    return -1
+                else if a < b
+                    return 1
+                return 0
+            console.log keys
+            for key in keys
+                $('#mylist').append '<li><a href="' + json.data[key] + '">' + key + '</a></li>'
