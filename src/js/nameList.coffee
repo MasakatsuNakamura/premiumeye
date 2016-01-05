@@ -11,7 +11,7 @@ $(document).ready ->
             "shokui":"職位",
             "indate":"入社日"
         }
-        header = title for key, title of HEADER
+        header = (title for key, title of HEADER)
         $("#myheader").append "<th>" + header.join("</th><th>") + "</th>"
         namelist = (person for number, person of data)
         namelist.sort (a, b) ->
