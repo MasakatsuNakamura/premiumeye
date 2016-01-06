@@ -3,8 +3,8 @@ $(document).ready ->
     $('#myheader').html args.id
 
     AWS.config.update {
-        accessKeyId: 'AKIAIXDMG63TWB5ODRMQ',
-        secretAccessKey: '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'
+        accessKeyId: 'AKIAJHJ63VLJOLLLWKDA',
+        secretAccessKey: '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'
     }
     AWS.config.region = 'ap-northeast-1'
     lambda = new AWS.Lambda()
