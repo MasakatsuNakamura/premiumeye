@@ -29,14 +29,11 @@ $(document).ready ->
         num = 0
         data = []
         for id, items of json
-            myitems = {}
-            for key in header
-                myitems[key] = if items[key]? then items[key] else '&nbsp'
             line = []
-            for key, value of myitems
+            for key, value of items
                 line.push (value + '').replace("\n", " ")
             if !items.テスト && (search == '' || line.join(',').match(re))
-                data.push myitems
+                data.push items
                 num++
 
         if $('#sortby').val() != ''
@@ -73,7 +70,7 @@ $(document).ready ->
                     tbl += "&nbsp"
                 tbl += "</td>"
                 for cell in header
-                    value = line[cell]
+                    value = if line[cell]? then line[cell] else '&nbsp;'
                     if cell == "発電所名"
                         value = '<a href="https://maps.google.co.jp/maps?ll=' +
                             line.緯度 + ',' + line.経度 + '&z=11&q=' + line.緯度 + ',' + line.経度 +
