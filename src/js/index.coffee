@@ -105,7 +105,7 @@ $(document).ready ->
         $("#sanix").click ->
             location.href = '?search=' + "SA099T01 V[0-6][0-9A-F]"
         $("#tabuchi").click ->
-            location.href = '?search=' + "田淵電機 1\\.0[0-8] or 安川電機 1\\.0[0-5] or SA099T01 1\\.0[0-8] or P73H103RJ 1\\.(0[0-9]|1[01])"
+            location.href = '?search=' + "パワコン 田淵電機 ,1\\.0[0-8] or パワコン 安川電機 ,1\\.0[0-5] or パワコン SA099T01 ,1\\.0[0-8] or パワコン P73H103RJ ,1\\.(0[0-9]|1[01])"
         $("#pana").click ->
             location.href = '?search=' + "SP(SS|SM|US) ,([6-9]|1[0-9]), パワコン 初期化待ち|アクティベート待ち"
         $("#wide").click ->
