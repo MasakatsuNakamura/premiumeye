@@ -1,7 +1,6 @@
 $(document).ready ->
     args = getUrlVars()
     if args.search?
-        console.log(args)
         $('#search').val(args.search)
     if 'sortby' in args
         $('#sortby').val(args.sortby)
@@ -26,12 +25,18 @@ $(document).ready ->
             searches[mysearch] = '^(?=.*' + searches[mysearch].split(/\s+/).join(')(?=.*') + ')'
         re = new RegExp(searches.join('|'), "i")
 
+        console.log re
         num = 0
         data = []
+        sum = {}
         for id, items of json
             line = []
             for key, value of items
-                line.push (value + '').replace("\n", " ")
+                if value?
+                    line.push (value + '').replace(/[\r\n]+/g, " ")
+            if items.機種名 == 'SA099T01' and !line.join(',').match(re)
+                console.log re
+                console.log line.join(',')
             if !items.テスト && (search == '' || line.join(',').match(re))
                 data.push items
                 num++
