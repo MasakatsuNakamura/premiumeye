@@ -22,36 +22,36 @@ $(document).ready ->
         $.getJSON "https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/pv_sensors.json", (pvsensors) =>
             header = ['パワコン番号', '積算電力', '前回積算電力', '差分', '日時', '前回日時', '変化係数']
             res = ''
-            num = 0
             keys = (key for key of myjson).sort (a, b) ->
-                if a > b
-                    return 1
-                else if a < b
-                    return -1
-                return 0
-            for id in keys
+                if a > b then 1 else if a < b then -1 else 0
+            for id, num in keys
                 list = myjson[id].Series
-                res += '<div class="panel panel-default">'
-                res += '<div class="panel-heading">'
-                res += '<h4 class="panel-title">'
-                res += '<a data-toggle="collapse" data-parent="#accordion" href="#collapse' + num + '">'
-                res += id + '(' + list.length + '件) ' + myjson[id].発電所名 + '発電所(' + myjson[id].営業所 + ') '
-                res += myjson[id].メーカー + ':' + myjson[id].機種名 + '(ファームバージョン:' + myjson[id].プログラムバージョン + ')</a></p>'
-                res += '</a>'
-                res += '</h4>'
-                res += '</div>'
-                res += '<div id="collapse' + num + '" class="panel-collapse collapse">'
-                res += '<div class="panel-body">'
-                res += '<table class="table"><thead><th>&nbsp</th>'
+                res += """
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#collapse#{num}">
+                                    #{id}(#{list.length}件:#{myjson[id].発電所名}発電所(#{myjson[id].営業所})
+                                    #{myjson[id].メーカー}:#{myjson[id].機種名}(ファームバージョン:#{myjson[id].プログラムバージョン})</a></p>
+                                </a>
+                            </h4>
+                        </div>
+                    <div id="collapse#{num}" class="panel-collapse collapse">
+                    <div class="panel-body">
+                    <table class="table"><thead><th>&nbsp</th>
+                """
                 for item in header
-                    res += '<th style="padding:8px 15px">' + item + '</th>'
-                res += '</tr></thead><tbody>'
+                    res += "<th style='padding:8px 15px'>#{item}</th>"
+                res += "</tr></thead><tbody>"
                 for line in list
-                    res += '<tr>'
-                    res += "<td><a style='padding:0' href='" + pvsensors[id].URL.replace(/\/pv_sensor/, "/rawdata") + "' target='_blank'>開く</a></td>"
+                    res += """
+                        <tr>
+                            <td>
+                                <a style='padding:0' href='#{pvsensors[id].URL.replace(/\/pv_sensor/, "/rawdata")}' target='_blank'>開く</a>
+                            </td>
+                    """
                     for item in header
-                        res += '<td>' + line[item] + '</td>'
-                    res += '</tr>'
-                res += '</tbody></table></div></div></div>'
-                num++
+                        res += "<td>#{line[item]}</td>"
+                    res += "</tr>"
+                res += "</tbody></table></div></div></div>"
             $('#accordion').html res
