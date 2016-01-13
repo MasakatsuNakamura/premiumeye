@@ -2,8 +2,8 @@ extends ./components/_header
 block content
  .form-inline(style="margin-bottom:12px")
   .alert.alert-success
-   p 現在サニックスパワコンしかグラフがでないようになってます
-   p サニックスパワコンのシリアル番号/日付けを入力してグラフ描画ボタンを押下してください
+   p 現状サニックスパワコンしかグラフがでません
+   p サニックスパワコンのシリアル番号/日付けを入力してください
 
   label(for="search") シリアル番号：
   input#search.form-control(size="20")
@@ -37,10 +37,7 @@ block content
      .radio-inline
       input#disp_hour(type="radio", value="3", name="gender")
       label(for="disp_hour") 1h
- button#search-btn.btn.btn-default グラフ描画
+ //button#search-btn.btn.btn-default グラフ描画
  #chart
  script(src="js/geturlvars.js")
  script(src="js/integralElectricGraph.js")
-
-
-
