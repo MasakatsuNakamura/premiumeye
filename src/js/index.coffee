@@ -15,8 +15,7 @@ $(document).ready ->
     $('#myheader').append "<th>" + header.join('</th><th>') + "</th>"
     size = 20
 
-    $.getJSON "https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/pv_sensors.json", (json) =>
-
+    $.getJSON "https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/pv_sensors.json", (json) ->
         search = $("#search").val()
         searches = search.split(/ or /)
         if searches.length == 0
@@ -45,11 +44,7 @@ $(document).ready ->
             data.sort (a, b) ->
                 a = a[$('#sortby').val()]
                 b = b[$('#sortby').val()]
-                if a < b
-                    return -1
-                else if a > b
-                    return 1
-                return 0
+                if a < b then -1 else if a > b then 1 else 0
 
         pages = parseInt(num / size) + 1
         page = ''
@@ -60,34 +55,31 @@ $(document).ready ->
 
         draw = (size) ->
             p = parseInt $('#page').val()
-            tbl = ""
             values = {}
+            $("#list").html ""
             for cell in header
                 values[cell] = {}
             for i in [p * size..(p + 1) * size - 1]
                 if i >= num
                     break
                 line = data[i]
-                tbl += "<tr><td>" + (i + 1) + "</td><td>"
+                tbl = "<tr><td>#{i + 1}</td><td>"
                 if line.機種名 == 'SA099T01' && line.ステータス == '稼働中'
-                    tbl += "<a href='list-csv.html?id=" + line.serialid + "' class='btn btn-primary'>CSV</a>"
+                    tbl += "<a href='list-csv.html?id=#{line.serialid}' class='btn btn-primary'>CSV</a>"
                 else
                     tbl += "&nbsp"
                 tbl += "</td>"
                 for cell in header
                     value = if line[cell]? then line[cell] else '&nbsp;'
                     if cell == "発電所名"
-                        value = '<a href="https://maps.google.co.jp/maps?ll=' +
-                            line.緯度 + ',' + line.経度 + '&z=11&q=' + line.緯度 + ',' + line.経度 +
-                            '+(' + encodeURI(line.発電所名 + '発電所') + ')&hl=ja&iwloc=A" target="_blank">' +
-                            line.発電所名 + '発電所</a>'
+                        value = "<a href='https://maps.google.co.jp/maps?ll=#{line.緯度},#{line.経度}&z=11&q=#{line.緯度},#{line.経度}" +
+                            "(#{encodeURI(line.発電所名 + '発電所')})&hl=ja&iwloc=A' target='_blank'>#{line.発電所名}発電所</a>"
                     else if cell == "serialid"
-                        value = '<a href="' + line.URL + '" target="_blank">' + line.serialid + '</a>'
-                    tbl += "<td>" + (value + '').replace(/\n/g, '<br />') + "</td>"
+                        value = "<a href='#{line.URL}' target='_blank'>#{line.serialid}</a>"
+                    tbl += "<td>#{(value + '').replace(/\n/g, '<br />')}</td>"
                     values[cell][line[cell]] = true
                 tbl += "</tr>"
-            tbl += "</table>"
-            $("#list").html tbl
+                $("#list").append tbl
 
         draw size
 

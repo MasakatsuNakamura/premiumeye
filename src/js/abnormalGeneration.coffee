@@ -8,31 +8,30 @@ $(document).ready ->
 
     yesterday = new Date date.getFullYear(), date.getMonth(), date.getDate()
     yesterday.setDate yesterday.getDate() - 1
-    $('#yesterday').attr "href", "?year=" + yesterday.getFullYear() + "&month=" + (yesterday.getMonth() + 1) + "&day=" + yesterday.getDate()
+    $('#yesterday').attr "href", "?year=#{yesterday.getFullYear()}&month=#{yesterday.getMonth() + 1}&day=#{yesterday.getDate()}"
 
     tommorow = new Date date.getFullYear(), date.getMonth(), date.getDate()
     tommorow.setDate tommorow.getDate() + 1
-    $('#tommorow').attr "href", "?year=" + tommorow.getFullYear() + "&month=" + (tommorow.getMonth() + 1) + "&day=" + tommorow.getDate()
+    $('#tommorow').attr "href", "?year=#{tommorow.getFullYear()}&month=#{tommorow.getMonth() + 1}&day=#{tommorow.getDate()}"
 
-    strDate = date.getFullYear() + "/" + (date.getMonth() + 1) + "/" + date.getDate()
-    $('#mydate').html '&nbsp' + strDate + '&nbsp'
+    strDate = "#{date.getFullYear()}/#{date.getMonth() + 1}/#{date.getDate()}"
+    $('#mydate').html "&nbsp#{strDate}&nbsp"
 
-    $.getJSON "https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/abnormalGeneration/" + strDate + ".json", (json) =>
-        myjson = json
+    $.getJSON "https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/abnormalGeneration/" + strDate + ".json", (json) ->
         $.getJSON "https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/pv_sensors.json", (pvsensors) =>
             header = ['パワコン番号', '積算電力', '前回積算電力', '差分', '日時', '前回日時', '変化係数']
             res = ''
-            keys = (key for key of myjson).sort (a, b) ->
+            keys = (key for key of json).sort (a, b) ->
                 if a > b then 1 else if a < b then -1 else 0
             for id, num in keys
-                list = myjson[id].Series
+                list = json[id].Series
                 res += """
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <h4 class="panel-title">
                                 <a data-toggle="collapse" data-parent="#accordion" href="#collapse#{num}">
-                                    #{id}(#{list.length}件:#{myjson[id].発電所名}発電所(#{myjson[id].営業所})
-                                    #{myjson[id].メーカー}:#{myjson[id].機種名}(ファームバージョン:#{myjson[id].プログラムバージョン})</a></p>
+                                    #{id}(#{list.length}件):#{json[id].発電所名}発電所(#{json[id].営業所})
+                                    #{json[id].メーカー}:#{json[id].機種名}(ファームバージョン:#{json[id].プログラムバージョン})</a></p>
                                 </a>
                             </h4>
                         </div>
