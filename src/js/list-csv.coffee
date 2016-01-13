@@ -27,4 +27,4 @@ $(document).ready ->
                 return 0
             console.log keys
             for key in keys
-                $('#mylist').append '<li><a href="' + json.data[key] + '">' + key + '</a></li>'
+                $('#mylist').append '<li>' + '<a href="' + json.data[key] + '">' + key + '</a>' + "  " + "<a href='integralElectricGraph.html?csv=" + key + "' class='btn btn-primary'>グラフ表示</a>" + '</li>'

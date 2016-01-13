@@ -1,0 +1,46 @@
+extends ./components/_header
+block content
+ .form-inline(style="margin-bottom:12px")
+  .alert.alert-success
+   p 現在サニックスパワコンしかグラフがでないようになってます
+   p サニックスパワコンのシリアル番号/日付けを入力してグラフ描画ボタンを押下してください
+
+  label(for="search") シリアル番号：
+  input#search.form-control(size="20")
+   
+ .form-inline(style="margin-bottom:12px")
+  link(href="../c3/c3.css", rel="stylesheet", type="text/css")
+  script(src="../d3/d3.min.js", charset="utf-8")
+  script(src="../c3/c3.min.js")
+  script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js")
+  script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js")
+  script(src="https://sdk.amazonaws.com/js/aws-sdk-2.0.0-rc1.min.js")
+  link(href="http://cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/v4.0.0/build/css/bootstrap-datetimepicker.css", rel="stylesheet", type="text/css")
+  script(src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.js")
+  script(src="http://cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/v4.0.0/src/js/bootstrap-datetimepicker.js")  
+  label(for="mydate") 日選択：
+  .input-group
+   input#mydate.form-control.date(type="text")
+   span.input-group-addon
+    span.glyphicon.glyphicon-calendar
+          
+ .form-inline(style="margin-bottom:12px")
+  .form-group(name="radios")
+    p.control-label グラフx軸単位
+    #mode
+     .radio-inline
+      input#disp_minute(type="radio", value="1", name="gender", checked="checked")
+      label(for="disp_minute") 1分
+     .radio-inline
+      input#disp_10minute(type="radio", value="2", name="gender")
+      label(for="disp_10minute") 10分
+     .radio-inline
+      input#disp_hour(type="radio", value="3", name="gender")
+      label(for="disp_hour") 1h
+ button#search-btn.btn.btn-default グラフ描画
+ #chart
+ script(src="js/geturlvars.js")
+ script(src="js/integralElectricGraph.js")
+
+ 
+    
