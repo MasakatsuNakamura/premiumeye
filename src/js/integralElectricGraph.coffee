@@ -1,17 +1,9 @@
     getDateyyyymmdd = (date) ->
       return (date.getFullYear() + "-" + ('0' + (date.getMonth() + 1)).slice(-2) + "-" + ('0' + date.getDate()).slice(-2))
 
-    getDatehhmm = (date) ->
-      return (('0' + date.getHours()).slice(-2) + ":" + ('0' + date.getMinutes()).slice(-2))
-
     $(document).ready ->
       'use strict'
       args = getUrlVars()
-      date = new Date()
-      #一日前の日付に設定する
-      date.setDate(date.getDate() - 1)
-
-      $("#mydate").datetimepicker(locale: 'ja', format : 'YYYY-MM-DD').val(getDateyyyymmdd(date))
 
       $.getJSON "https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/pv_sensors.json", (pvsensors) ->
         draw = (file_path, option) ->
@@ -143,6 +135,10 @@
 
         $("#mydate").on "dp.change", (e) ->
           date = new Date(e.date)
+          drawDisplay($('#search').val(), date, $('#mode input[name="gender"]:checked').val())
+
+        $('#mode input[type=radio]').change ->
+          drawDisplay($('#search').val(), date, $('#mode input[name="gender"]:checked').val())
 
         createArray = (csvData) ->
             tempArray = csvData.split("\n")
@@ -161,6 +157,9 @@
         getFilePath = (id, date) ->
           return ("https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/gendata_bypcs/" + id + "/" + getTargetFileName(id, date))
 
+        getDatehhmm = (date) ->
+          return (('0' + date.getHours()).slice(-2) + ":" + ('0' + date.getMinutes()).slice(-2))
+
         if Object.keys(args).length > 0
           #console.log(args)
           #console.log(args.csv)
@@ -172,4 +171,10 @@
           $("#mydate").val(date_temp)
           date = new Date(date_temp)
           $('#search').val(serialid)
+          $("#mydate").datetimepicker(locale: 'ja', format : 'YYYY-MM-DD').val(getDateyyyymmdd(date))
           drawDisplay($('#search').val(), date, $('#mode input[name="gender"]:checked').val())
+        else
+          date = new Date()
+          #一日前の日付に設定する
+          date.setDate(date.getDate() - 1)
+          $("#mydate").datetimepicker(locale: 'ja', format : 'YYYY-MM-DD').val(getDateyyyymmdd(date))
