@@ -84,7 +84,7 @@ $(document).ready ->
         draw size
 
         date = new Date
-        $("#numbers").text num + " 箇所 (" + date.getFullYear() + "年" + (date.getMonth() + 1) + "月" + date.getDate() + "日 時点)"
+        $("#numbers").text num + " 箇所 (#{date.getFullYear()}年#{date.getMonth() + 1}月#{date.getDate()}日 時点)"
 
         $("#page").change ->
             draw(size)
@@ -101,7 +101,7 @@ $(document).ready ->
         $("#pana").click ->
             location.href = '?search=' + "SP(SS|SM|US) ,([6-9]|1[0-9]), パワコン 初期化待ち|アクティベート待ち"
         $("#wide").click ->
-            location.href = '?search=' + "電力量センサー ,逆,"
+            location.href = '?search=' + "電力量センサー ,逆"
         $("input").keydown (e) ->
             if e.keyCode == 13
                 location.href = '?search=' + $('#search').val()
