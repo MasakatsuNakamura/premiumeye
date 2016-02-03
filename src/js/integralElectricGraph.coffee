@@ -174,7 +174,7 @@ $(document).ready ->
 
             if csvArray.length < 2
               $('#chart').html("<p>csvファイル内にデータがありません</p>")
-              console.log(csvArray.length)
+              return
 
             $.ajax
               url: getOutputRestriantFilePath(id, date)
