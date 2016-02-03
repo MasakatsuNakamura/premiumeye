@@ -18,6 +18,41 @@ block content
   link(href="https://cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/v4.0.0/build/css/bootstrap-datetimepicker.css", rel="stylesheet", type="text/css")
   script(src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.js")
   script(src="https://cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/v4.0.0/src/js/bootstrap-datetimepicker.js")
+  //- link(href='https://fonts.googleapis.com/css?family=Roboto', rel='stylesheet', type='text/css')
+  //- script(src='https://apis.google.com/js/api:client.js')
+  //- style(type='text/css').
+  //-  #customBtn {
+  //-    display: inline-block;
+  //-    background: #4285f4;
+  //-    color: white;
+  //-    width: 190px;
+  //-    border-radius: 5px;
+  //-    white-space: nowrap;
+  //-    }
+  //-    #customBtn:hover {
+  //-    cursor: pointer;
+  //-    }
+  //-    span.label {
+  //-    font-weight: bold;
+  //-    }
+  //-    span.icon {
+  //-    background: url('/identity/sign-in/g-normal.png') transparent 5px 50% no-repeat;
+  //-    display: inline-block;
+  //-    vertical-align: middle;
+  //-    width: 42px;
+  //-    height: 42px;
+  //-    border-right: #2265d4 1px solid;
+  //-    }
+  //-    span.buttonText {
+  //-    display: inline-block;
+  //-    vertical-align: middle;
+  //-    padding-left: 42px;
+  //-    padding-right: 42px;
+  //-    font-size: 14px;
+  //-    font-weight: bold;
+  //-    /* Use the Roboto font that is loaded in the <head> */
+  //-    font-family: 'Roboto', sans-serif;
+  //-    }
   label(for="mydate") 日選択：
   .input-group
     span.input-group-addon
@@ -44,10 +79,24 @@ block content
  //button#search-btn.btn.btn-default グラフ描画
  #chart
  #outputRestriant
- button#createRestriant.btn.btn-default 抑制履歴cvsファイル作成
- .code(style='width: 50%; padding-top: 15px')
-    .progress
-        #pgss2.progress-bar.progress-bar-info
+ #status
+ button#createRestriant.btn.btn-success(type='button', data-toggle='modal', data-target='#myModal') 抑制履歴cvsファイル作成
+ #myModal.modal.fade
+    .modal-dialog
+        .modal-content
+          .modal-header
+            h4.modal-title 抑制履歴csv作成中
+          .modal-body 抑制履歴csvファイルを作成しています。作成が終わると自動的に表示を更新しますのでそのままお待ちください。
+          .modal-footer
+ //- fb:login-button(scope='public_profile,email', onlogin='checkLoginState();')
+ //- #gSignInWrapper
+ //-  span.label Sign in with:
+ //-    #customBtn.customGPlusSignIn
+ //-      span.icon
+ //-      span.buttonText Google
+ //-  #name
+ //- .code(style='width: 50%; padding-top: 15px')
+ //-    .progress
+ //-        #pgss2.progress-bar.progress-bar-info
  script(src="js/geturlvars.js")
  script(src="js/integralElectricGraph.js")
- 
