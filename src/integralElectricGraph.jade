@@ -18,6 +18,10 @@ block content
   link(href="https://cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/v4.0.0/build/css/bootstrap-datetimepicker.css", rel="stylesheet", type="text/css")
   script(src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.js")
   script(src="https://cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/v4.0.0/src/js/bootstrap-datetimepicker.js")
+  script(src="js/geturlvars.js")
+  script(src="js/integralElectricGraph.js")
+  link(href='https://fonts.googleapis.com/css?family=Roboto', rel='stylesheet', type='text/css')
+  script(src='https://apis.google.com/js/client.js?onload=hoge')
   //- style(type='text/css').
   //-  #customBtn {
   //-    display: inline-block;
@@ -76,7 +80,7 @@ block content
       label(for="disp_hour") 1h
  //button#search-btn.btn.btn-default グラフ描画
  #chart
- button#createChart.btn.btn-success(type='button', data-toggle='modal', data-target='#myChartModal') グラフ描画用cvsファイル作成
+ button#createChart.btn.btn-success(type='button', data-toggle='modal', data-target='#myChartModal', style='display:none') グラフ描画用cvsファイル作成
  #myChartModal.modal.fade
     .modal-dialog
         .modal-content
@@ -88,7 +92,7 @@ block content
  .form-inline(style="margin-bottom:12px")
   #outputRestriant
  #status
- button#createRestriant.btn.btn-success(type='button', data-toggle='modal', data-target='#myModal') 抑制履歴cvsファイル作成
+ button#createRestriant.btn.btn-success(type='button', data-toggle='modal', data-target='#myModal', style='display:none') 抑制履歴cvsファイル作成
  #myModal.modal.fade
     .modal-dialog
         .modal-content
@@ -106,7 +110,3 @@ block content
  //- .code(style='width: 50%; padding-top: 15px')
  //-    .progress
  //-        #pgss2.progress-bar.progress-bar-info
- script(src="js/geturlvars.js")
- script(src="js/integralElectricGraph.js")
- link(href='https://fonts.googleapis.com/css?family=Roboto', rel='stylesheet', type='text/css')
- script(src='https://apis.google.com/js/client.js?onload=hoge')

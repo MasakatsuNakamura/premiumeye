@@ -51,6 +51,7 @@ $(document).ready ->
   'use strict'
   args = getUrlVars()
   date = new Date()
+  isGraphDataGetFirst = false
 
   AWS.config.region = 'ap-northeast-1';
   AWS.config.credentials = new (AWS.CognitoIdentityCredentials)(
@@ -284,16 +285,22 @@ $(document).ready ->
             $('#csvdownload').append("<a href='https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/gendata_bypcs/#{id}/#{getTargetFileName(id, date)}' class='btn btn-primary'>#{getTargetFileName(id, date)}ダウンロード</a>")
 
           error: (error) ->
-            $('#chart').html("<p>csvファイルがありません</p>")
-            $('#createChart').trigger("click");
+            if isGraphDataGetFirst == false
+              $('#createChart').trigger("click");
+              isGraphDataGetFirst = true
+            else
+              $('#chart').html("<p>グラフデータを作成できませんでした。</p>")
 
-    drawDisplay = (id, date, option) ->
+    clearDisplay = ->
       $('#chart').html("")
       $('#csvdownload').html("")
       $('#outputRestriant').html("")
       $('#createChart').hide()
       $('#createRestriant').hide()
       console.log('#outputRestriant クリア')
+
+    drawDisplay = (id, date, option) ->
+      clearDisplay()
       if pvsensors[id] is undefined
         $('#chart').html("<p>存在しないシリアル番号(id)です</p>")
         return
@@ -308,20 +315,24 @@ $(document).ready ->
 
     $("#mydate").on "dp.change", (e) ->
       date = new Date(e.date)
+      isGraphDataGetFirst = false
       drawDisplay($('#search').val(), date, $('#mode input[name="gender"]:checked').val())
       # console.log("#mydate.on dp.change")
 
     $('#mode input[type=radio]').change ->
+      isGraphDataGetFirst = false
       drawDisplay($('#search').val(), date, $('#mode input[name="gender"]:checked').val())
 
     $("#yesterday").click ->
       date.setDate date.getDate() - 1
       $("#mydate").val(getDateyyyymmdd(date))
+      isGraphDataGetFirst = false
       $("#mydate").data("DateTimePicker").date(date)
 
     $("#tommorow").click ->
       date.setDate date.getDate() + 1
       $("#mydate").val(getDateyyyymmdd(date))
+      isGraphDataGetFirst = false
       $("#mydate").data("DateTimePicker").date(date)
 
     $('#createChart').click ->
@@ -335,14 +346,13 @@ $(document).ready ->
           Payload: JSON.stringify({"id": $('#search').val(), "date": getDateyyyymmdd(date).replace(/-/g, '/')})
       }, (err, data) ->
           console.log('Lambda invoke end');
-
+          $('#myChartModal').modal('hide')
           if err
             console.log(err, err.stack);
+            $('#chart').html("<p>グラフデータを作成できませんでした。</p>")
           else
             console.log(data);
-            $('#myChartModal').modal('hide')
             drawDisplay($('#search').val(), date, $('#mode input[name="gender"]:checked').val())
-
 
     $("#createRestriant").click ->
       lambda = new AWS.Lambda()
@@ -396,6 +406,7 @@ $(document).ready ->
     getOutputRestriantFileName = (id, date) ->
       return (id + "-" + getDateyyyymmdd(date) + "_errorflag.csv")
 
+    clearDisplay()
     if Object.keys(args).length > 0
       #console.log(args)
       #console.log(args.csv)
