@@ -65,7 +65,8 @@ $(document).ready ->
                 line = data[i]
                 tbl = "<tr><td>#{i + 1}</td><td>"
                 if line.機種名 == 'SA099T01' && line.ステータス == '稼働中'
-                    tbl += "<a href='list-csv.html?id=#{line.serialid}' class='btn btn-primary'>CSV</a>"
+                    # tbl += "<a href='list-csv.html?id=#{line.serialid}' class='btn btn-primary'>CSV</a>"
+                    tbl += "<a href='integralElectricGraph.html?id=#{line.serialid}' class='btn btn-primary'>グラフ表示</a>"
                 else
                     tbl += "&nbsp"
                 tbl += "</td>"

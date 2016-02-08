@@ -152,7 +152,8 @@ $(document).ready ->
           </div>
         </div>
       """
-      $('#outputRestriant').html(res)
+      $('#outputRestriant').html('<p class="control-label">[抑制履歴情報]</p>')
+      $('#outputRestriant').append(res)
 
     # wait = (time) ->
     #     time1 = new Date().getTime()
@@ -279,11 +280,14 @@ $(document).ready ->
             graph_count++
 
             c3.generate(chart_data)
+            $('#csvdownload').append("<a href='https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/gendata_bypcs/#{id}/#{getTargetFileName(id, date)}' class='btn btn-primary'>#{getTargetFileName(id, date)}ダウンロード</a>")
+
           error: (error) ->
             $('#chart').html("<p>csvファイルがありません</p>")
 
     drawDisplay = (id, date, option) ->
       $('#chart').html("")
+      $('#csvdownload').html("")
       $('#outputRestriant').html("")
       $('#createRestriant').hide()
       console.log('#outputRestriant クリア')
@@ -368,17 +372,17 @@ $(document).ready ->
     if Object.keys(args).length > 0
       #console.log(args)
       #console.log(args.csv)
-      serialid = args.csv.substring(0, args.csv.indexOf("-"))
-      date_temp = args.csv.substring(args.csv.indexOf("-")+1, args.csv.length)
-      date_temp = date_temp.replace(/.csv/g,"")
+      # serialid = args.csv.substring(0, args.csv.indexOf("-"))
+      serialid = args.id
+      # date_temp = args.csv.substring(args.csv.indexOf("-")+1, args.csv.length)
+      # date_temp = date_temp.replace(/.csv/g,"")
       #console.log(date_temp)
-      $("#mydate").val(date_temp)
-      date = new Date(date_temp)
+      # $("#mydate").val(date_temp)
+      # date = new Date(date_temp)
       $('#search').val(serialid)
-    else
-      date = new Date()
-      $("#mydate").val(getDateyyyymmdd(date))
 
+    date = new Date()
+    $("#mydate").val(getDateyyyymmdd(date))
     $("#mydate").datetimepicker(locale: 'ja', format : 'YYYY-MM-DD').val(getDateyyyymmdd(date))
     $("#mydate").data("DateTimePicker").date(date)
     console.log($("#mydate").val());
