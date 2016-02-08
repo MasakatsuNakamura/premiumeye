@@ -185,7 +185,8 @@ $(document).ready ->
                 makeOutputRestriantTable(id, date, pcs_num, outRestraint)
                 console.log("出力抑制ファイル取得成功")
               error: (error) ->
-                $('#createRestriant').show()
+                if pvsensors[id]['機種名'] == 'SA099T01' && pvsensors[id]['ステータス'] == '稼働中'
+                  $('#createRestriant').show()
 
             #console.log(csvArray[0].length)
             chart_data =
@@ -284,11 +285,13 @@ $(document).ready ->
 
           error: (error) ->
             $('#chart').html("<p>csvファイルがありません</p>")
+            $('#createChart').trigger("click");
 
     drawDisplay = (id, date, option) ->
       $('#chart').html("")
       $('#csvdownload').html("")
       $('#outputRestriant').html("")
+      $('#createChart').hide()
       $('#createRestriant').hide()
       console.log('#outputRestriant クリア')
       if pvsensors[id] is undefined
@@ -296,13 +299,17 @@ $(document).ready ->
         return
       draw(id, date, parseInt(option))
 
+    $("#search").change　->
+      console.log("#search change")
+      drawDisplay($('#search').val(), date, $('#mode input[name="gender"]:checked').val())
+
     $("#search-btn").click ->
       drawDisplay($('#search').val(), date, $('#mode input[name="gender"]:checked').val())
 
     $("#mydate").on "dp.change", (e) ->
       date = new Date(e.date)
       drawDisplay($('#search').val(), date, $('#mode input[name="gender"]:checked').val())
-      console.log("#mydate.on dp.change")
+      # console.log("#mydate.on dp.change")
 
     $('#mode input[type=radio]').change ->
       drawDisplay($('#search').val(), date, $('#mode input[name="gender"]:checked').val())
@@ -316,6 +323,26 @@ $(document).ready ->
       date.setDate date.getDate() + 1
       $("#mydate").val(getDateyyyymmdd(date))
       $("#mydate").data("DateTimePicker").date(date)
+
+    $('#createChart').click ->
+      lambda = new AWS.Lambda()
+      #console.log(date)
+      console.log(getDateyyyymmdd(date).replace(/-/g, '/'))
+      $('#createRestriant').hide()
+      $('#myChartModal').show()
+      lambda.invoke {
+          FunctionName: 'get-csv'
+          Payload: JSON.stringify({"id": $('#search').val(), "date": getDateyyyymmdd(date).replace(/-/g, '/')})
+      }, (err, data) ->
+          console.log('Lambda invoke end');
+
+          if err
+            console.log(err, err.stack);
+          else
+            console.log(data);
+            $('#myChartModal').modal('hide')
+            drawDisplay($('#search').val(), date, $('#mode input[name="gender"]:checked').val())
+
 
     $("#createRestriant").click ->
       lambda = new AWS.Lambda()
@@ -382,6 +409,7 @@ $(document).ready ->
       $('#search').val(serialid)
 
     date = new Date()
+    date.setDate(date.getDate() - 1)
     $("#mydate").val(getDateyyyymmdd(date))
     $("#mydate").datetimepicker(locale: 'ja', format : 'YYYY-MM-DD').val(getDateyyyymmdd(date))
     $("#mydate").data("DateTimePicker").date(date)

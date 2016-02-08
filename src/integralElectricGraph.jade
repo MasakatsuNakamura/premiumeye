@@ -1,9 +1,9 @@
 extends ./components/_header
 block content
  .form-inline(style="margin-bottom:12px")
-  .alert.alert-success
-   p 現状サニックスパワコンしかグラフがでません
-   p サニックスパワコンのシリアル番号/日付けを入力してください
+  //- .alert.alert-success
+  //-  p 現状サニックスパワコンしかグラフがでません
+  //-  p サニックスパワコンのシリアル番号/日付けを入力してください
 
   label(for="search") シリアル番号：
   input#search.form-control(size="20")
@@ -18,8 +18,6 @@ block content
   link(href="https://cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/v4.0.0/build/css/bootstrap-datetimepicker.css", rel="stylesheet", type="text/css")
   script(src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.js")
   script(src="https://cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/v4.0.0/src/js/bootstrap-datetimepicker.js")
-  //- link(href='https://fonts.googleapis.com/css?family=Roboto', rel='stylesheet', type='text/css')
-  //- script(src='https://apis.google.com/js/api:client.js')
   //- style(type='text/css').
   //-  #customBtn {
   //-    display: inline-block;
@@ -78,6 +76,14 @@ block content
       label(for="disp_hour") 1h
  //button#search-btn.btn.btn-default グラフ描画
  #chart
+ button#createChart.btn.btn-success(type='button', data-toggle='modal', data-target='#myChartModal') グラフ描画用cvsファイル作成
+ #myChartModal.modal.fade
+    .modal-dialog
+        .modal-content
+          .modal-header
+            h4.modal-title グラフ準備中
+          .modal-body グラフ描画用csvファイルを作成しています。しばらくお待ちください。
+          .modal-footer
  #csvdownload 
  .form-inline(style="margin-bottom:12px")
   #outputRestriant
@@ -96,9 +102,11 @@ block content
  //-    #customBtn.customGPlusSignIn
  //-      span.icon
  //-      span.buttonText Google
- //-  #name
+ //-    #name
  //- .code(style='width: 50%; padding-top: 15px')
  //-    .progress
  //-        #pgss2.progress-bar.progress-bar-info
  script(src="js/geturlvars.js")
  script(src="js/integralElectricGraph.js")
+ link(href='https://fonts.googleapis.com/css?family=Roboto', rel='stylesheet', type='text/css')
+ script(src='https://apis.google.com/js/client.js?onload=hoge')
