@@ -63,7 +63,10 @@ $(document).ready ->
                 if i >= num
                     break
                 line = data[i]
-                tbl = "<tr><td><a href='integralElectricGraph.html?id=#{line.serialid}' class='btn btn-primary'>#{i + 1}</a></td><td>"
+                if line.ステータス == "稼働中"
+                    tbl = "<tr><td><a href='integralElectricGraph.html?id=#{line.serialid}' class='btn btn-default'>#{i + 1}</a></td><td>"
+                else
+                    tbl = "<tr><td><a href='integralElectricGraph.html?id=#{line.serialid}' class='btn btn-default' disabled='disabled'>#{i + 1}</a></td><td>"
                 tbl += "</td>"
                 for cell in header
                     value = if line[cell]? then line[cell] else '&nbsp;'
