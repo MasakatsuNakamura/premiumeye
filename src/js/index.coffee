@@ -63,12 +63,7 @@ $(document).ready ->
                 if i >= num
                     break
                 line = data[i]
-                tbl = "<tr><td>#{i + 1}</td><td>"
-                if line.機種名 == 'SA099T01' && line.ステータス == '稼働中'
-                    # tbl += "<a href='list-csv.html?id=#{line.serialid}' class='btn btn-primary'>CSV</a>"
-                    tbl += "<a href='integralElectricGraph.html?id=#{line.serialid}' class='btn btn-primary'>グラフ表示</a>"
-                else
-                    tbl += "&nbsp"
+                tbl = "<tr><td><a href='integralElectricGraph.html?id=#{line.serialid}' class='btn btn-primary'>#{i + 1}</a></td><td>"
                 tbl += "</td>"
                 for cell in header
                     value = if line[cell]? then line[cell] else '&nbsp;'
