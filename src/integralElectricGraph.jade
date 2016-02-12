@@ -1,112 +1,77 @@
 extends ./components/_header
 block content
- .form-inline(style="margin-bottom:12px")
-  //- .alert.alert-success
-  //-  p 現状サニックスパワコンしかグラフがでません
-  //-  p サニックスパワコンのシリアル番号/日付けを入力してください
+  .form-inline(style="margin-bottom:12px")
+    //- .alert.alert-success
+    //-  p 現状サニックスパワコンしかグラフがでません
+    //-  p サニックスパワコンのシリアル番号/日付けを入力してください
+    label(for="search") シリアル番号：
+    input#search.form-control(size="20")
 
-  label(for="search") シリアル番号：
-  input#search.form-control(size="20")
+  .form-inline(style="margin-bottom:12px")
+    link(href="./c3/c3.css", rel="stylesheet", type="text/css")
+    script(src="./d3/d3.min.js", charset="utf-8")
+    script(src="./c3/c3.min.js")
+    script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js")
+    script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js")
+    script(src="https://sdk.amazonaws.com/js/aws-sdk-2.1.36.min.js")
+    link(href="https://cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/v4.0.0/build/css/bootstrap-datetimepicker.css", rel="stylesheet", type="text/css")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.js")
+    script(src="https://cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/v4.0.0/src/js/bootstrap-datetimepicker.js")
+    script(src="js/geturlvars.js")
+    script(src="js/integralElectricGraph.js")
+    script(src='https://apis.google.com/js/client.js?onload=authorize')
 
- .form-inline(style="margin-bottom:12px")
-  link(href="./c3/c3.css", rel="stylesheet", type="text/css")
-  script(src="./d3/d3.min.js", charset="utf-8")
-  script(src="./c3/c3.min.js")
-  script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js")
-  script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js")
-  script(src="https://sdk.amazonaws.com/js/aws-sdk-2.1.36.min.js")
-  link(href="https://cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/v4.0.0/build/css/bootstrap-datetimepicker.css", rel="stylesheet", type="text/css")
-  script(src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.js")
-  script(src="https://cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/v4.0.0/src/js/bootstrap-datetimepicker.js")
-  script(src="js/geturlvars.js")
-  script(src="js/integralElectricGraph.js")
-  link(href='https://fonts.googleapis.com/css?family=Roboto', rel='stylesheet', type='text/css')
-  script(src='https://apis.google.com/js/client.js?onload=hoge')
-  //- style(type='text/css').
-  //-  #customBtn {
-  //-    display: inline-block;
-  //-    background: #4285f4;
-  //-    color: white;
-  //-    width: 190px;
-  //-    border-radius: 5px;
-  //-    white-space: nowrap;
-  //-    }
-  //-    #customBtn:hover {
-  //-    cursor: pointer;
-  //-    }
-  //-    span.label {
-  //-    font-weight: bold;
-  //-    }
-  //-    span.icon {
-  //-    background: url('/identity/sign-in/g-normal.png') transparent 5px 50% no-repeat;
-  //-    display: inline-block;
-  //-    vertical-align: middle;
-  //-    width: 42px;
-  //-    height: 42px;
-  //-    border-right: #2265d4 1px solid;
-  //-    }
-  //-    span.buttonText {
-  //-    display: inline-block;
-  //-    vertical-align: middle;
-  //-    padding-left: 42px;
-  //-    padding-right: 42px;
-  //-    font-size: 14px;
-  //-    font-weight: bold;
-  //-    /* Use the Roboto font that is loaded in the <head> */
-  //-    font-family: 'Roboto', sans-serif;
-  //-    }
-  label(for="mydate") 日選択：
-  .input-group
-    span.input-group-addon
-     span#yesterday.glyphicon.glyphicon-chevron-left
-    input#mydate.form-control.date(type="text", size="8")
-    span.input-group-addon
-     span.glyphicon.glyphicon-calendar
-    span.input-group-addon
-     span#tommorow.glyphicon.glyphicon-chevron-right
+    label(for="mydate") 日選択：
+    .input-group
+      span.input-group-addon
+        span#yesterday.glyphicon.glyphicon-chevron-left
+      input#mydate.form-control.date(type="text", size="8")
+      span.input-group-addon
+        span.glyphicon.glyphicon-calendar
+      span.input-group-addon
+        span#tommorow.glyphicon.glyphicon-chevron-right
 
- .form-inline(style="margin-bottom:12px")
-  .form-group(name="radios")
-    p.control-label グラフx軸単位
-    #mode
-     .radio-inline
-      input#disp_minute(type="radio", value="1", name="gender", checked="checked")
-      label(for="disp_minute") 1分
-     .radio-inline
-      input#disp_10minute(type="radio", value="2", name="gender")
-      label(for="disp_10minute") 10分
-     .radio-inline
-      input#disp_hour(type="radio", value="3", name="gender")
-      label(for="disp_hour") 1h
- //button#search-btn.btn.btn-default グラフ描画
- #chart
- button#createChart.btn.btn-success(type='button', data-toggle='modal', data-target='#myChartModal', style='display:none') グラフ描画用cvsファイル作成
- #myChartModal.modal.fade
+  .form-inline(style="margin-bottom:12px")
+    .form-group(name="radios")
+      p.control-label グラフx軸単位
+      #mode
+        .radio-inline
+          input#disp_minute(type="radio", value="1", name="gender", checked="checked")
+          label(for="disp_minute") 1分
+        .radio-inline
+          input#disp_10minute(type="radio", value="2", name="gender")
+          label(for="disp_10minute") 10分
+        .radio-inline
+          input#disp_hour(type="radio", value="3", name="gender")
+          label(for="disp_hour") 1h
+  #chart
+  button#createChart.btn.btn-success(type='button', data-toggle='modal', data-target='#myChartModal', style='display:none') グラフ描画用cvsファイル作成
+  #myChartModal.modal.fade
     .modal-dialog
         .modal-content
           .modal-header
             h4.modal-title グラフ準備中
           .modal-body グラフ描画用csvファイルを作成しています。しばらくお待ちください。
           .modal-footer
- #csvdownload 
- .form-inline(style="margin-bottom:12px")
+  #csvdownload 
+  .form-inline(style="margin-bottom:12px")
   #outputRestriant
- #status
- button#createRestriant.btn.btn-success(type='button', data-toggle='modal', data-target='#myModal', style='display:none') 抑制履歴cvsファイル作成
- #myModal.modal.fade
+  button#createRestriant.btn.btn-success(type='button', data-toggle='modal', data-target='#myModal', style='display:none') 抑制履歴cvsファイル作成
+  #myModal.modal.fade
     .modal-dialog
         .modal-content
           .modal-header
             h4.modal-title 抑制履歴csv作成中
           .modal-body 抑制履歴csvファイルを作成しています。作成が終わると自動的に表示を更新しますのでそのままお待ちください。
           .modal-footer
- //- fb:login-button(scope='public_profile,email', onlogin='checkLoginState();')
- //- #gSignInWrapper
- //-  span.label Sign in with:
- //-    #customBtn.customGPlusSignIn
- //-      span.icon
- //-      span.buttonText Google
- //-    #name
+
+  #FacebookBtn(style='display:none')
+    fb:login-button(scope='public_profile,email', onlogin='checkLoginState();') 
+  #status
+  button#facebook-login-confirmation.btn.btn-success(style='display:none') 先へ進む
+  button#GoogleBtn.btn.btn-success(style='display:none') Google認証
+  button#AnonymityBtn.btn.btn-success(style='display:none') 匿名認証
+  #name
  //- .code(style='width: 50%; padding-top: 15px')
  //-    .progress
  //-        #pgss2.progress-bar.progress-bar-info

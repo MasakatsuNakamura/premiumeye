@@ -1,124 +1,17 @@
-# This function is called when someone finishes with the Login
-# Button.  See the onlogin handler attached to it in the sample
-# code below.
-
-# checkLoginState = ->
-#   FB.getLoginStatus (response) ->
-#     statusChangeCallback response
-#
-# statusChangeCallback = (response) ->
-#   console.log 'statusChangeCallback'
-#   console.log response
-#   # The response object is returned with a status field that lets the
-#   # app know the current login status of the person.
-#   # Full docs on the response object can be found in the documentation
-#   # for FB.getLoginStatus().
-#   if response.status == 'connected'
-#     # Logged into your app and Facebook.
-#     testAPI()
-#     AWS.config.credentials = new (AWS.CognitoIdentityCredentials)(
-#       AccountId: '882219098944'
-#       IdentityPoolId: 'ap-northeast-1:663975fc-ae6c-4ca4-9575-57e59d4e6f4e'
-#       RoleArn: 'arn:aws:iam::882219098944:role/Cognito_test_restraint_data_uploadAuth_Role'
-#       Logins:
-#         'graph.facebook.com': response.authResponse.accessToken)
-#
-#     console.log 'FB ID: ' + response.authResponse.userID
-#
-#     AWS.config.credentials.get (err) ->
-#       if !err
-#         console.log 'Cognito Identity id:' + AWS.config.credentials.identityId
-#       else
-#         console.log err
-#
-#   else if response.status == 'not_authorized'
-#     # The person is logged into Facebook, but not your app.
-#     document.getElementById('status').innerHTML = 'Please log ' + 'into this app.'
-#   else
-#     # The person is not logged into Facebook, so we're not sure if
-#     # they are logged into this app or not.
-#     document.getElementById('status').innerHTML = 'Please log ' + 'into Facebook.'
-#
-# # Here we run a very simple test of the Graph API after login is
-# # successful.  See statusChangeCallback() for when this call is made.
-# testAPI = ->
-#   console.log 'Welcome!  Fetching your information.... '
-#   FB.api '/me', (response) ->
-#     console.log 'Successful login for: ' + response.name
-#     document.getElementById('status').innerHTML = 'Thanks for logging in, ' + response.name + '!'
-
 $(document).ready ->
-  'use strict'
   args = getUrlVars()
   date = new Date()
   isGraphDataGetFirst = false
-
-  AWS.config.region = 'ap-northeast-1';
-  AWS.config.credentials = new (AWS.CognitoIdentityCredentials)(
-    AccountId: '882219098944'
-    IdentityPoolId: 'ap-northeast-1:663975fc-ae6c-4ca4-9575-57e59d4e6f4e'
-    RoleArn: 'arn:aws:iam::882219098944:role/Cognito_test_restraint_data_uploadUnauth_Role')
-
-  AWS.config.credentials.get (err) ->
-    if !err
-      console.log 'Cognito Identity id:' + AWS.config.credentials.identityId
-    else
-      console.log err
-
-  # googleUser = {}
-  # auth2 = 0
-
-  # attachSignin = (element) ->
-  #   console.log element.id
-  #   auth2.attachClickHandler element, {}, ((googleUser) ->
-  #     document.getElementById('name').innerText = 'Signed in: ' + googleUser.getBasicProfile().getName()
-  #   ), (error) ->
-  #     alert JSON.stringify(error, undefined, 2)
-
-  # window.fbAsyncInit = ->
-  #   FB.init
-  #     appId: '1741978699356923'
-  #     cookie: true
-  #     xfbml: true
-  #     version: 'v2.2'
-  #   # Now that we've initialized the JavaScript SDK, we call
-  #   # FB.getLoginStatus().  This function gets the state of the
-  #   # person visiting this page and can return one of three states to
-  #   # the callback you provide.  They can be:
-  #   # 1. Logged into your app ('connected')
-  #   # 2. Logged into Facebook, but not your app ('not_authorized')
-  #   # 3. Not logged into Facebook and can't tell if they are logged into
-  #   #    your app or not.
-  #   #
-  #   # These three cases are handled in the callback function.
-  #   checkLoginState()
-  #
-  # # Load the SDK asynchronously
-  # ((d, s, id) ->
-  #   js = undefined
-  #   fjs = d.getElementsByTagName(s)[0]
-  #   if d.getElementById(id)
-  #     return
-  #   js = d.createElement(s)
-  #   js.id = id
-  #   js.src = '//connect.facebook.net/ja_jp/sdk.js'
-  #   fjs.parentNode.insertBefore js, fjs
-  # ) document, 'script', 'facebook-jssdk'
-
-  # console.log 'startApp'
-  # gapi.load 'auth2', ->
-  #   # Retrieve the singleton for the GoogleAuth library and set up the client.
-  #   auth2 = gapi.auth2.init(
-  #     client_id: '484628944735-fl01nng92lhjpqto03t6qkki4s0psinq.apps.googleusercontent.com'
-  #     cookiepolicy: 'single_host_origin')
-  #   attachSignin document.getElementById('customBtn')
-
+  isCertification = false
   time = 600000
   # 1分毎
   timer = undefined
   # モーダルが開かれた場合
 
+  $.ajaxSetup({async: false})  #同期通信(json取ってくるまで待つ)
+
   $.getJSON "https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/pv_sensors.json", (pvsensors) ->
+    console.log('getJSON')
     getDateyyyymmdd = (date) ->
       return (date.getFullYear() + "-" + ('0' + (date.getMonth() + 1)).slice(-2) + "-" + ('0' + date.getDate()).slice(-2))
 
@@ -167,6 +60,16 @@ $(document).ready ->
       # timer = setInterval ->
       # , 1000
 
+    showCertificationButton = ->
+      $('#GoogleBtn').show()
+      $('#AnonymityBtn').show()
+      $('#FacebookBtn').show()
+
+    hideCertificationButton = ->
+      $('#GoogleBtn').hide()
+      $('#AnonymityBtn').hide()
+      $('#FacebookBtn').hide()
+
     draw = (id, date, option) ->
       $.ajax
           url: getFilePath(id, date),
@@ -186,10 +89,8 @@ $(document).ready ->
                 makeOutputRestriantTable(id, date, pcs_num, outRestraint)
                 console.log("出力抑制ファイル取得成功")
               error: (error) ->
-                if pvsensors[id]['機種名'] == 'SA099T01' && pvsensors[id]['ステータス'] == '稼働中'
-                  $('#createRestriant').show()
+                $('#createRestriant').show()
 
-            #console.log(csvArray[0].length)
             chart_data =
               bindto: '#chart',
               data:
@@ -285,11 +186,14 @@ $(document).ready ->
             $('#csvdownload').append("<a href='https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/gendata_bypcs/#{id}/#{getTargetFileName(id, date)}' class='btn btn-primary'>#{getTargetFileName(id, date)}ダウンロード</a>")
 
           error: (error) ->
-            if isGraphDataGetFirst == false
-              $('#createChart').trigger("click");
-              isGraphDataGetFirst = true
+            if isCertification == false
+              showCertificationButton()
             else
-              $('#chart').html("<p>グラフデータを作成できませんでした。</p>")
+              if isGraphDataGetFirst == false
+                $('#createChart').trigger("click");
+                isGraphDataGetFirst = true
+              else
+                $('#chart').html("<p>グラフデータを作成できませんでした。</p>")
 
     clearDisplay = ->
       $('#chart').html("")
@@ -297,7 +201,7 @@ $(document).ready ->
       $('#outputRestriant').html("")
       $('#createChart').hide()
       $('#createRestriant').hide()
-      console.log('#outputRestriant クリア')
+      hideCertificationButton()
 
     drawDisplay = (id, date, option) ->
       clearDisplay()
@@ -306,57 +210,57 @@ $(document).ready ->
         return
       draw(id, date, parseInt(option))
 
-    $("#search").change　->
+    $('#search').change　->
       console.log("#search change")
       drawDisplay($('#search').val(), date, $('#mode input[name="gender"]:checked').val())
 
-    $("#search-btn").click ->
+    $('#facebook-login-confirmation').click ->
+      isCertification = true
+      hideCertificationButton()
+      $('#facebook-login-confirmation').hide()
+      $('#status').html()
       drawDisplay($('#search').val(), date, $('#mode input[name="gender"]:checked').val())
 
-    $("#mydate").on "dp.change", (e) ->
+    $('#mydate').on "dp.change", (e) ->
       date = new Date(e.date)
       isGraphDataGetFirst = false
       drawDisplay($('#search').val(), date, $('#mode input[name="gender"]:checked').val())
-      # console.log("#mydate.on dp.change")
 
     $('#mode input[type=radio]').change ->
       isGraphDataGetFirst = false
       drawDisplay($('#search').val(), date, $('#mode input[name="gender"]:checked').val())
 
-    $("#yesterday").click ->
+    $('#yesterday').click ->
       date.setDate date.getDate() - 1
-      $("#mydate").val(getDateyyyymmdd(date))
+      $('#mydate').val(getDateyyyymmdd(date))
       isGraphDataGetFirst = false
-      $("#mydate").data("DateTimePicker").date(date)
+      $('#mydate').data("DateTimePicker").date(date)
 
-    $("#tommorow").click ->
+    $('#tommorow').click ->
       date.setDate date.getDate() + 1
-      $("#mydate").val(getDateyyyymmdd(date))
+      $('#mydate').val(getDateyyyymmdd(date))
       isGraphDataGetFirst = false
-      $("#mydate").data("DateTimePicker").date(date)
+      $('#mydate').data("DateTimePicker").date(date)
 
     $('#createChart').click ->
       lambda = new AWS.Lambda()
-      #console.log(date)
-      console.log(getDateyyyymmdd(date).replace(/-/g, '/'))
       $('#createRestriant').hide()
       $('#myChartModal').show()
       lambda.invoke {
           FunctionName: 'get-csv'
           Payload: JSON.stringify({"id": $('#search').val(), "date": getDateyyyymmdd(date).replace(/-/g, '/')})
       }, (err, data) ->
-          console.log('Lambda invoke end');
+          console.log('Lambda invoke end')
           $('#myChartModal').modal('hide')
           if err
-            console.log(err, err.stack);
+            console.log(err, err.stack)
             $('#chart').html("<p>グラフデータを作成できませんでした。</p>")
           else
-            console.log(data);
+            console.log(data)
             drawDisplay($('#search').val(), date, $('#mode input[name="gender"]:checked').val())
 
     $("#createRestriant").click ->
       lambda = new AWS.Lambda()
-      #console.log(date)
       console.log(getDateyyyymmdd(date).replace(/-/g, '/'))
       $('#createRestriant').hide()
       $('#myModal').show()
@@ -365,10 +269,30 @@ $(document).ready ->
           Payload: JSON.stringify({"id": $('#search').val(), "date": getDateyyyymmdd(date).replace(/-/g, '/')})
       }, (err, data) ->
           if err
-            console.log(err, err.stack);
+            console.log(err, err.stack)
           else
             $('#myModal').modal('hide')
             drawDisplay($('#search').val(), date, $('#mode input[name="gender"]:checked').val())
+
+    $('#GoogleBtn').click ->
+      console.log('google 押下')
+      $('#chart').html("<p>実は。。google認証はまだサポートできてません。。</p>")
+
+    $('#AnonymityBtn').click ->
+      AWS.config.region = 'ap-northeast-1'
+      AWS.config.credentials = new (AWS.CognitoIdentityCredentials)(
+        AccountId: '882219098944'
+        IdentityPoolId: 'ap-northeast-1:663975fc-ae6c-4ca4-9575-57e59d4e6f4e'
+        RoleArn: 'arn:aws:iam::882219098944:role/Cognito_test_restraint_data_uploadUnauth_Role')
+
+      AWS.config.credentials.get (err) ->
+        if !err
+          console.log 'Cognito Identity id:' + AWS.config.credentials.identityId
+          isCertification = true
+          hideCertificationButton()
+          drawDisplay($('#search').val(), date, $('#mode input[name="gender"]:checked').val())
+        else
+          console.log err
 
     progress = (count) ->
       setTimeout (->
@@ -386,9 +310,6 @@ $(document).ready ->
         #最後に何故か常にごみデータ（ブランクデータ）が入るらしい
         for i in [0...(tempArray.length-1)] by 1
           csvArray[i] = tempArray[i].split(",")
-          #console.log(i)
-          #console.log(csvArray[0])
-          #console.log(csvArray[0].length)
         return (csvArray)
 
     getTargetFileName = (id, date) ->
@@ -406,19 +327,170 @@ $(document).ready ->
     getOutputRestriantFileName = (id, date) ->
       return (id + "-" + getDateyyyymmdd(date) + "_errorflag.csv")
 
+    # authorize = (event) ->
+    #   console.log('authorize呼び出し')
+    #   # Handles the authorization flow.
+    #   # `immediate` should be false when invoked from the button click.
+    #   useImmdiate = if event then false else true
+    #   authData =
+    #     client_id: CLIENT_ID
+    #     scope: SCOPES
+    #     immediate: useImmdiate
+    #   gapi.auth.authorize authData, (response) ->
+    #     console.log(response)
+    #     # authButton = document.getElementById('GoogleBtn')
+    #     # if response.error
+    #     #   authButton.hidden = false
+    #     # else
+    #     #   authButton.hidden = true
+    #     if response.error
+    #       console.log(response.error)
+    #     else
+    #       AWS.config.region = 'ap-northeast-1'
+    #       cognitoidentity = new (AWS.CognitoIdentity)(apiVersion: '2014-06-30')
+    #       params =
+    #         IdentityPoolId: 'ap-northeast-1:663975fc-ae6c-4ca4-9575-57e59d4e6f4e'
+    #         AccountId: '882219098944'
+    #         Logins: 'accounts.google.com': response.access_token
+    #       cognitoidentity.getId params, (err, data) ->
+    #         if err
+    #           console.log err, err.stack
+    #         else
+    #           console.log data
+    #
+    #       # queryAccounts()
+    #       # AWS.config.region = 'ap-northeast-1'
+    #       # AWS.config.credentials = new (AWS.CognitoIdentityCredentials)(
+    #       #   AccountId: '882219098944'
+    #       #   IdentityPoolId: 'ap-northeast-1:663975fc-ae6c-4ca4-9575-57e59d4e6f4e'
+    #       #   RoleArn: 'arn:aws:iam::882219098944:role/Cognito_test_restraint_data_uploadAuth_Role'
+    #       #   Logins:
+    #       #     'accounts.google.com': response.access_token)
+    #       #
+    #       # console.log 'GOOGLE ID: ' + response.access_token
+    #       #
+    #       # AWS.config.credentials.get (err) ->
+    #       #   if !err
+    #       #     console.log 'Cognito Identity id:' + AWS.config.credentials.identityId
+    #       #     isCertification = true
+    #       #     $("#GoogleBtn").hide()
+    #       #     $('#AnonymityBtn').hide()
+    #       #     drawDisplay($('#search').val(), date, $('#mode input[name="gender"]:checked').val())
+    #       #   else
+    #       #     console.log err
+    #
+    # queryAccounts = ->
+    #   # Load the Google Analytics client library.
+    #   gapi.client.load('analytics', 'v3').then ->
+    #     # Get a list of all Google Analytics accounts for this user
+    #     gapi.client.analytics.management.accounts.list().then handleAccounts
+    #
+    # handleAccounts = (response) ->
+    #   console.log('handleAccounts')
+    #   console.log(response)
+    #   # Handles the response from the accounts list method.
+    #   if response.result.items and response.result.items.length
+    #     # Get the first Google Analytics account.
+    #     firstAccountId = response.result.items[0].id
+    #     # Query for properties.
+    #     queryProperties firstAccountId
+    #   else
+    #     console.log 'No accounts found for this user.'
+    #
+    # queryProperties = (accountId) ->
+    #   # Get a list of all the properties for the account.
+    #   gapi.client.analytics.management.webproperties.list('accountId': accountId).then(handleProperties).then null, (err) ->
+    #     # Log any errors.
+    #     console.log err
+    #
+    # handleProperties = (response) ->
+    #   # Handles the response from the webproperties list method.
+    #   if response.result.items and response.result.items.length
+    #     # Get the first Google Analytics account
+    #     firstAccountId = response.result.items[0].accountId
+    #     # Get the first property ID
+    #     firstPropertyId = response.result.items[0].id
+    #     # Query for Views (Profiles).
+    #     queryProfiles firstAccountId, firstPropertyId
+    #   else
+    #     console.log 'No properties found for this user.'
+    #
+    # queryProfiles = (accountId, propertyId) ->
+    #   # Get a list of all Views (Profiles) for the first property
+    #   # of the first Account.
+    #   gapi.client.analytics.management.profiles.list(
+    #     'accountId': accountId
+    #     'webPropertyId': propertyId).then(handleProfiles).then null, (err) ->
+    #     # Log any errors.
+    #     console.log err
+    #
+    # handleProfiles = (response) ->
+    #   # Handles the response from the profiles list method.
+    #   if response.result.items and response.result.items.length
+    #     # Get the first View (Profile) ID.
+    #     firstProfileId = response.result.items[0].id
+    #     # Query the Core Reporting API.
+    #     queryCoreReportingApi firstProfileId
+    #   else
+    #     console.log 'No views (profiles) found for this user.'
+    #
+    # queryCoreReportingApi = (profileId) ->
+    #   # Query the Core Reporting API for the number sessions for
+    #   # the past seven days.
+    #   gapi.client.analytics.data.ga.get(
+    #     'ids': 'ga:' + profileId
+    #     'start-date': '7daysAgo'
+    #     'end-date': 'today'
+    #     'metrics': 'ga:sessions').then((response) ->
+    #     formattedJson = JSON.stringify(response.result, null, 2)
+    #     document.getElementById('name').value = formattedJson
+    #   ).then null, (err) ->
+    #     # Log any errors.
+    #     console.log err
+
+    # # Replace with your client ID from the developer console.
+    # CLIENT_ID = '484628944735-fl01nng92lhjpqto03t6qkki4s0psinq.apps.googleusercontent.com'
+    # # Set authorized scope.
+    # SCOPES = [ 'https://www.googleapis.com/auth/analytics.readonly' ]
+    # # Add an event listener to the 'auth-button'.
+    # $('#GoogleBtn').on('click', authorize)
+
+    window.fbAsyncInit = ->
+      FB.init
+        appId: '1741978699356923'
+        cookie: true
+        xfbml: true
+        version: 'v2.2'
+      # Now that we've initialized the JavaScript SDK, we call
+      # FB.getLoginStatus().  This function gets the state of the
+      # person visiting this page and can return one of three states to
+      # the callback you provide.  They can be:
+      # 1. Logged into your app ('connected')
+      # 2. Logged into Facebook, but not your app ('not_authorized')
+      # 3. Not logged into Facebook and can't tell if they are logged into
+      #    your app or not.
+      #
+      # These three cases are handled in the callback function.
+      checkLoginState()
+
+    # Load the SDK asynchronously
+    ((d, s, id) ->
+      js = undefined
+      fjs = d.getElementsByTagName(s)[0]
+      if d.getElementById(id)
+        return
+      js = d.createElement(s)
+      js.id = id
+      js.src = '//connect.facebook.net/ja_jp/sdk.js'
+      fjs.parentNode.insertBefore js, fjs
+    ) document, 'script', 'facebook-jssdk'
+
+    $.ajaxSetup({async: true})  #同期通信(json取ってくるまで待つ)
+
     clearDisplay()
     if Object.keys(args).length > 0
-      #console.log(args)
-      #console.log(args.csv)
-      # serialid = args.csv.substring(0, args.csv.indexOf("-"))
       serialid = args.id
-      # date_temp = args.csv.substring(args.csv.indexOf("-")+1, args.csv.length)
-      # date_temp = date_temp.replace(/.csv/g,"")
-      #console.log(date_temp)
-      # $("#mydate").val(date_temp)
-      # date = new Date(date_temp)
       $('#search').val(serialid)
-
     date = new Date()
     date.setDate(date.getDate() - 1)
     $("#mydate").val(getDateyyyymmdd(date))
@@ -426,3 +498,55 @@ $(document).ready ->
     $("#mydate").data("DateTimePicker").date(date)
     console.log($("#mydate").val());
     console.log(date);
+
+# This function is called when someone finishes with the Login
+# Button.  See the onlogin handler attached to it in the sample
+# code below.
+statusChangeCallback = (response) ->
+  console.log 'statusChangeCallback'
+  console.log response
+  # The response object is returned with a status field that lets the
+  # app know the current login status of the person.
+  # Full docs on the response object can be found in the documentation
+  # for FB.getLoginStatus().
+  if response.status == 'connected'
+    # Logged into your app and Facebook.
+    testAPI()
+    AWS.config.region = 'ap-northeast-1'
+    AWS.config.credentials = new (AWS.CognitoIdentityCredentials)(
+      AccountId: '882219098944'
+      IdentityPoolId: 'ap-northeast-1:663975fc-ae6c-4ca4-9575-57e59d4e6f4e'
+      RoleArn: 'arn:aws:iam::882219098944:role/Cognito_test_restraint_data_uploadAuth_Role'
+      Logins:
+        'graph.facebook.com': response.authResponse.accessToken)
+
+    console.log 'FB ID: ' + response.authResponse.userID
+
+    AWS.config.credentials.get (err) ->
+      if !err
+        console.log 'Cognito Identity id:' + AWS.config.credentials.identityId
+      else
+        console.log err
+
+  else if response.status == 'not_authorized'
+    # The person is logged into Facebook, but not your app.
+    # document.getElementById('status').innerHTML = 'Please log ' + 'into this app.'
+  else
+    # The person is not logged into Facebook, so we're not sure if
+    # they are logged into this app or not.
+    # document.getElementById('status').innerHTML = 'Please log ' + 'into Facebook.'
+
+# Here we run a very simple test of the Graph API after login is
+# successful.  See statusChangeCallback() for when this call is made.
+testAPI = ->
+  console.log 'Welcome!  Fetching your information.... '
+  FB.api '/me', (response) ->
+    console.log 'Successful login for: ' + response.name
+    document.getElementById('status').innerHTML = 'Thanks for logging in, ' + response.name + '!'
+
+    console.log 'facebook-login-confirmation'
+
+checkLoginState = ->
+  FB.getLoginStatus (response) ->
+    statusChangeCallback response
+    $('#facebook-login-confirmation').trigger("click")
