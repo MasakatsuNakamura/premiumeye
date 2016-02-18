@@ -1,88 +1,88 @@
 isCertification = false
-isFacebookCertification = false
-isDisplayStart = false
+# isFacebookCertification = false
+# isDisplayStart = false
 
-checkLoginState = ->
-  FB.getLoginStatus (response) ->
-    statusChangeCallback response
-
-# This function is called when someone finishes with the Login
-# Button.  See the onlogin handler attached to it in the sample
-# code below.
-statusChangeCallback = (response) ->
-  console.log 'statusChangeCallback'
-  console.log response
-  # The response object is returned with a status field that lets the
-  # app know the current login status of the person.
-  # Full docs on the response object can be found in the documentation
-  # for FB.getLoginStatus().
-  if response.status == 'connected'
-    # Logged into your app and Facebook.
-    testAPI()
-    AWS.config.region = 'ap-northeast-1'
-    AWS.config.credentials = new (AWS.CognitoIdentityCredentials)(
-      AccountId: '882219098944'
-      IdentityPoolId: 'ap-northeast-1:663975fc-ae6c-4ca4-9575-57e59d4e6f4e'
-      RoleArn: 'arn:aws:iam::882219098944:role/Cognito_test_restraint_data_uploadAuth_Role'
-      Logins:
-        'graph.facebook.com': response.authResponse.accessToken)
-
-    console.log 'FB ID: ' + response.authResponse.userID
-
-    AWS.config.credentials.get (err) ->
-      if !err
-        console.log 'Cognito Identity id:' + AWS.config.credentials.identityId
-        isFacebookCertification = true
-      else
-        console.log err
-      $('#facebook-login-confirmation').trigger("click")
-  else if response.status == 'not_authorized'
-    # The person is logged into Facebook, but not your app.
-    # document.getElementById('status').innerHTML = 'Please log ' + 'into this app.'
-    $('#facebook-login-confirmation').trigger("click")
-  else
-    # The person is not logged into Facebook, so we're not sure if
-    # they are logged into this app or not.
-    # document.getElementById('status').innerHTML = 'Please log ' + 'into Facebook.'
-    $('#facebook-login-confirmation').trigger("click")
-
-# Here we run a very simple test of the Graph API after login is
-# successful.  See statusChangeCallback() for when this call is made.
-testAPI = ->
-  console.log 'Welcome!  Fetching your information.... '
-  FB.api '/me', (response) ->
-    console.log 'Successful login for: ' + response.name
-    document.getElementById('status').innerHTML = 'Thanks for logging in, ' + response.name + '!'
-
-window.fbAsyncInit = ->
-  FB.init
-    appId: '1741978699356923'
-    cookie: true
-    xfbml: true
-    version: 'v2.2'
-  # Now that we've initialized the JavaScript SDK, we call
-  # FB.getLoginStatus().  This function gets the state of the
-  # person visiting this page and can return one of three states to
-  # the callback you provide.  They can be:
-  # 1. Logged into your app ('connected')
-  # 2. Logged into Facebook, but not your app ('not_authorized')
-  # 3. Not logged into Facebook and can't tell if they are logged into
-  #    your app or not.
-  #
-  # These three cases are handled in the callback function.
-  checkLoginState()
-
-# Load the SDK asynchronously
-((d, s, id) ->
-  js = undefined
-  fjs = d.getElementsByTagName(s)[0]
-  if d.getElementById(id)
-    return
-  js = d.createElement(s)
-  js.id = id
-  js.src = '//connect.facebook.net/ja_jp/sdk.js'
-  fjs.parentNode.insertBefore js, fjs
-) document, 'script', 'facebook-jssdk'
+# checkLoginState = ->
+#   FB.getLoginStatus (response) ->
+#     statusChangeCallback response
+#
+# # This function is called when someone finishes with the Login
+# # Button.  See the onlogin handler attached to it in the sample
+# # code below.
+# statusChangeCallback = (response) ->
+#   console.log 'statusChangeCallback'
+#   console.log response
+#   # The response object is returned with a status field that lets the
+#   # app know the current login status of the person.
+#   # Full docs on the response object can be found in the documentation
+#   # for FB.getLoginStatus().
+#   if response.status == 'connected'
+#     # Logged into your app and Facebook.
+#     testAPI()
+#     AWS.config.region = 'ap-northeast-1'
+#     AWS.config.credentials = new (AWS.CognitoIdentityCredentials)(
+#       AccountId: '882219098944'
+#       IdentityPoolId: 'ap-northeast-1:663975fc-ae6c-4ca4-9575-57e59d4e6f4e'
+#       RoleArn: 'arn:aws:iam::882219098944:role/Cognito_test_restraint_data_uploadAuth_Role'
+#       Logins:
+#         'graph.facebook.com': response.authResponse.accessToken)
+#
+#     console.log 'FB ID: ' + response.authResponse.userID
+#
+#     AWS.config.credentials.get (err) ->
+#       if !err
+#         console.log 'Cognito Identity id:' + AWS.config.credentials.identityId
+#         isFacebookCertification = true
+#       else
+#         console.log err
+#       $('#facebook-login-confirmation').trigger("click")
+#   else if response.status == 'not_authorized'
+#     # The person is logged into Facebook, but not your app.
+#     # document.getElementById('status').innerHTML = 'Please log ' + 'into this app.'
+#     $('#facebook-login-confirmation').trigger("click")
+#   else
+#     # The person is not logged into Facebook, so we're not sure if
+#     # they are logged into this app or not.
+#     # document.getElementById('status').innerHTML = 'Please log ' + 'into Facebook.'
+#     $('#facebook-login-confirmation').trigger("click")
+#
+# # Here we run a very simple test of the Graph API after login is
+# # successful.  See statusChangeCallback() for when this call is made.
+# testAPI = ->
+#   console.log 'Welcome!  Fetching your information.... '
+#   FB.api '/me', (response) ->
+#     console.log 'Successful login for: ' + response.name
+#     document.getElementById('status').innerHTML = 'Thanks for logging in, ' + response.name + '!'
+#
+# window.fbAsyncInit = ->
+#   FB.init
+#     appId: '1741978699356923'
+#     cookie: true
+#     xfbml: true
+#     version: 'v2.2'
+#   # Now that we've initialized the JavaScript SDK, we call
+#   # FB.getLoginStatus().  This function gets the state of the
+#   # person visiting this page and can return one of three states to
+#   # the callback you provide.  They can be:
+#   # 1. Logged into your app ('connected')
+#   # 2. Logged into Facebook, but not your app ('not_authorized')
+#   # 3. Not logged into Facebook and can't tell if they are logged into
+#   #    your app or not.
+#   #
+#   # These three cases are handled in the callback function.
+#   checkLoginState()
+#
+# # Load the SDK asynchronously
+# ((d, s, id) ->
+#   js = undefined
+#   fjs = d.getElementsByTagName(s)[0]
+#   if d.getElementById(id)
+#     return
+#   js = d.createElement(s)
+#   js.id = id
+#   js.src = '//connect.facebook.net/ja_jp/sdk.js'
+#   fjs.parentNode.insertBefore js, fjs
+# ) document, 'script', 'facebook-jssdk'
 
 $(document).ready ->
   args = getUrlVars()
@@ -128,11 +128,11 @@ $(document).ready ->
       $('#outputRestriant').html('<p class="control-label">[抑制履歴情報]</p>')
       $('#outputRestriant').append(res)
 
-    showCertificationButton = ->
-      $('#GoogleBtn').show()
-      $('#AnonymityBtn').show()
-      $('#FacebookBtn').show()
-      console.log '認証ボタン表示'
+    # showCertificationButton = ->
+    #   $('#GoogleBtn').show()
+    #   $('#AnonymityBtn').show()
+    #   $('#FacebookBtn').show()
+    #   console.log '認証ボタン表示'
 
     hideCertificationButton = ->
       $('#GoogleBtn').hide()
@@ -256,7 +256,7 @@ $(document).ready ->
 
           error: (error) ->
             if isCertification == false
-              showCertificationButton()
+                $('#AnonymityBtn').trigger("click");
             else
               if isGraphDataGetFirst == false
                 $('#createChart').trigger("click");
@@ -274,10 +274,10 @@ $(document).ready ->
 
     drawDisplay = (id, date, option) ->
       clearDisplay()
-      if isDisplayStart == false
-        console.log("isDisplayStart == false")
-        $('#status').html("")
-        return
+      # if isDisplayStart == false
+      #   console.log("isDisplayStart == false")
+      #   $('#status').html("")
+      #   return
       if pvsensors[id] is undefined
         $('#chart').html("<p>存在しないシリアル番号(id)です</p>")
         return
@@ -293,7 +293,7 @@ $(document).ready ->
       if isFacebookCertification != false
         hideCertificationButton()
         isCertification = true
-      isDisplayStart = true
+      # isDisplayStart = true
       drawDisplay($('#search').val(), date, $('#mode input[name="gender"]:checked').val())
 
     $('#mydate').on "dp.change", (e) ->
