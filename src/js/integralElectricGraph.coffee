@@ -1,4 +1,3 @@
-isCertification = false
 # isFacebookCertification = false
 # isDisplayStart = false
 
@@ -88,6 +87,7 @@ $(document).ready ->
   args = getUrlVars()
   date = new Date()
   isGraphDataGetFirst = false
+  isCertification = false
 
   $.getJSON "https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/pv_sensors.json", (pvsensors) ->
     console.log('getJSON')
@@ -255,9 +255,9 @@ $(document).ready ->
             $('#csvdownload').append("<a href='https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/gendata_bypcs/#{id}/#{getTargetFileName(id, date)}' class='btn btn-primary'>#{getTargetFileName(id, date)}ダウンロード</a>")
 
           error: (error) ->
-            if isCertification == false
-                $('#AnonymityBtn').trigger("click");
-            else
+            # if isCertification == false
+            #   showCertificationButton()
+            # else
               if isGraphDataGetFirst == false
                 $('#createChart').trigger("click");
                 isGraphDataGetFirst = true
@@ -364,8 +364,8 @@ $(document).ready ->
         if !err
           console.log 'Cognito Identity id:' + AWS.config.credentials.identityId
           isCertification = true
-          hideCertificationButton()
-          drawDisplay($('#search').val(), date, $('#mode input[name="gender"]:checked').val())
+          # hideCertificationButton()
+          # drawDisplay($('#search').val(), date, $('#mode input[name="gender"]:checked').val())
         else
           console.log err
 
@@ -531,6 +531,7 @@ $(document).ready ->
     # $('#GoogleBtn').on('click', authorize)
 
     clearDisplay()
+    $('#AnonymityBtn').trigger("click");
     if Object.keys(args).length > 0
       serialid = args.id
       $('#search').val(serialid)
