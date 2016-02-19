@@ -127,6 +127,7 @@ $(document).ready ->
       """
       $('#outputRestriant').html('<p class="control-label">[抑制履歴情報]</p>')
       $('#outputRestriant').append(res)
+      $('#outputRestriantcsvdownload').append("<a href='https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/gendata_bypcs_restraint/#{id}/#{getRestraintTargetFileName(id, date)}' class='btn btn-primary'>抑制履歴csvダウンロード</a>")
 
     # showCertificationButton = ->
     #   $('#GoogleBtn').show()
@@ -267,6 +268,7 @@ $(document).ready ->
     clearDisplay = ->
       $('#chart').html("")
       $('#csvdownload').html("")
+      $('#outputRestriantcsvdownload').html("")
       $('#outputRestriant').html("")
       $('#createChart').hide()
       $('#createRestriant').hide()
@@ -389,6 +391,9 @@ $(document).ready ->
 
     getTargetFileName = (id, date) ->
       return (id + "-" + getDateyyyymmdd(date) + ".csv")
+
+    getRestraintTargetFileName = (id, date) ->
+      return (id + "-" + getDateyyyymmdd(date) + "_errorflag.csv")
 
     getFilePath = (id, date) ->
       return ("https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/gendata_bypcs/" + id + "/" + getTargetFileName(id, date))
