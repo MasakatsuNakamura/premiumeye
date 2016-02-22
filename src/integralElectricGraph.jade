@@ -44,34 +44,38 @@ block content
         .radio-inline
           input#disp_hour(type="radio", value="3", name="gender")
           label(for="disp_hour") 1h
-  #chart
-  button#createChart.btn.btn-success(type='button', data-toggle='modal', data-target='#myChartModal', style='display:none') グラフ描画用csvファイル作成
-  #myChartModal.modal.fade
-    .modal-dialog
-        .modal-content
-          .modal-header
-            h4.modal-title グラフ準備中
-          .modal-body グラフ描画用csvファイルを作成しています。しばらくお待ちください。
-          .modal-footer
+  #graph_area
+  button#createChart.btn.btn-success.myhide(type='button') グラフ描画用csvファイル作成
+  //- button#createChart.btn.btn-success(type='button', data-toggle='modal', data-target='#myChartModal', style='display:none') グラフ描画用csvファイル作成
+  //- #myChartModal.modal.fade
+  //-   .modal-dialog
+  //-       .modal-content
+  //-         .modal-header
+  //-           h4.modal-title グラフ準備中
+  //-         .modal-body グラフ描画用csvファイルを作成しています。しばらくお待ちください。
+  //-         .modal-footer
+
   #csvdownload 
   .form-inline(style="margin-bottom:12px")
   #outputRestriant
+  .form-inline(style="margin-bottom:12px")
   #outputRestriantcsvdownload
-  button#createRestriant.btn.btn-success(type='button', data-toggle='modal', data-target='#myModal', style='display:none') 抑制履歴csvファイル作成
-  #myModal.modal.fade
-    .modal-dialog
-        .modal-content
-          .modal-header
-            h4.modal-title 抑制履歴csv作成中
-          .modal-body 抑制履歴csvファイルを作成しています。作成が終わると自動的に表示を更新しますのでそのままお待ちください。
-          .modal-footer
-
-  #FacebookBtn(style='display:none')
-    fb:login-button(scope='public_profile,email', onlogin='checkLoginState();') 
-  #status
-  button#facebook-login-confirmation.btn.btn-success(style='display:none') 先へ進む
-  button#GoogleBtn.btn.btn-success(style='display:none') Google認証
-  button#AnonymityBtn.btn.btn-success(style='display:none') 匿名認証
+  button#createRestriant.btn.btn-success.myhide(type='button') 抑制履歴csvファイル作成
+  //- button#createRestriant.btn.btn-success(type='button', data-toggle='modal', data-target='#myModal', style='display:none') 抑制履歴csvファイル作成
+  //- #myModal.modal.fade
+  //-   .modal-dialog
+  //-       .modal-content
+  //-         .modal-header
+  //-           h4.modal-title 抑制履歴csv作成中
+  //-         .modal-body 抑制履歴csvファイルを作成しています。作成が終わると自動的に表示を更新しますのでそのままお待ちください。
+  //-         .modal-footer
+  
+  //- #FacebookBtn.myhide
+  //-   fb:login-button(scope='public_profile,email', onlogin='checkLoginState();') 
+  //- #status
+  //- button#facebook-login-confirmation.btn.btn-success.myhide 先へ進む
+  //- button#GoogleBtn.btn.btn-success.myhide Google認証
+  button#AnonymityBtn.btn.btn-success.myhide 匿名認証
   #name
  //- .code(style='width: 50%; padding-top: 15px')
  //-    .progress

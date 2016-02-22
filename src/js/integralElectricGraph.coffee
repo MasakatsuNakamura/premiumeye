@@ -84,6 +84,8 @@
 # ) document, 'script', 'facebook-jssdk'
 
 $(document).ready ->
+  $('.myhide').hide()
+
   args = getUrlVars()
   date = new Date()
   isGraphDataGetFirst = false
@@ -135,10 +137,10 @@ $(document).ready ->
     #   $('#FacebookBtn').show()
     #   console.log '認証ボタン表示'
 
-    hideCertificationButton = ->
-      $('#GoogleBtn').hide()
-      $('#AnonymityBtn').hide()
-      $('#FacebookBtn').hide()
+    # hideCertificationButton = ->
+    #   $('#GoogleBtn').hide()
+    #   $('#AnonymityBtn').hide()
+    #   $('#FacebookBtn').hide()
 
     draw = (id, date, option) ->
       $.ajax
@@ -148,7 +150,7 @@ $(document).ready ->
             pcs_num = csvArray[0].length-1
 
             if csvArray.length < 2
-              $('#chart').html("<p>csvファイル内にデータがありません</p>")
+              $('#graph_area').html("<p>csvファイル内にデータがありません</p>")
               return
 
             $.ajax
@@ -162,7 +164,7 @@ $(document).ready ->
                 $('#createRestriant').show()
 
             chart_data =
-              bindto: '#chart',
+              bindto: '#graph_area',
               data:
                   x:'x',
                   xFormat: '%H:%M',
@@ -183,7 +185,7 @@ $(document).ready ->
             graph_count = 0
 
             # グラフ先頭データ設定
-            for i in [0..pcs_num] by 1
+            for i in [0..pcs_num]
               chart_data.data.columns[i] = new Array()
               if i == 0
                 chart_data.data.columns[i][graph_count] = 'x'
@@ -198,47 +200,52 @@ $(document).ready ->
 
             chart_data.data.columns[0][graph_count] = start_time
 
-            for i in [1..pcs_num] by 1
+            for i in [1..pcs_num]
                 chart_data.data.columns[i][graph_count] = String(parseFloat('0'))
 
             graph_count++
 
             #初期化
             genkw_total = new Array()
-            for i in [0...pcs_num] by 1
+            for i in [0...pcs_num]
               genkw_total[i] = parseFloat('0')
 
             if option == 1
-              for i in [1...csvArray.length] by 1
+              for i in [1...csvArray.length]
                 chart_data.data.columns[0][graph_count] = csvArray[i][0].substring(csvArray[i][0].indexOf(" ")+1, (csvArray[i][0].length-3))
-                for j in [1..pcs_num] by 1
+                for j in [1..pcs_num]
                     chart_data.data.columns[j][graph_count] = csvArray[i][j]
                 graph_count++
+
             else if option == 2
-              for i in [1...csvArray.length] by 1
-                minute_1digit = parseInt(csvArray[i][0].substring(csvArray[i][0].indexOf(" ")+5, (csvArray[i][0].length-3)))
-                if minute_1digit == 0
+              before_time = start_time.substring(start_time.indexOf(" ")+1, (start_time.length-4)) + "0:00"
+              for i in [1...csvArray.length]
+                current_time = csvArray[i][0].substring(csvArray[i][0].indexOf(" ")+1, (csvArray[i][0].length-4)) + "0:00"
+                if current_time != before_time
                   chart_data.data.columns[0][graph_count] = csvArray[i][0].substring(csvArray[i][0].indexOf(" ")+1, (csvArray[i][0].length-3))
-                  for j in [1..pcs_num] by 1
+                  for j in [1..pcs_num]
                       chart_data.data.columns[j][graph_count] = String(genkw_total[j-1])
-                  for j in [0...pcs_num] by 1
+                  for j in [0...pcs_num]
                     genkw_total[j] = parseFloat('0')
                   graph_count++
+                  before_time = current_time
 
-                for j in [1..pcs_num] by 1
+                for j in [1..pcs_num]
                   genkw_total[j-1] += parseFloat(csvArray[i][j])
             else
-              for i in [1...csvArray.length] by 1
-                minute_2digit = parseInt(csvArray[i][0].substring(csvArray[i][0].indexOf(" ")+4, (csvArray[i][0].length-3)))
-                if minute_2digit == 0
+              before_time = start_time.substring(start_time.indexOf(" ")+1, (start_time.length-5)) + "00:00"
+              for i in [1...csvArray.length]
+                current_time = parseInt(csvArray[i][0].substring(csvArray[i][0].indexOf(" ")+1, (csvArray[i][0].length-5)))
+                if current_time != before_time
                   chart_data.data.columns[0][graph_count] = csvArray[i][0].substring(csvArray[i][0].indexOf(" ")+1, (csvArray[i][0].length-3))
-                  for j in[1..pcs_num] by 1
+                  for j in[1..pcs_num]
                       chart_data.data.columns[j][graph_count] = String(genkw_total[j-1])
-                  for j in [0...pcs_num] by 1
+                  for j in [0...pcs_num]
                     genkw_total[j] = parseFloat('0')
                   graph_count++
+                  before_time = current_time
 
-                for j in [1..pcs_num] by 1
+                for j in [1..pcs_num]
                   genkw_total[j-1] += parseFloat(csvArray[i][j])
 
             endDate = new Date(csvArray[csvArray.length-1][0])
@@ -247,7 +254,7 @@ $(document).ready ->
 
             chart_data.data.columns[0][graph_count] = end_time
 
-            for j in[1..pcs_num] by 1
+            for j in[1..pcs_num]
               chart_data.data.columns[j][graph_count] = String(parseFloat('0'))
 
             graph_count++
@@ -263,16 +270,16 @@ $(document).ready ->
                 $('#createChart').trigger("click");
                 isGraphDataGetFirst = true
               else
-                $('#chart').html("<p>グラフデータを作成できませんでした。</p>")
+                $('#graph_area').html("<p>グラフデータを作成できませんでした。</p>")
 
     clearDisplay = ->
-      $('#chart').html("")
+      $('#graph_area').html("")
       $('#csvdownload').html("")
       $('#outputRestriantcsvdownload').html("")
       $('#outputRestriant').html("")
       $('#createChart').hide()
       $('#createRestriant').hide()
-      hideCertificationButton()
+      # hideCertificationButton()
 
     drawDisplay = (id, date, option) ->
       clearDisplay()
@@ -281,7 +288,7 @@ $(document).ready ->
       #   $('#status').html("")
       #   return
       if pvsensors[id] is undefined
-        $('#chart').html("<p>存在しないシリアル番号(id)です</p>")
+        $('#graph_area').html("<p>存在しないシリアル番号(id)です</p>")
         return
       draw(id, date, parseInt(option))
 
@@ -289,14 +296,14 @@ $(document).ready ->
       console.log("#search change")
       drawDisplay($('#search').val(), date, $('#mode input[name="gender"]:checked').val())
 
-    $('#facebook-login-confirmation').click ->
-      console.log "$('#facebook-login-confirmation').click"
-      $('#status').html("")
-      if isFacebookCertification != false
-        hideCertificationButton()
-        isCertification = true
-      # isDisplayStart = true
-      drawDisplay($('#search').val(), date, $('#mode input[name="gender"]:checked').val())
+    # $('#facebook-login-confirmation').click ->
+    #   console.log "$('#facebook-login-confirmation').click"
+    #   $('#status').html("")
+    #   if isFacebookCertification != false
+    #     hideCertificationButton()
+    #     isCertification = true
+    #   # isDisplayStart = true
+    #   drawDisplay($('#search').val(), date, $('#mode input[name="gender"]:checked').val())
 
     $('#mydate').on "dp.change", (e) ->
       date = new Date(e.date)
@@ -321,17 +328,19 @@ $(document).ready ->
 
     $('#createChart').click ->
       lambda = new AWS.Lambda()
-      $('#createRestriant').hide()
-      $('#myChartModal').show()
+      $('#graph_area').html("<img src='./gif-load.gif'>")
+      # $('#myChartModal').show()
+      console.log("$('#myChartModal').show()")
       lambda.invoke {
           FunctionName: 'get-csv'
           Payload: JSON.stringify({"id": $('#search').val(), "date": getDateyyyymmdd(date).replace(/-/g, '/')})
       }, (err, data) ->
           console.log('Lambda invoke end')
-          $('#myChartModal').modal('hide')
+          # $('#myChartModal').modal('hide')  #モーダルの場合はこちら
+          $('#myChartModal').hide()
           if err
             console.log(err, err.stack)
-            $('#chart').html("<p>グラフデータを作成できませんでした。</p>")
+            $('#graph_area').html("<p>グラフデータを作成できませんでした。</p>")
           else
             console.log(data)
             drawDisplay($('#search').val(), date, $('#mode input[name="gender"]:checked').val())
@@ -340,7 +349,8 @@ $(document).ready ->
       lambda = new AWS.Lambda()
       console.log(getDateyyyymmdd(date).replace(/-/g, '/'))
       $('#createRestriant').hide()
-      $('#myModal').show()
+      # $('#myModal').show()
+      $('#outputRestriant').html("<img src='./gif-load.gif'>")
       lambda.invoke {
           FunctionName: 'create_cvs_restraint_history'
           Payload: JSON.stringify({"id": $('#search').val(), "date": getDateyyyymmdd(date).replace(/-/g, '/')})
@@ -348,12 +358,13 @@ $(document).ready ->
           if err
             console.log(err, err.stack)
           else
-            $('#myModal').modal('hide')
+            # $('#myModal').modal('hide')   #モーダルの場合はこちら
+            $('#myModal').hide()
             drawDisplay($('#search').val(), date, $('#mode input[name="gender"]:checked').val())
 
     $('#GoogleBtn').click ->
       console.log('google 押下')
-      $('#chart').html("<p>実は。。google認証はまだサポートできてません。。</p>")
+      $('#graph_area').html("<p>実は。。google認証はまだサポートできてません。。</p>")
 
     $('#AnonymityBtn').click ->
       AWS.config.region = 'ap-northeast-1'
@@ -371,23 +382,22 @@ $(document).ready ->
         else
           console.log err
 
-    progress = (count) ->
-      setTimeout (->
-        $('#pgss2').css 'width': count + '%'
-        count++
-        if count == 90
-          return
-        progress count
-        return
-      ), 300
+    # progress = (count) ->
+    #   setTimeout (->
+    #     $('#pgss2').css 'width': count + '%'
+    #     count++
+    #     if count == 90
+    #       return
+    #     progress count
+    #     return
+    #   ), 300
 
     createArray = (csvData) ->
-        tempArray = csvData.split("\n")
-        csvArray = new Array()
-        #最後に何故か常にごみデータ（ブランクデータ）が入るらしい
-        for i in [0...(tempArray.length-1)] by 1
-          csvArray[i] = tempArray[i].split(",")
-        return (csvArray)
+      csvArray = csvData.split("\n")[..-2].map (l) -> l.split(",")
+
+      # console.log(tempArray)
+      console.log(csvArray)
+      return (csvArray)
 
     getTargetFileName = (id, date) ->
       return (id + "-" + getDateyyyymmdd(date) + ".csv")
