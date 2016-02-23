@@ -54,10 +54,12 @@ block content
   //-           h4.modal-title グラフ準備中
   //-         .modal-body グラフ描画用csvファイルを作成しています。しばらくお待ちください。
   //-         .modal-footer
-
+      
   #csvdownload 
   .form-inline(style="margin-bottom:12px")
   #outputRestriant
+  .form-inline(style="margin-bottom:12px")  
+  #outputRestriantPager
   .form-inline(style="margin-bottom:12px")
   #outputRestriantcsvdownload
   button#createRestriant.btn.btn-success.myhide(type='button') 抑制履歴csvファイル作成
@@ -77,6 +79,7 @@ block content
   //- button#GoogleBtn.btn.btn-success.myhide Google認証
   button#AnonymityBtn.btn.btn-success.myhide 匿名認証
   #name
+
  //- .code(style='width: 50%; padding-top: 15px')
  //-    .progress
  //-        #pgss2.progress-bar.progress-bar-info

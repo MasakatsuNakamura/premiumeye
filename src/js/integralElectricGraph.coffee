@@ -82,7 +82,6 @@
 #   js.src = '//connect.facebook.net/ja_jp/sdk.js'
 #   fjs.parentNode.insertBefore js, fjs
 # ) document, 'script', 'facebook-jssdk'
-
 $(document).ready ->
   $('.myhide').hide()
 
@@ -93,31 +92,49 @@ $(document).ready ->
 
   $.getJSON "https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/pv_sensors.json", (pvsensors) ->
     console.log('getJSON')
+
     getDateyyyymmdd = (date) ->
       return (date.getFullYear() + "-" + ('0' + (date.getMonth() + 1)).slice(-2) + "-" + ('0' + date.getDate()).slice(-2))
 
-    makeOutputRestriantTable = (id, date, pcs_num, outRestraint) ->
-      color_tbl = ['bg-primary', 'bg-success', 'bg-info', 'bg-warning', 'bg-danger']
-      colums = Math.floor(12/pcs_num)
-      csvOutputRestriantArray = createArray(outRestraint)
-      Restriant_data = new Array()
-      for i in [0...pcs_num] by 1
-        Restriant_data[i] = ""
-      for i in [1...csvOutputRestriantArray.length] by 1
-        pcs_id = parseInt(csvOutputRestriantArray[i][0])
-        Restriant_data[pcs_id] += """
-              <div class="row">
-                <div class="col-xs-4 #{color_tbl[pcs_id%pcs_num]}">#{csvOutputRestriantArray[i][1]}</div>
-                <div class="col-xs-4 #{color_tbl[pcs_id%pcs_num]}">#{csvOutputRestriantArray[i][2]}</div>
-                <div class="col-xs-4 #{color_tbl[pcs_id%pcs_num]}">#{csvOutputRestriantArray[i][3]}</div>
-              </div>
-        """
+    getRestraintTargetFileName = (id, date) ->
+      return (id + "-" + getDateyyyymmdd(date) + "_errorflag.csv")
+
+    onClick = (e) ->
+      $('#outputRestriantcsvdownload').html("")
+      console.log(e.data.value)
+      pageindx = e.data.pageindx
+      if e.data.value == 0
+        console.log('<<押下')
+        if e.data.pageindx != 0
+          pageindx -= 1
+      else if e.data.value == e.data.pageNum+1
+        console.log('>>押下')
+        if e.data.pageindx+1 != e.data.pageNum
+          pageindx += 1
+      else
+        pageindx = e.data.value-1
+
+      console.log('pageindx:' + pageindx)
+
+      dispOutputRestriantTable(e.data.id, e.data.date, e.data.pcs_num, e.data.pageNum, pageindx, e.data.restriant_data, e.data.color_tbl, e.data.restriant_disp_pcsnum, e.data.Restriant_pcs_totaltime)
+
+    dispOutputRestriantTable = (id, date, pcs_num, pageNum, pageindx, restriant_data, color_tbl, restriant_disp_pcsnum, Restriant_pcs_totaltime) ->
+      colums = Math.floor(12/restriant_disp_pcsnum)
       OutputRestriantTbl = ''
-      for i in [0...pcs_num] by 1
+      start_pcsid = (pageindx*restriant_disp_pcsnum)
+      if pageindx+1 == pageNum
+        end_pcsnum = pcs_num
+      else
+        end_pcsnum = (restriant_disp_pcsnum*pageindx) + restriant_disp_pcsnum
+
+      # console.log('start_pcsid:' + start_pcsid)
+      # console.log('end_pcsnum:' + end_pcsnum)
+
+      for i in [start_pcsid...end_pcsnum]
         OutputRestriantTbl += """
-              <div class="col-xs-#{colums} #{color_tbl[i%pcs_num]}">
-                pcs#{i}
-                #{Restriant_data[i]}
+              <div class="col-xs-#{colums} #{color_tbl[i%restriant_disp_pcsnum]}">
+                pcs#{i}&nbsp;&nbsp;&nbsp;&nbsp;抑制時間合計:&nbsp;&nbsp;&nbsp;&nbsp;#{Restriant_pcs_totaltime[i]}
+                #{restriant_data[i]}
               </div>
         """
       res = """
@@ -129,8 +146,96 @@ $(document).ready ->
       """
       $('#outputRestriant').html('<p class="control-label">[抑制履歴情報]</p>')
       $('#outputRestriant').append(res)
+      $('#outputRestriantPager').html("")
+      if pageNum != 1
+        pagingdispdata = ''
+        pagingTbl = ''
+
+        # 先頭ページ表示の場合
+        tbl = "<button class='btn btn-default'>&laquo</button>"
+        pagingTbl += tbl
+        pagingTbl += '\n'
+
+        for i in [1..pageNum]
+          if i == pageindx+1
+              tbl = "<button class='btn btn-primary'>#{i}</button>"
+          else
+              tbl = "<button class='btn btn-default'>#{i}</button>"
+          pagingTbl += tbl
+          pagingTbl += '\n'
+
+        tbl = "<button class='btn btn-default'>&raquo</button>"
+        pagingTbl += tbl
+        pagingTbl += '\n'
+
+        $('#outputRestriantPager').append(pagingTbl)
+
+        i = 0
+        while i < (pageNum+2)
+          param = {
+            value: i,
+            id: id,
+            date: date,
+            pcs_num: pcs_num,
+            pageNum: pageNum,
+            pageindx: pageindx,
+            restriant_data: restriant_data,
+            color_tbl: color_tbl,
+            restriant_disp_pcsnum: restriant_disp_pcsnum,
+            Restriant_pcs_totaltime: Restriant_pcs_totaltime
+          }
+          # console.log(param.value)
+          $('#outputRestriantPager button').eq(i).on 'click', param, onClick
+          i++
+
       $('#outputRestriantcsvdownload').append("<a href='https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/gendata_bypcs_restraint/#{id}/#{getRestraintTargetFileName(id, date)}' class='btn btn-primary'>抑制履歴csvダウンロード</a>")
 
+    makeOutputRestriantTable = (id, date, pcs_num, outRestraint) ->
+      color_tbl = ['bg-primary', 'bg-success', 'bg-info', 'bg-warning', 'bg-danger']
+      restriant_disp_pcsnum = 4
+      # colums = Math.floor(12/pcs_num)
+      pageNum = Math.floor(pcs_num/restriant_disp_pcsnum)
+      if (pcs_num%restriant_disp_pcsnum) != 0
+        pageNum += 1
+
+      # console.log('pageNum:'+pageNum)
+      csvOutputRestriantArray = createArray(outRestraint)
+      Restriant_data = new Array()
+      for i in [0...pcs_num]
+        Restriant_data[i] = ""
+
+      pcs_count = 0
+      Restriant_pcs_totaltime = new Array()
+      for i in [(csvOutputRestriantArray.length-pcs_num)...csvOutputRestriantArray.length]
+        Restriant_pcs_totaltime[pcs_count] = csvOutputRestriantArray[i][2]
+        pcs_count++
+
+      console.log(csvOutputRestriantArray.length)
+      for i in [1...(csvOutputRestriantArray.length-pcs_num)]
+        pcs_id = parseInt(csvOutputRestriantArray[i][0])
+        # console.log(String(pcs_id%pcs_num))
+        Restriant_data[pcs_id] += """
+              <div class="row">
+                <div class="col-xs-4 #{color_tbl[pcs_id%restriant_disp_pcsnum]}">#{csvOutputRestriantArray[i][1]}</div>
+                <div class="col-xs-4 #{color_tbl[pcs_id%restriant_disp_pcsnum]}">#{csvOutputRestriantArray[i][2]}</div>
+                <div class="col-xs-4 #{color_tbl[pcs_id%restriant_disp_pcsnum]}">#{csvOutputRestriantArray[i][3]}</div>
+              </div>
+        """
+      dispOutputRestriantTable(id, date, pcs_num, pageNum, 0, Restriant_data, color_tbl, restriant_disp_pcsnum, Restriant_pcs_totaltime)
+
+      # #ページ番号のボタンをli要素に入れ込む
+      # spans = $('.pagination').find('.pageNum')
+      # i = 0
+      # while i < spans.length
+      #   $(spans[i]).wrap '<li></li>'
+      #   i++
+      # #現在のページ番号を青く塗りつぶす
+      # $('.current').parent('li').addClass 'active'
+      # #CakePHPで「disabled」クラスがついていたら、Bootstrapのliにも付ける
+      # $('.disabled').parent('li').addClass 'disabled'
+
+# ---
+# generated by js2coffee 2.1.0
     # showCertificationButton = ->
     #   $('#GoogleBtn').show()
     #   $('#AnonymityBtn').show()
@@ -277,6 +382,7 @@ $(document).ready ->
       $('#csvdownload').html("")
       $('#outputRestriantcsvdownload').html("")
       $('#outputRestriant').html("")
+      $('#outputRestriantPager').html("")
       $('#createChart').hide()
       $('#createRestriant').hide()
       # hideCertificationButton()
@@ -401,9 +507,6 @@ $(document).ready ->
 
     getTargetFileName = (id, date) ->
       return (id + "-" + getDateyyyymmdd(date) + ".csv")
-
-    getRestraintTargetFileName = (id, date) ->
-      return (id + "-" + getDateyyyymmdd(date) + "_errorflag.csv")
 
     getFilePath = (id, date) ->
       return ("https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/gendata_bypcs/" + id + "/" + getTargetFileName(id, date))
