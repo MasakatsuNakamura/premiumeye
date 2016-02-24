@@ -144,9 +144,8 @@ $(document).ready ->
           </div>
         </div>
       """
-      $('#outputRestriant').html('<p class="control-label">[抑制履歴情報]</p>')
-      $('#outputRestriant').append(res)
-      $('#outputRestriantPager').html("")
+      $('#outputRestriant').html(res)
+      $('#outputRestriantPager').html('<p class="control-label">[抑制履歴情報]</p>')
       if pageNum != 1
         pagingdispdata = ''
         pagingTbl = ''
@@ -188,7 +187,7 @@ $(document).ready ->
           $('#outputRestriantPager button').eq(i).on 'click', param, onClick
           i++
 
-      $('#outputRestriantcsvdownload').append("<a href='https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/gendata_bypcs_restraint/#{id}/#{getRestraintTargetFileName(id, date)}' class='btn btn-primary'>抑制履歴csvダウンロード</a>")
+      $('#outputRestriantPager').append("<a href='https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/gendata_bypcs_restraint/#{id}/#{getRestraintTargetFileName(id, date)}' class='btn btn-primary'>抑制履歴csvダウンロード</a>")
 
     makeOutputRestriantTable = (id, date, pcs_num, outRestraint) ->
       color_tbl = ['bg-primary', 'bg-success', 'bg-info', 'bg-warning', 'bg-danger']
@@ -396,6 +395,7 @@ $(document).ready ->
       if pvsensors[id] is undefined
         $('#graph_area').html("<p>存在しないシリアル番号(id)です</p>")
         return
+      makeUserInfo(id)
       draw(id, date, parseInt(option))
 
     $('#search').change　->
@@ -519,6 +519,22 @@ $(document).ready ->
 
     getOutputRestriantFileName = (id, date) ->
       return (id + "-" + getDateyyyymmdd(date) + "_errorflag.csv")
+
+    makeUserInfo = (id) ->
+      $("#list").html("")
+      # header = [
+      #     "発電所名", "顧客名", "プラン", "営業所", "パワコン台数", "ステータス",
+      #     "メーカー", "機種名", "プログラムバージョン", "センサー向き"
+      # ]
+      # tbl =''
+      # for cell in header
+      #   value = if pvsensors[id][cell]? then pvsensors[id][cell] else '&nbsp;'
+      #   if cell == "発電所名"
+      #       value = "<a href='https://maps.google.co.jp/maps?ll=#{pvsensors[id]['緯度']},#{pvsensors[id]['経度']}&z=11&q=#{pvsensors[id]['緯度']},#{pvsensors[id]['経度']}" +
+      #           "(#{encodeURI(pvsensors[id][cell] + '発電所')})&hl=ja&iwloc=A' target='_blank'>#{pvsensors[id][cell]}発電所</a>"
+      #   tbl += "<td>#{(value + '').replace(/\n/g, '<br />')}</td>"
+      # tbl += "</tr>"
+      # $("#list").append tbl
 
     # authorize = (event) ->
     #   console.log('authorize呼び出し')
@@ -651,8 +667,8 @@ $(document).ready ->
     clearDisplay()
     $('#AnonymityBtn').trigger("click");
     if Object.keys(args).length > 0
-      serialid = args.id
-      $('#search').val(serialid)
+      $('#search').val(args.id)
+
     date = new Date()
     date.setDate(date.getDate() - 1)
     $("#mydate").val(getDateyyyymmdd(date))

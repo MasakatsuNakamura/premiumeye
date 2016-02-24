@@ -6,7 +6,8 @@ block content
     //-  p サニックスパワコンのシリアル番号/日付けを入力してください
     label(for="search") シリアル番号：
     input#search.form-control(size="20")
-
+    #list
+    
   .form-inline(style="margin-bottom:12px")
     link(href="./c3/c3.css", rel="stylesheet", type="text/css")
     script(src="./d3/d3.min.js", charset="utf-8")
@@ -25,7 +26,8 @@ block content
     .input-group
       span.input-group-addon
         span#yesterday.glyphicon.glyphicon-chevron-left
-      input#mydate.form-control.date(type="text", size="8")
+      //- input#mydate.form-control.date(type="text", size="8")
+      input#mydate.form-control.date(type="text", size="10")
       span.input-group-addon
         span.glyphicon.glyphicon-calendar
       span.input-group-addon
@@ -44,6 +46,9 @@ block content
         .radio-inline
           input#disp_hour(type="radio", value="3", name="gender")
           label(for="disp_hour") 1h
+        .radio-inline
+          #csvdownload
+
   #graph_area
   button#createChart.btn.btn-success.myhide(type='button') グラフ描画用csvファイル作成
   //- button#createChart.btn.btn-success(type='button', data-toggle='modal', data-target='#myChartModal', style='display:none') グラフ描画用csvファイル作成
@@ -53,13 +58,11 @@ block content
   //-         .modal-header
   //-           h4.modal-title グラフ準備中
   //-         .modal-body グラフ描画用csvファイルを作成しています。しばらくお待ちください。
-  //-         .modal-footer
-      
-  #csvdownload 
-  .form-inline(style="margin-bottom:12px")
-  #outputRestriant
+  //-         .modal-footer 
   .form-inline(style="margin-bottom:12px")  
   #outputRestriantPager
+  .form-inline(style="margin-bottom:12px")
+  #outputRestriant
   .form-inline(style="margin-bottom:12px")
   #outputRestriantcsvdownload
   button#createRestriant.btn.btn-success.myhide(type='button') 抑制履歴csvファイル作成
