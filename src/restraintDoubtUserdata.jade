@@ -1,0 +1,120 @@
+extends ./components/_header
+block content
+    .form-inline
+        a#yesterday.btn.btn-default 前日
+        span#mydate(style="font-size:22px")
+        a#tommorow.btn.btn-default 翌日
+        
+        label(for="search") pcs機種名検索：
+        input#search.form-control(size="20")
+    div
+        - var header = ['頻発順位', 'シリアル番号', '営業所', '姓', '名', '発電所名', 'pcs機種名', '出力抑制時間']
+        table.table
+            thead
+                tr
+                    each name in header
+                        th=name
+            tbody#list
+    script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js")
+    script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js")
+    script.
+        function getUrlVars() {
+          'use strict';
+          var vars = [], hash;
+          var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+          for(var i = 0; i < hashes.length; i++) {
+              hash = hashes[i].split('=');
+              vars.push(hash[0]);
+              vars[hash[0]] = hash[1];
+          }
+          return vars;
+        }
+        
+        function createArray(csvData) {
+          var csvArray = new Array();
+          var tmp = csvData.split("\n");
+          for(var i = 0; i < tmp.length; i++) {
+            csvArray[i] = tmp[i].split(",");
+          }
+          return csvArray;
+        }
+        
+        $(document).ready(function() {
+          'use strict';
+          var args = getUrlVars();
+          var date;
+          if (args.length == 3) {
+              date = new Date(args.year, args.month - 1, args.day);
+          } else {
+              date = new Date();
+              date.setDate(date.getDate() - 1);
+          }
+          var yesterday = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+          yesterday.setDate(yesterday.getDate() - 1);
+          $('#yesterday').attr("href", "?year=" + yesterday.getFullYear() + "&month=" + (yesterday.getMonth() + 1) + "&day=" + yesterday.getDate());
+          $('#yesterday').text("前日");
+
+          var tommorow = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+          tommorow.setDate(tommorow.getDate() + 1);
+          $('#tommorow').attr("href", "?year=" + tommorow.getFullYear() + "&month=" + (tommorow.getMonth() + 1) + "&day=" + tommorow.getDate());
+          $('#tommorow').text("翌日");
+
+          var strDate = date.getFullYear() + "/" + (date.getMonth() + 1) + "/" + date.getDate();
+          $('#mydate').html('&nbsp;' + strDate + '&nbsp;');           
+          $.getJSON("https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/pv_sensors.json", function (pvsensors) {
+            var disp_data = '';
+
+            function draw(data) {
+              console.log('データ取得成功')
+              var csvArray = createArray(data);
+              var res = '';
+              for(var i=1; i<csvArray.length; i++) {
+                  var class_style = '';
+                  var rowspan_num = '';
+                  var id = csvArray[i][0];
+                  if (pvsensors[id] === void 0) {
+                    continue;
+                  }
+                  class_style = ' class=success';
+                  res += '<tr' + class_style + '>';
+                  var search = $('#search').val();
+                  if( search != '') {
+                    console.log('serch start')
+                    if(search != csvArray[i][5]) {
+                      continue;
+                    }
+                  }
+                  
+                  if(pvsensors[id]['ステータス'] === '稼働中') {
+                      res += '<td' + rowspan_num + '><a href=integralElectricGraph.html?id=' + id + ' class="btn btn-default">' + String(i) + '</a></td>';
+                  } else {
+                      res += '<td' + rowspan_num + '><a href=integralElectricGraph.html?id=' + id + ' class="btn btn-default" disabled="disabled">' + String(i) + '</a></td>';
+                  }
+                  res += '<td' + rowspan_num + '><a href=' + pvsensors[id].URL + ' target="_blank">' + id + '</a></td>';
+                  res += '<td' + rowspan_num + '>' + csvArray[i][1] + '</td>';
+                  res += '<td' + rowspan_num + '>' + csvArray[i][2] + '</td>';
+                  res += '<td' + rowspan_num + '>' + csvArray[i][3] + '</td>';
+                  res += '<td' + rowspan_num + '>' + csvArray[i][4] + '</td>';
+                  res += '<td' + rowspan_num + '>' + csvArray[i][5] + '</td>';
+                  res += '<td' + rowspan_num + '>' + csvArray[i][6] + '</td>';
+                  res += '</tr>/n';
+              }
+              $('#list').html(res);                  
+            }
+
+            $.ajax({
+                url: "https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/gendata_bypcs_restraint/doubt_userdata/doubt_userdata.csv",
+                beforeSend : function(xhr) {
+                    xhr.overrideMimeType("text/plain; charset=shift_jis")
+                },
+                success: function(data) {
+                  disp_data = data;
+                  draw(disp_data);
+                }
+            });
+            
+            $('#search').change(function() {
+              draw(disp_data);
+            });
+          });
+        });

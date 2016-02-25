@@ -1,13 +1,5 @@
 extends ./components/_header
-block content
-  .form-inline(style="margin-bottom:12px")
-    //- .alert.alert-success
-    //-  p 現状サニックスパワコンしかグラフがでません
-    //-  p サニックスパワコンのシリアル番号/日付けを入力してください
-    label(for="search") シリアル番号：
-    input#search.form-control(size="20")
-    #list
-    
+block content    
   .form-inline(style="margin-bottom:12px")
     link(href="./c3/c3.css", rel="stylesheet", type="text/css")
     script(src="./d3/d3.min.js", charset="utf-8")
@@ -22,18 +14,22 @@ block content
     script(src="js/integralElectricGraph.js")
     script(src='https://apis.google.com/js/client.js?onload=authorize')
 
+    //- .alert.alert-success
+    //-  p 現状サニックスパワコンしかグラフがでません
+    //-  p サニックスパワコンのシリアル番号/日付けを入力してください
+    label(for="search") シリアル番号：
+    input#search.form-control(size="20")
+
     label(for="mydate") 日選択：
     .input-group
       span.input-group-addon
         span#yesterday.glyphicon.glyphicon-chevron-left
-      //- input#mydate.form-control.date(type="text", size="8")
       input#mydate.form-control.date(type="text", size="10")
       span.input-group-addon
         span.glyphicon.glyphicon-calendar
       span.input-group-addon
         span#tommorow.glyphicon.glyphicon-chevron-right
 
-  .form-inline(style="margin-bottom:12px")
     .form-group(name="radios")
       p.control-label グラフx軸単位
       #mode
@@ -48,6 +44,10 @@ block content
           label(for="disp_hour") 1h
         .radio-inline
           #csvdownload
+
+    table.table
+        thead#userheader
+        tbody#userdata
 
   #graph_area
   button#createChart.btn.btn-success.myhide(type='button') グラフ描画用csvファイル作成

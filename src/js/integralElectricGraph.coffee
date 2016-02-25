@@ -394,6 +394,8 @@ $(document).ready ->
       #   return
       if pvsensors[id] is undefined
         $('#graph_area').html("<p>存在しないシリアル番号(id)です</p>")
+        $("#userheader").html("")
+        $("#userdata").html("")
         return
       makeUserInfo(id)
       draw(id, date, parseInt(option))
@@ -521,20 +523,28 @@ $(document).ready ->
       return (id + "-" + getDateyyyymmdd(date) + "_errorflag.csv")
 
     makeUserInfo = (id) ->
-      $("#list").html("")
-      # header = [
-      #     "発電所名", "顧客名", "プラン", "営業所", "パワコン台数", "ステータス",
-      #     "メーカー", "機種名", "プログラムバージョン", "センサー向き"
-      # ]
-      # tbl =''
-      # for cell in header
-      #   value = if pvsensors[id][cell]? then pvsensors[id][cell] else '&nbsp;'
-      #   if cell == "発電所名"
-      #       value = "<a href='https://maps.google.co.jp/maps?ll=#{pvsensors[id]['緯度']},#{pvsensors[id]['経度']}&z=11&q=#{pvsensors[id]['緯度']},#{pvsensors[id]['経度']}" +
-      #           "(#{encodeURI(pvsensors[id][cell] + '発電所')})&hl=ja&iwloc=A' target='_blank'>#{pvsensors[id][cell]}発電所</a>"
-      #   tbl += "<td>#{(value + '').replace(/\n/g, '<br />')}</td>"
-      # tbl += "</tr>"
-      # $("#list").append tbl
+      $("#userheader").html("")
+      $("#userdata").html("")
+      header = [
+          "発電所名", "顧客名", "プラン", "営業所", "パワコン台数", "ステータス",
+          "メーカー", "機種名", "パワコン情報"
+      ]
+
+      tbl = '<tr>'
+      for cell in header
+        tbl += '<th>' + cell + '</th>'
+      tbl += '</tr>'
+      $("#userheader").append tbl
+
+      tbl =''
+      for cell in header
+        value = if pvsensors[id][cell]? then pvsensors[id][cell] else '&nbsp;'
+        if cell == "発電所名"
+            value = "<a href='https://maps.google.co.jp/maps?ll=#{pvsensors[id]['緯度']},#{pvsensors[id]['経度']}&z=11&q=#{pvsensors[id]['緯度']},#{pvsensors[id]['経度']}" +
+                "(#{encodeURI(pvsensors[id][cell] + '発電所')})&hl=ja&iwloc=A' target='_blank'>#{pvsensors[id][cell]}発電所</a>"
+        tbl += "<td>#{(value + '').replace(/\n/g, '<br />')}</td>"
+      tbl += "</tr>"
+      $("#userdata").append tbl
 
     # authorize = (event) ->
     #   console.log('authorize呼び出し')

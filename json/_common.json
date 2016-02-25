@@ -7,6 +7,7 @@
   "menu": {
   	"index": "PVセンサー一覧",
   	"lowGeneration2": "未復旧故障一覧",
+    "restraintDoubtUserdata": "出力抑制頻発",
   	"異常検出": {
 	  	"lowGeneration": "低発電量一覧表",
 	  	"abnormalGeneration": "異常発電量一覧表",
