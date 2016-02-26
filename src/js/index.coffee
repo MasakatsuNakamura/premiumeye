@@ -18,7 +18,7 @@ $(document).ready ->
     $.getJSON "https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/pv_sensors.json", (json) ->
         search = $("#search").val()
         searches = search.split(/ or /)
-        if searches.length == 0
+        if searches.length == -1
             searches[0] = search
         for mysearch of searches
             searches[mysearch] = '^(?=.*' + searches[mysearch].split(/\s+/).join(')(?=.*') + ')'
