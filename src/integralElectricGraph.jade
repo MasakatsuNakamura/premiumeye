@@ -40,10 +40,16 @@ block content
           input#disp_10minute(type="radio", value="2", name="gender")
           label(for="disp_10minute") 10分
         .radio-inline
-          input#disp_hour(type="radio", value="3", name="gender")
+          input#disp_20minute(type="radio", value="3", name="gender")
+          label(for="disp_20minute") 20分
+          .radio-inline
+            input#disp_30minute(type="radio", value="4", name="gender")
+            label(for="disp_30minute") 30分
+        .radio-inline
+          input#disp_hour(type="radio", value="5", name="gender")
           label(for="disp_hour") 1h
         .radio-inline
-          #csvdownload
+    a#csvdownload.btn.btn-success.myhide(type='button') 発電量csvファイルダウンロード
 
     table.table
         thead#userheader

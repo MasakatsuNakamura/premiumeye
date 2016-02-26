@@ -4,9 +4,11 @@ block content
         a#yesterday.btn.btn-default 前日
         span#mydate(style="font-size:22px")
         a#tommorow.btn.btn-default 翌日
-        
-        label(for="search") pcs機種名検索：
-        input#search.form-control(size="20")
+          
+        .form-group
+            label(for='sel1') pcs機種名抽出：
+              select#sel1.form-control
+                option  選択無し
     div
         - var header = ['頻発順位', 'シリアル番号', '営業所', '姓', '名', '発電所名', 'pcs機種名', '出力抑制時間']
         table.table
@@ -39,6 +41,25 @@ block content
           return csvArray;
         }
         
+        function uniqueExchenge(array) {
+          var storage = {};
+          var uniqueArray = [];
+          var i,value;
+          for ( i=0; i<array.length; i++) {
+            value = array[i];
+              if (!(value in storage)) {
+                  storage[value] = true;
+                  if(value == undefined) {
+                    continue;
+                  }
+                  uniqueArray.push(value);
+              }
+           }
+           return uniqueArray;
+        }
+        
+        var dropdown_list_menu = '無し';
+
         $(document).ready(function() {
           'use strict';
           var args = getUrlVars();
@@ -59,15 +80,18 @@ block content
           $('#tommorow').attr("href", "?year=" + tommorow.getFullYear() + "&month=" + (tommorow.getMonth() + 1) + "&day=" + tommorow.getDate());
           $('#tommorow').text("翌日");
 
+          $("#dropdown-button").text(dropdown_list_menu);
+
           var strDate = date.getFullYear() + "/" + (date.getMonth() + 1) + "/" + date.getDate();
           $('#mydate').html('&nbsp;' + strDate + '&nbsp;');           
           $.getJSON("https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/pv_sensors.json", function (pvsensors) {
             var disp_data = '';
 
-            function draw(data) {
+            function draw(data, serach_model) {
               console.log('データ取得成功')
               var csvArray = createArray(data);
               var res = '';
+              var array = new Array();
               for(var i=1; i<csvArray.length; i++) {
                   var class_style = '';
                   var rowspan_num = '';
@@ -77,14 +101,14 @@ block content
                   }
                   class_style = ' class=success';
                   res += '<tr' + class_style + '>';
-                  var search = $('#search').val();
-                  if( search != '') {
+                  console.log(serach_model)
+                  array[i-1] = csvArray[i][5];
+                  if(serach_model != '選択無し') {
                     console.log('serch start')
-                    if(search != csvArray[i][5]) {
+                    if(serach_model != csvArray[i][5]) {
                       continue;
                     }
                   }
-                  
                   if(pvsensors[id]['ステータス'] === '稼働中') {
                       res += '<td' + rowspan_num + '><a href=integralElectricGraph.html?id=' + id + ' class="btn btn-default">' + String(i) + '</a></td>';
                   } else {
@@ -99,7 +123,29 @@ block content
                   res += '<td' + rowspan_num + '>' + csvArray[i][6] + '</td>';
                   res += '</tr>/n';
               }
-              $('#list').html(res);                  
+              $('#list').html(res);
+              var uniquearray = uniqueExchenge(array);
+              if(serach_model != '選択無し') {
+                var res = '<option>' + serach_model + '</option>';
+
+                for(var item in uniquearray) {
+                  if(serach_model == uniquearray[item]) {
+                    console.log('continue')
+                    continue
+                  }
+                  res += '<option>' + uniquearray[item] + '</option>';
+                }
+                res += '<option>選択無し</option>';
+              } else {
+                var res = '<option>選択無し</option>';
+                for(var item in uniquearray) {
+                  res += '<option>' + uniquearray[item] + '</option>';
+                  console.log(uniquearray[item])
+                }
+              }
+              $("#sel1").html("");
+              $("#sel1").append(res);
+              console.log(uniquearray)
             }
 
             $.ajax({
@@ -109,12 +155,13 @@ block content
                 },
                 success: function(data) {
                   disp_data = data;
-                  draw(disp_data);
+                  draw(disp_data, $('#sel1').val());
                 }
             });
-            
-            $('#search').change(function() {
-              draw(disp_data);
+
+            $('#sel1').change(function() {
+              console.log($('#sel1').val());
+              draw(disp_data, $('#sel1').val());
             });
           });
         });

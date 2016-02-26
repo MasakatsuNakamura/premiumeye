@@ -82,6 +82,7 @@
 #   js.src = '//connect.facebook.net/ja_jp/sdk.js'
 #   fjs.parentNode.insertBefore js, fjs
 # ) document, 'script', 'facebook-jssdk'
+
 $(document).ready ->
   $('.myhide').hide()
 
@@ -132,7 +133,7 @@ $(document).ready ->
 
       for i in [start_pcsid...end_pcsnum]
         OutputRestriantTbl += """
-              <div class="col-xs-#{colums} #{color_tbl[i%restriant_disp_pcsnum]}">
+              <div class="col-xs-#{colums}" style="background-color:#{color_tbl[i]}">
                 pcs#{i}&nbsp;&nbsp;&nbsp;&nbsp;抑制時間合計:&nbsp;&nbsp;&nbsp;&nbsp;#{Restriant_pcs_totaltime[i]}
                 #{restriant_data[i]}
               </div>
@@ -190,7 +191,7 @@ $(document).ready ->
       $('#outputRestriantPager').append("<a href='https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/gendata_bypcs_restraint/#{id}/#{getRestraintTargetFileName(id, date)}' class='btn btn-primary'>抑制履歴csvダウンロード</a>")
 
     makeOutputRestriantTable = (id, date, pcs_num, outRestraint) ->
-      color_tbl = ['bg-primary', 'bg-success', 'bg-info', 'bg-warning', 'bg-danger']
+      color_tbl = ['aqua', 'orange', 'red', 'lime', 'mediumSlateBlue', 'brown', 'pink', 'gray', 'yellow', 'cyan', 'green', 'yellowGreen', 'orangeRed', 'blue', 'purple', 'brown', 'pink', 'gray', 'bitter orange', 'light blue']
       restriant_disp_pcsnum = 4
       # colums = Math.floor(12/pcs_num)
       pageNum = Math.floor(pcs_num/restriant_disp_pcsnum)
@@ -215,9 +216,9 @@ $(document).ready ->
         # console.log(String(pcs_id%pcs_num))
         Restriant_data[pcs_id] += """
               <div class="row">
-                <div class="col-xs-4 #{color_tbl[pcs_id%restriant_disp_pcsnum]}">#{csvOutputRestriantArray[i][1]}</div>
-                <div class="col-xs-4 #{color_tbl[pcs_id%restriant_disp_pcsnum]}">#{csvOutputRestriantArray[i][2]}</div>
-                <div class="col-xs-4 #{color_tbl[pcs_id%restriant_disp_pcsnum]}">#{csvOutputRestriantArray[i][3]}</div>
+                <div class="col-xs-4" style="background-color:#{color_tbl[pcs_id]}">#{csvOutputRestriantArray[i][1]}</div>
+                <div class="col-xs-4" style="background-color:#{color_tbl[pcs_id]}">#{csvOutputRestriantArray[i][2]}</div>
+                <div class="col-xs-4" style="background-color:#{color_tbl[pcs_id]}">#{csvOutputRestriantArray[i][3]}</div>
               </div>
         """
       dispOutputRestriantTable(id, date, pcs_num, pageNum, 0, Restriant_data, color_tbl, restriant_disp_pcsnum, Restriant_pcs_totaltime)
@@ -278,12 +279,13 @@ $(document).ready ->
                     #['data2', 130, 340, 200, 500, 250, 350]
                   ]
                   #type: 'bar'
-
               axis:
                   x:
                       type: 'timeseries',
                       tick:
                           format: '%H:%M'
+              color:
+                  pattern: ['Aqua', 'Orange', 'Red', 'Lime', 'MediumSlateBlue', 'Brown', 'Pink', 'Gray', 'Yellow', 'Cyan', 'Green', 'YellowGreen', 'OrangeRed', 'Blue', 'Purple', 'Brown', 'Pink', 'Gray', 'Bitter orange', 'Light blue']
 
             chart_data.data.columns = new Array()
             graph_count = 0
@@ -299,10 +301,11 @@ $(document).ready ->
 
             # 初回の点は発電量0の点を打つべし
             startDate = new Date(csvArray[1][0])
+            console.log(startDate)
             startDate.setMinutes(startDate.getMinutes()-1)
-            start_time = getDatehhmm(startDate)
+            start_time = getDatehhmmss(startDate)
 
-            chart_data.data.columns[0][graph_count] = start_time
+            chart_data.data.columns[0][graph_count] = getDatehhmm(startDate)
 
             for i in [1..pcs_num]
                 chart_data.data.columns[i][graph_count] = String(parseFloat('0'))
@@ -322,7 +325,7 @@ $(document).ready ->
                 graph_count++
 
             else if option == 2
-              before_time = start_time.substring(start_time.indexOf(" ")+1, (start_time.length-4)) + "0:00"
+              before_time = start_time.substring(0, (start_time.length-4)) + "0:00"
               for i in [1...csvArray.length]
                 current_time = csvArray[i][0].substring(csvArray[i][0].indexOf(" ")+1, (csvArray[i][0].length-4)) + "0:00"
                 if current_time != before_time
@@ -333,6 +336,55 @@ $(document).ready ->
                     genkw_total[j] = parseFloat('0')
                   graph_count++
                   before_time = current_time
+
+                for j in [1..pcs_num]
+                  genkw_total[j-1] += parseFloat(csvArray[i][j])
+            else if option == 3
+              before_time = start_time.substring(0, (start_time.length-4)) + "0:00"
+              before_min = parseInt(start_time.substring(3, (start_time.length-4)))
+
+              for i in [1...csvArray.length]
+                current_time = csvArray[i][0].substring(csvArray[i][0].indexOf(" ")+1, (csvArray[i][0].length-4)) + "0:00"
+                current_min = parseInt(csvArray[i][0].substring(csvArray[i][0].indexOf(" ")+4, (csvArray[i][0].length-4)))
+
+                diff = current_min - before_min
+                if before_min > current_min
+                  diff = 6 + current_min - before_min
+
+                if diff > 1
+                  chart_data.data.columns[0][graph_count] = csvArray[i][0].substring(csvArray[i][0].indexOf(" ")+1, (csvArray[i][0].length-3))
+                  for j in [1..pcs_num]
+                      chart_data.data.columns[j][graph_count] = String(genkw_total[j-1])
+                  for j in [0...pcs_num]
+                    genkw_total[j] = parseFloat('0')
+                  graph_count++
+                  before_time = current_time
+                  before_min = parseInt(before_time.substring(3, (start_time.length-4)))
+
+                for j in [1..pcs_num]
+                  genkw_total[j-1] += parseFloat(csvArray[i][j])
+
+            else if option == 4
+              before_time = start_time.substring(0, (start_time.length-4)) + "0:00"
+              before_min = parseInt(start_time.substring(3, (start_time.length-4)))
+
+              for i in [1...csvArray.length]
+                current_time = csvArray[i][0].substring(csvArray[i][0].indexOf(" ")+1, (csvArray[i][0].length-4)) + "0:00"
+                current_min = parseInt(csvArray[i][0].substring(csvArray[i][0].indexOf(" ")+4, (csvArray[i][0].length-4)))
+
+                diff = current_min - before_min
+                if before_min > current_min
+                  diff = 6 + current_min - before_min
+
+                if diff > 2
+                  chart_data.data.columns[0][graph_count] = csvArray[i][0].substring(csvArray[i][0].indexOf(" ")+1, (csvArray[i][0].length-3))
+                  for j in [1..pcs_num]
+                      chart_data.data.columns[j][graph_count] = String(genkw_total[j-1])
+                  for j in [0...pcs_num]
+                    genkw_total[j] = parseFloat('0')
+                  graph_count++
+                  before_time = current_time
+                  before_min = parseInt(before_time.substring(3, (start_time.length-4)))
 
                 for j in [1..pcs_num]
                   genkw_total[j-1] += parseFloat(csvArray[i][j])
@@ -354,9 +406,8 @@ $(document).ready ->
 
             endDate = new Date(csvArray[csvArray.length-1][0])
             endDate.setMinutes(endDate.getMinutes()+1)
-            end_time = getDatehhmm(endDate)
 
-            chart_data.data.columns[0][graph_count] = end_time
+            chart_data.data.columns[0][graph_count] = getDatehhmm(endDate)
 
             for j in[1..pcs_num]
               chart_data.data.columns[j][graph_count] = String(parseFloat('0'))
@@ -364,7 +415,8 @@ $(document).ready ->
             graph_count++
 
             c3.generate(chart_data)
-            $('#csvdownload').append("<a href='https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/gendata_bypcs/#{id}/#{getTargetFileName(id, date)}' class='btn btn-primary'>#{getTargetFileName(id, date)}ダウンロード</a>")
+            $("#csvdownload").attr("href", "https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/gendata_bypcs/#{id}/#{getTargetFileName(id, date)}")
+            $('#csvdownload').show()
 
           error: (error) ->
             # if isCertification == false
@@ -378,7 +430,7 @@ $(document).ready ->
 
     clearDisplay = ->
       $('#graph_area').html("")
-      $('#csvdownload').html("")
+      $('#csvdownload').hide()
       $('#outputRestriantcsvdownload').html("")
       $('#outputRestriant').html("")
       $('#outputRestriantPager').html("")
@@ -392,17 +444,18 @@ $(document).ready ->
       #   console.log("isDisplayStart == false")
       #   $('#status').html("")
       #   return
+      draw(id, date, parseInt(option))
+
+    $('#search').change　->
+      console.log("#search change")
+      id = $('#search').val()
       if pvsensors[id] is undefined
         $('#graph_area').html("<p>存在しないシリアル番号(id)です</p>")
         $("#userheader").html("")
         $("#userdata").html("")
         return
       makeUserInfo(id)
-      draw(id, date, parseInt(option))
-
-    $('#search').change　->
-      console.log("#search change")
-      drawDisplay($('#search').val(), date, $('#mode input[name="gender"]:checked').val())
+      drawDisplay(id, date, $('#mode input[name="gender"]:checked').val())
 
     # $('#facebook-login-confirmation').click ->
     #   console.log "$('#facebook-login-confirmation').click"
@@ -515,6 +568,9 @@ $(document).ready ->
 
     getDatehhmm = (date) ->
       return (('0' + date.getHours()).slice(-2) + ":" + ('0' + date.getMinutes()).slice(-2))
+
+    getDatehhmmss = (date) ->
+      return (getDatehhmm(date) + ":" + ('0' + date.getSeconds()).slice(-2))
 
     getOutputRestriantFilePath = (id, date) ->
       return ("https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/gendata_bypcs_restraint/" + id + "/" + getOutputRestriantFileName(id, date))
@@ -678,9 +734,11 @@ $(document).ready ->
     $('#AnonymityBtn').trigger("click");
     if Object.keys(args).length > 0
       $('#search').val(args.id)
+      makeUserInfo(args.id)
 
     date = new Date()
     date.setDate(date.getDate() - 1)
     $("#mydate").val(getDateyyyymmdd(date))
     $("#mydate").datetimepicker(locale: 'ja', format : 'YYYY-MM-DD').val(getDateyyyymmdd(date))
     $("#mydate").data("DateTimePicker").date(date)
+    
