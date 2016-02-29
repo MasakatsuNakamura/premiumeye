@@ -67,7 +67,7 @@ block content
               date = new Date(args.year, args.month - 1, args.day);
           } else {
               date = new Date();
-              date.setDate(date.getDate() - 1);
+              date.setDate(date.getDate());
           }
           var yesterday = new Date(date.getFullYear(), date.getMonth(), date.getDate());
           yesterday.setDate(yesterday.getDate() - 1);
@@ -79,8 +79,8 @@ block content
           $('#tommorow').attr("href", "?year=" + tommorow.getFullYear() + "&month=" + (tommorow.getMonth() + 1) + "&day=" + tommorow.getDate());
           $('#tommorow').text("翌日");
 
-          var strDate = date.getFullYear() + "/" + (date.getMonth() + 1) + "/" + date.getDate();
-          $('#mydate').html('&nbsp;' + strDate + '&nbsp;');           
+          var strDate = date.getFullYear() + "/" + (date.getMonth() + 1) + "/" + date.getDate();          
+          $('#mydate').html('&nbsp;' + strDate + '&nbsp;');
           $.getJSON("https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/pv_sensors.json", function (pvsensors) {
             var disp_data = '';
 
@@ -121,39 +121,33 @@ block content
                   res += '</tr>/n';
               }
               $('#list').html(res);
+              
+              var res = '';
               var uniquearray = uniqueExchenge(array);
-              if(serach_model != '選択無し') {
-                var res = '<option>' + serach_model + '</option>';
-
-                for(var item in uniquearray) {
-                  if(serach_model == uniquearray[item]) {
-                    console.log('continue')
-                    continue
-                  }
-                  res += '<option>' + uniquearray[item] + '</option>';
-                }
-                res += '<option>選択無し</option>';
-              } else {
-                var res = '<option>選択無し</option>';
-                for(var item in uniquearray) {
-                  res += '<option>' + uniquearray[item] + '</option>';
-                  console.log(uniquearray[item])
-                }
+              for(var item in uniquearray) {
+                res += '<option>' + uniquearray[item] + '</option>';
+                console.log(uniquearray[item])
               }
+              res += '<option>選択無し</option>';
               $("#sel1").html("");
               $("#sel1").append(res);
+              $('#sel1').val(serach_model);
               console.log(uniquearray)
             }
 
+            var filename = date.getFullYear() + "-" + ('0' + (date.getMonth() + 1)).slice(-2) + "-" + ('0' + date.getDate()).slice(-2) + '.csv';
             $.ajax({
-                url: "https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/gendata_bypcs_restraint/doubt_userdata/doubt_userdata.csv",
+                url: "https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/gendata_bypcs_restraint/doubt_userdata/" + filename,
                 beforeSend : function(xhr) {
                     xhr.overrideMimeType("text/plain; charset=shift_jis")
                 },
                 success: function(data) {
                   disp_data = data;
-                  console.log($('#sel1').val())
+                  console.log($('#sel1').val());
                   draw(disp_data, $('#sel1').val());
+                },
+                error: function(error) {
+                  $('#list').html("最新ファイルがありません");
                 }
             });
 
