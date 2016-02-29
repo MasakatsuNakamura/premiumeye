@@ -58,10 +58,9 @@ block content
            return uniqueArray;
         }
         
-        var dropdown_list_menu = '無し';
-
         $(document).ready(function() {
           'use strict';
+          $('#sel1').val('選択無し')
           var args = getUrlVars();
           var date;
           if (args.length == 3) {
@@ -79,8 +78,6 @@ block content
           tommorow.setDate(tommorow.getDate() + 1);
           $('#tommorow').attr("href", "?year=" + tommorow.getFullYear() + "&month=" + (tommorow.getMonth() + 1) + "&day=" + tommorow.getDate());
           $('#tommorow').text("翌日");
-
-          $("#dropdown-button").text(dropdown_list_menu);
 
           var strDate = date.getFullYear() + "/" + (date.getMonth() + 1) + "/" + date.getDate();
           $('#mydate').html('&nbsp;' + strDate + '&nbsp;');           
@@ -155,6 +152,7 @@ block content
                 },
                 success: function(data) {
                   disp_data = data;
+                  console.log($('#sel1').val())
                   draw(disp_data, $('#sel1').val());
                 }
             });
