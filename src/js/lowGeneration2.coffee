@@ -10,7 +10,10 @@ $(document).ready ->
                 '</td></tr>'
         $("tr").each ->
             first = $(this).children("td:first-child").text()
-            if first == '警告'
+            if first.match(/警告/)
                 $(this).addClass("danger")
-            else if first == '通知'
+            else if first.match(/通知/)
                 $(this).addClass("success")
+            if first.match(/^\*/)
+                $(this).css({"font-weight":"bold"})
+                $(this).children("td:first-child").text(first[1...])
