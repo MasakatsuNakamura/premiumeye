@@ -10,11 +10,11 @@ $(document).ready ->
                 ((if item? then item else '&nbsp') for i, item of line).join('</td><td>') +
                 '</td></tr>'
         $("tr").each ->
-            first = $(this).children("td:first-child").text()
+            first = $(this).children("td:nth-child(2)").text()
             if first.match(/警告/)
                 $(this).addClass("danger")
             else if first.match(/通知/)
                 $(this).addClass("success")
             if first.match(/^\*/)
                 $(this).css({"font-weight":"bold"})
-                $(this).children("td:first-child").text(first[1...])
+                $(this).children("td:nth-child(2)").text(first[1...])
