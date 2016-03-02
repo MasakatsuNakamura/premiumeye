@@ -1,4 +1,6 @@
 extends ./components/_header
+block link
+  -var selected = 'integralElectricGraph'
 block content    
   .form-inline(style="margin-bottom:12px")
     link(href="./c3/c3.css", rel="stylesheet", type="text/css")
@@ -13,6 +15,7 @@ block content
     script(src="js/geturlvars.js")
     script(src="js/integralElectricGraph.js")
     script(src='https://apis.google.com/js/client.js?onload=authorize')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js')
 
     //- .alert.alert-success
     //-  p 現状サニックスパワコンしかグラフがでません

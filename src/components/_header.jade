@@ -1,5 +1,7 @@
 doctype html
 html
+  block link
+    -var selected = 'index' //default
   head
     meta(charset='utf-8')
     meta(http-equiv='X-UA-Compatible', content='IE=edge')
@@ -21,7 +23,7 @@ html
           ul.nav.navbar-nav
             each name, url in menu
               if typeof(name) == 'string'
-                li(class="#{(page === url) ? 'active' : ''}")
+                li(class="#{(selected === url) ? 'active' : ''}")
                   a(href="#{url}.html")=name
               else
                 li.dropdown

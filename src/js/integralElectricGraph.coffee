@@ -191,7 +191,7 @@ $(document).ready ->
       $('#outputRestriantPager').append("<a href='https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/gendata_bypcs_restraint/#{id}/#{getRestraintTargetFileName(id, date)}' class='btn btn-primary'>抑制履歴csvダウンロード</a>")
 
     makeOutputRestriantTable = (id, date, pcs_num, outRestraint) ->
-      color_tbl = ['aqua', 'orange', 'red', 'lime', 'mediumSlateBlue', 'brown', 'pink', 'gray', 'yellow', 'cyan', 'green', 'yellowGreen', 'orangeRed', 'blue', 'purple', 'brown', 'pink', 'gray', 'bitter orange', 'light blue']
+      color_tbl = ['aqua', 'orange', 'red', 'lime', 'mediumSlateBlue', 'brown', 'pink', 'gray', 'orangeRed', 'cyan', 'green', 'yellowGreen', 'yellow', 'blue', 'purple', 'brown', 'pink', 'gray', 'bitter orange', 'light blue']
       restriant_disp_pcsnum = 4
       # colums = Math.floor(12/pcs_num)
       pageNum = Math.floor(pcs_num/restriant_disp_pcsnum)
@@ -285,7 +285,7 @@ $(document).ready ->
                       tick:
                           format: '%H:%M'
               color:
-                  pattern: ['Aqua', 'Orange', 'Red', 'Lime', 'MediumSlateBlue', 'Brown', 'Pink', 'Gray', 'Yellow', 'Cyan', 'Green', 'YellowGreen', 'OrangeRed', 'Blue', 'Purple', 'Brown', 'Pink', 'Gray', 'Bitter orange', 'Light blue']
+                  pattern: ['Aqua', 'Orange', 'Red', 'Lime', 'MediumSlateBlue', 'Brown', 'Pink', 'Gray', 'OrangeRed', 'Cyan', 'Green', 'YellowGreen', 'Yellow', 'Blue', 'Purple', 'Brown', 'Pink', 'Gray', 'Bitter orange', 'Light blue']
 
             chart_data.data.columns = new Array()
             graph_count = 0
@@ -480,12 +480,14 @@ $(document).ready ->
       $('#mydate').val(getDateyyyymmdd(date))
       isGraphDataGetFirst = false
       $('#mydate').data("DateTimePicker").date(date)
+      # $.cookie( "sample" , "テスト" , { expires: 7 , path: "/", domain: "sanix-data-analysis.s3-website-ap-northeast-1.amazonaws.com" , secure: false });
 
     $('#tommorow').click ->
       date.setDate date.getDate() + 1
       $('#mydate').val(getDateyyyymmdd(date))
       isGraphDataGetFirst = false
       $('#mydate').data("DateTimePicker").date(date)
+      # $.cookie( "sample" , "テスト" , { expires: 7 , path: "/", domain: "sanix-data-analysis.s3-website-ap-northeast-1.amazonaws.com" , secure: false });
 
     $('#createChart').click ->
       lambda = new AWS.Lambda()
@@ -731,6 +733,8 @@ $(document).ready ->
     # $('#GoogleBtn').on('click', authorize)
 
     clearDisplay()
+    # console.log('cookie')
+    # console.log($.cookie("sample"))
     $('#AnonymityBtn').trigger("click");
     if Object.keys(args).length > 0
       $('#search').val(args.id)
@@ -741,4 +745,3 @@ $(document).ready ->
     $("#mydate").val(getDateyyyymmdd(date))
     $("#mydate").datetimepicker(locale: 'ja', format : 'YYYY-MM-DD').val(getDateyyyymmdd(date))
     $("#mydate").data("DateTimePicker").date(date)
-    

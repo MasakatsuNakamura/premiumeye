@@ -1,4 +1,6 @@
 extends ./components/_header
+block link
+  -var selected = 'lowGeneration'
 block content
     .form-inline
         a#yesterday.btn.btn-default 前日
@@ -15,4 +17,3 @@ block content
     script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js")
     script(src="js/geturlvars.js")
     script(src="js/lowGeneration.js")
-
