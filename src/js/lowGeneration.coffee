@@ -33,14 +33,14 @@ $(document).ready ->
         $.getJSON "https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/" +
                 "fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/pv_sensors.json", (pvsensors) =>
 
-            header = ['シリアル番号', '発電所名', '営業所', 'メーカー', '機種', 'プラン', '発電力量', '定格出力', '偏差値', '周辺順位', '周辺発電所数']
+            header = ['番号', 'シリアル番号', '発電所名', '営業所', 'メーカー', '機種', 'プラン', '発電力量', '定格出力', '偏差値', '周辺順位', '周辺発電所数']
 
             if !(pvsensors?)
                 return false
 
             $('#myheader').append "<th>" + header.join('</th><th>') + "</th>"
 
-            for list in gendata
+            for i, list of gendata
                 row = []
                 id = list.id
                 if !(pvsensors[id])?
@@ -50,13 +50,14 @@ $(document).ready ->
                 list.発電力量 = Math.round(list.発電力量 * 100)/ 100;
                 list.定格出力 = Math.round(list.定格出力 * 10)/ 10;
                 if list.偏差値 < 42 || list.電力量低下
+                    row.push "<a href='integralElectricGraph.html?id=#{id}' class='btn btn-default'>#{parseInt(i) + 1}</a>"
                     row.push '<a href=' + pvsensor.URL + ' target="_blank">' + id + '</a>'
                     row.push pvsensor.発電所名
                     row.push pvsensor.営業所
                     row.push pvsensor.メーカー
                     row.push pvsensor.機種名
                     row.push pvsensor.プラン
-                    for h in header[6..]
+                    for h in header[7..]
                         row.push list[h]
                     style = '';
                     if (list.電力量低下)? && list.偏差値 < 42.5
