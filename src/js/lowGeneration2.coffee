@@ -16,5 +16,5 @@ $(document).ready ->
             else if first.match(/通知/)
                 $(this).addClass("success")
             if first.match(/^\*/)
-                $(this).css({"font-weight":"bold"})
+                $(this).css({"font-weight":"bold", "color":"#F00"})
                 $(this).children("td:nth-child(2)").text(first[1...])
