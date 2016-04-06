@@ -490,6 +490,13 @@ $(document).ready ->
       # $.cookie( "sample" , "テスト" , { expires: 7 , path: "/", domain: "sanix-data-analysis.s3-website-ap-northeast-1.amazonaws.com" , secure: false });
 
     $('#createChart').click ->
+      today = new Date()
+      today.setHours(0,0,0,0)
+      if today.getTime() <= date.getTime()
+        console.log('future day selected')
+        $('#graph_area').html("<p>まだグラフデータがサーバー上にありません（未来のデータ）。</p>")
+        return
+
       lambda = new AWS.Lambda()
       $('#graph_area').html("<img src='./gif-load.gif'>")
       # $('#myChartModal').show()
@@ -584,7 +591,7 @@ $(document).ready ->
       $("#userheader").html("")
       $("#userdata").html("")
       header = [
-          "発電所名", "顧客名", "プラン", "営業所", "パワコン台数", "ステータス",
+          "serialid", "発電所名", "顧客名", "プラン", "営業所", "パワコン台数", "ステータス",
           "メーカー", "機種名", "パワコン情報"
       ]
 
@@ -596,9 +603,13 @@ $(document).ready ->
 
       tbl =''
       for cell in header
-        value = if pvsensors[id][cell]? then pvsensors[id][cell] else '&nbsp;'
+        if cell == "serialid"
+          value = "<a href='#{pvsensors[id]["URL"]}' target='_blank'>#{id}</a>"
+        else
+          value = if pvsensors[id][cell]? then pvsensors[id][cell] else '&nbsp;'
+
         if cell == "発電所名"
-            value = "<a href='https://maps.google.co.jp/maps?ll=#{pvsensors[id]['緯度']},#{pvsensors[id]['経度']}&z=11&q=#{pvsensors[id]['緯度']},#{pvsensors[id]['経度']}" +
+          value = "<a href='https://maps.google.co.jp/maps?ll=#{pvsensors[id]['緯度']},#{pvsensors[id]['経度']}&z=11&q=#{pvsensors[id]['緯度']},#{pvsensors[id]['経度']}" +
                 "(#{encodeURI(pvsensors[id][cell] + '発電所')})&hl=ja&iwloc=A' target='_blank'>#{pvsensors[id][cell]}発電所</a>"
         tbl += "<td>#{(value + '').replace(/\n/g, '<br />')}</td>"
       tbl += "</tr>"
