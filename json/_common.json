@@ -16,7 +16,8 @@
   	"その他": {
 	  	"noticeMail": "通知メール一覧",
 	  	"nameList": "社員名簿",
-	  	"administrators": "管理者一覧"
+	  	"administrators": "管理者一覧",
+      "serial_communication_log": "シリアル通信ログ"
 	  }
   }
 }

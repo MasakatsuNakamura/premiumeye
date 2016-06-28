@@ -21,6 +21,7 @@ block content
             tbody#list
     script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js")
     script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js")
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js')
     script.
         function getUrlVars() {
           'use strict';
@@ -61,8 +62,7 @@ block content
         }
         
         $(document).ready(function() {
-          'use strict';
-          $('#sel1').val('選択無し')
+          'use strict';          
           var args = getUrlVars();
           var date;
           if (args.length == 3) {
@@ -100,10 +100,10 @@ block content
                   }
                   class_style = ' class=success';
                   res += '<tr' + class_style + '>';
-                  console.log(serach_model)
+                  //- console.log(serach_model)
                   array[i-1] = csvArray[i][5];
                   if(serach_model != '選択無し') {
-                    console.log('serch start')
+                    //- console.log('serch start')
                     if(serach_model != csvArray[i][5]) {
                       continue;
                     }
@@ -134,10 +134,13 @@ block content
               $("#sel1").html("");
               $("#sel1").append(res);
               $('#sel1').val(serach_model);
-              console.log(uniquearray)
+              //- console.log(uniquearray)
+              //- console.log("$('#sel1').val(serach_model)")
+              //- console.log($('#sel1').val())
             }
 
             var filename = date.getFullYear() + "-" + ('0' + (date.getMonth() + 1)).slice(-2) + "-" + ('0' + date.getDate()).slice(-2) + '.csv';
+
             $.ajax({
                 url: "https://s3-ap-northeast-1.amazonaws.com/sanix-data-analysis/fhRK0XGVb3cR1r1S3x9j3j3DRFGUyRYC/gendata_bypcs_restraint/doubt_userdata/" + filename,
                 beforeSend : function(xhr) {
@@ -145,8 +148,13 @@ block content
                 },
                 success: function(data) {
                   disp_data = data;
-                  console.log($('#sel1').val());
-                  draw(disp_data, $('#sel1').val());
+                  var cook = '選択無し'
+                  if ($.cookie("restraint_doubt_user_data")) {
+                    var cook = $.cookie("restraint_doubt_user_data")
+                    //- console.log("$.cookie");
+                    //- console.log(cook);
+                  }
+                  draw(disp_data, cook);
                 },
                 error: function(error) {
                   $('#list').html("最新ファイルがありません");
@@ -154,8 +162,9 @@ block content
             });
 
             $('#sel1').change(function() {
-              console.log($('#sel1').val());
-              draw(disp_data, $('#sel1').val());
+              var cook = $('#sel1').val();
+              $.cookie("restraint_doubt_user_data" , cook , { expires: 7,  path: "/" });
+              draw(disp_data, cook);
             });
           });
         });
